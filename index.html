@@ -514,7 +514,6 @@
             if (!container) return;
 
             const { data: comments, error } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
-            // Fetch registered students list to verify who is allowed a delete button
             const { data: students } = await _supabase.from('students').select('name');
             const registeredNames = students ? students.map(s => s.name.toLowerCase()) : [];
 
@@ -540,7 +539,6 @@
                     });
                 }
 
-                // Check if author matches a registered student or if admin is logged in
                 const isRegistered = registeredNames.includes(c.name.trim().toLowerCase());
                 const showDeleteBtn = (isRegistered || isAdminLoggedIn);
 
@@ -595,7 +593,6 @@
             alert("Comment deleted successfully.");
         }
 
-        // Admin Management of Community Comments
         async function loadAdminCommunityComments() {
             const container = document.getElementById('adminCommentsContainer');
             if (!container) return;
@@ -667,7 +664,6 @@
             alert("Admin reply posted successfully!");
         }
 
-        // Student Login
         async function handleStudentLogin(e) {
             e.preventDefault();
             const name = document.getElementById('studentLoginName').value.trim();
@@ -694,7 +690,6 @@
             loadChatMessages(currentStudentName);
         }
 
-        // Admin Login
         async function handleAdminAuth(e) {
             e.preventDefault();
             const email = document.getElementById('adminEmail').value.trim();
@@ -713,7 +708,6 @@
         function adminLogout() { isAdminLoggedIn = false; location.reload(); }
         function studentLogout() { location.reload(); }
 
-        // Tabs Switching
         function switchTab(tab) {
             ['scheduleTab', 'studentsTab', 'paymentTab', 'adminChatTab', 'adminCommentsTab'].forEach(t => document.getElementById(t).classList.add('hidden'));
             ['navScheduleBtn', 'navStudentsBtn', 'navPaymentBtn', 'navAdminChatBtn', 'navAdminCommentsBtn'].forEach(b => {
@@ -818,7 +812,7 @@
             resetStudentForm();
             loadStudentsList();
             loadAdminData();
-            loadPublicComments(); // Refresh wall to update delete buttons
+            loadPublicComments();
         }
 
         function editStudent(id) {
@@ -1109,7 +1103,6 @@
             loadStudentPaymentHistory(name);
         }
 
-        // Student Cancel Class Functions
         function openCancelClassModal(id) {
             document.getElementById('cancelSessionId').value = id;
             document.getElementById('cancelReason').value = '';
@@ -1128,7 +1121,6 @@
             loadStudentPortal(currentStudentName);
         }
 
-        // Teacher Tag Absent Functions
         function openTeacherAbsentModal(id) {
             document.getElementById('teacherAbsentSessionId').value = id;
             document.getElementById('teacherAbsentReason').value = '';
@@ -1207,7 +1199,6 @@
             });
         }
 
-        // Chat Systems
         async function loadChatMessages(name) {
             const container = document.getElementById('chatMessagesContainer');
             if (!container) return;
