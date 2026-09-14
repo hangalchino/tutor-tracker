@@ -81,7 +81,7 @@
                     <li><i class="fa-solid fa-check mr-2"></i> One-on-one & interactive guided sessions</li>
                     <li><i class="fa-solid fa-check mr-2"></i> Class recordings available for easy review</li>
                     <li><i class="fa-solid fa-check mr-2"></i> Transparent scheduling, homework notes & parent tracking</li>
-                    <li><i class="fa-solid fa-check mr-2"></i> Secure tuition processing via WorldRemit & PayMaya</li>
+                    <li><i class="fa-solid fa-check mr-2"></i> Convenient tuition payment via any bank to QR code</li>
                 </ul>
             </div>
         </section>
@@ -121,8 +121,8 @@
                     <p class="text-xs text-slate-500">We have added new morning slots for primary school reading comprehension classes.</p>
                 </div>
                 <div class="bg-white p-4 rounded-xl border space-y-2">
-                    <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold">WorldRemit Support</span>
-                    <p class="text-xs text-slate-500">Tuition fee processing via WorldRemit to PayMaya is fully active and instant.</p>
+                    <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold">Easy Bank Transfer</span>
+                    <p class="text-xs text-slate-500">Students can now pay tuition securely via any bank transfer directly scanned to our QR code.</p>
                 </div>
                 <div class="bg-white p-4 rounded-xl border space-y-2">
                     <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold">Homework Hub</span>
@@ -231,7 +231,7 @@
                     <div class="flex bg-indigo-700/60 p-1 rounded-lg text-xs">
                         <button onclick="switchTab('schedule')" id="navScheduleBtn" class="px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all">Schedule</button>
                         <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Registered Accounts</button>
-                        <button onclick="switchTab('payment')" id="navPaymentBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Payment Info</button>
+                        <button onclick="switchTab('payment')" id="navPaymentBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Payment Setup</button>
                         <button onclick="switchTab('adminChat')" id="navAdminChatBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Support Chat</button>
                     </div>
                     <button onclick="adminLogout()" class="bg-indigo-700 hover:bg-indigo-800 text-indigo-200 px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-right-from-bracket"></i> Exit to Website</button>
@@ -300,12 +300,14 @@
 
             <!-- TAB 3: PAYMENT SETUP -->
             <div id="paymentTab" class="hidden max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-wallet text-indigo-600 mr-2"></i> Configure WorldRemit & PayMaya</h2>
+                <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-wallet text-indigo-600 mr-2"></i> Configure Bank Transfer & QR Code</h2>
                 <form onsubmit="savePaymentInfo(event)" class="space-y-4 text-xs">
-                    <div><label class="block font-semibold uppercase mb-1">PayMaya Account Name / Number</label><input type="text" id="paymayaDetails" required class="w-full p-2.5 border rounded-lg"></div>
-                    <div><label class="block font-semibold uppercase mb-1">WorldRemit Instructions</label><textarea id="worldremitInstructions" rows="3" class="w-full p-2.5 border rounded-lg"></textarea></div>
-                    <div><label class="block font-semibold uppercase mb-1">PayMaya QR Code Image URL</label><input type="url" id="paymayaQrUrl" class="w-full p-2.5 border rounded-lg"></div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Save Payment Info</button>
+                    <div><label class="block font-semibold uppercase mb-1">Bank Account / Mobile Wallet Details (Name, Account No)</label><input type="text" id="paymayaDetails" required placeholder="e.g., Bank Name / Account Name / Number" class="w-full p-2.5 border rounded-lg"></div>
+                    <div><label class="block font-semibold uppercase mb-1">Payment Instructions</label><textarea id="worldremitInstructions" rows="3" placeholder="Transfer from any bank directly to our account or scan QR code below." class="w-full p-2.5 border rounded-lg"></textarea></div>
+                    <div><label class="block font-semibold uppercase mb-1">Upload QR Code Image</label><input type="file" id="paymayaQrFile" accept="image/*" class="w-full p-2 border rounded-lg bg-slate-50" onchange="previewQrUpload(event)"></div>
+                    <input type="hidden" id="paymayaQrUrl">
+                    <div id="qrPreviewContainer" class="mt-2"></div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Save Payment Configuration</button>
                 </form>
             </div>
 
@@ -363,16 +365,21 @@
             </div>
             <div id="studentPaymentView" class="hidden space-y-6">
                 <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-md font-bold text-slate-800 mb-4"><i class="fa-solid fa-money-bill-transfer text-emerald-600 mr-2"></i> Tuition Payment Info</h2>
+                    <h2 class="text-md font-bold text-slate-800 mb-4"><i class="fa-solid fa-money-bill-transfer text-emerald-600 mr-2"></i> Tuition Payment Info & QR Code</h2>
                     <div id="studentPaymentInfo" class="text-xs text-slate-600 space-y-3"></div>
                 </div>
                 <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-md font-bold text-slate-800 mb-4"><i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference & Receipt</h2>
+                    <h2 class="text-md font-bold text-slate-800 mb-4"><i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference & Upload Receipt Photo</h2>
                     <form onsubmit="submitPaymentProof(event)" class="space-y-3 text-xs">
-                        <div><label class="block font-semibold uppercase mb-1">Reference Number</label><input type="text" id="payRefNumber" required placeholder="e.g., WR-987654" class="w-full p-2 border rounded"></div>
-                        <div><label class="block font-semibold uppercase mb-1">Amount & Remarks</label><input type="text" id="payAmount" required placeholder="e.g., PHP 2,800" class="w-full p-2 border rounded"></div>
-                        <div><label class="block font-semibold uppercase mb-1">Receipt Image URL</label><input type="url" id="payReceiptUrl" placeholder="https://..." class="w-full p-2 border rounded"></div>
-                        <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium">Send Payment Proof</button>
+                        <div><label class="block font-semibold uppercase mb-1">Reference Number / Transaction ID</label><input type="text" id="payRefNumber" required placeholder="e.g., TXN-987654" class="w-full p-2 border rounded"></div>
+                        <div><label class="block font-semibold uppercase mb-1">Amount Sent & Remarks</label><input type="text" id="payAmount" required placeholder="e.g., PHP 2,800 for Math & Reading" class="w-full p-2 border rounded"></div>
+                        <div>
+                            <label class="block font-semibold uppercase mb-1">Upload Receipt Photo</label>
+                            <input type="file" id="payReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewReceiptUpload(event)">
+                        </div>
+                        <input type="hidden" id="payReceiptUrl">
+                        <div id="receiptPreviewContainer"></div>
+                        <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium">Send Payment Proof to Teacher</button>
                     </form>
                     <div id="studentPaymentHistoryList" class="mt-4 pt-4 border-t space-y-2"></div>
                 </div>
@@ -415,6 +422,15 @@
         </div>
     </div>
 
+    <!-- Modal for viewing receipt image -->
+    <div id="imageModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4" onclick="closeImageModal()">
+        <div class="bg-white rounded-xl p-4 max-w-lg w-full text-center space-y-3">
+            <h3 class="font-bold text-slate-800 text-sm">Receipt Image</h3>
+            <img id="modalImageDisplay" src="" class="max-h-[400px] mx-auto object-contain border rounded" alt="Receipt">
+            <p class="text-[10px] text-slate-400">Click anywhere to close</p>
+        </div>
+    </div>
+
     <!-- ================= SCRIPT LOGIC ================= -->
     <script>
         let currentStudentName = '';
@@ -431,7 +447,7 @@
         function openAdminLoginModal() { document.getElementById('adminLoginModal').classList.remove('hidden'); }
         function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
 
-        // Public Enrollment (Creates Account Automatically)
+        // Public Enrollment
         async function handlePublicEnrollment(e) {
             e.preventDefault();
             const name = document.getElementById('enrollStudentName').value.trim();
@@ -545,6 +561,38 @@
             selectAdminChatStudent(studentName);
         }
 
+        // Image Converters for Direct Uploads
+        function previewQrUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('paymayaQrUrl').value = e.target.result;
+                document.getElementById('qrPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-32 h-32 object-contain border rounded mt-1 bg-white" alt="QR Preview">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function previewReceiptUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('payReceiptUrl').value = e.target.result;
+                document.getElementById('receiptPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover border rounded mt-1" alt="Receipt Preview">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function viewFullImage(url) {
+            document.getElementById('modalImageDisplay').src = url;
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+
         // Admin: Save or Update Student Account
         async function saveStudentDirect(e) {
             e.preventDefault();
@@ -625,7 +673,7 @@
             const instructions = document.getElementById('worldremitInstructions').value.trim();
             const qrUrl = document.getElementById('paymayaQrUrl').value.trim();
             localStorage.setItem('tutor_payment_info', JSON.stringify({ paymaya, instructions, qrUrl }));
-            alert("Payment configuration saved!");
+            alert("Bank payment & QR code configuration saved successfully!");
         }
 
         function loadPaymentConfig() {
@@ -634,6 +682,9 @@
                 document.getElementById('paymayaDetails').value = saved.paymaya || '';
                 document.getElementById('worldremitInstructions').value = saved.instructions || '';
                 document.getElementById('paymayaQrUrl').value = saved.qrUrl || '';
+                if (saved.qrUrl) {
+                    document.getElementById('qrPreviewContainer').innerHTML = `<img src="${saved.qrUrl}" class="w-32 h-32 object-contain border rounded mt-1 bg-white" alt="QR Code">`;
+                }
             }
         }
 
@@ -707,8 +758,13 @@
             }
 
             const paymentConfig = JSON.parse(localStorage.getItem('tutor_payment_info'));
+            const paymentContainer = document.getElementById('studentPaymentInfo');
             if (paymentConfig) {
-                document.getElementById('studentPaymentInfo').innerHTML = `<p><strong>PayMaya Account:</strong> ${paymentConfig.paymaya || ''}</p><p><strong>WorldRemit Instructions:</strong> ${paymentConfig.instructions || ''}</p>${paymentConfig.qrUrl ? `<img src="${paymentConfig.qrUrl}" class="w-32 h-32 object-contain border rounded mt-2 bg-white">` : ''}`;
+                paymentContainer.innerHTML = `
+                    <p><strong>Bank / Wallet Account Details:</strong> ${paymentConfig.paymaya || 'N/A'}</p>
+                    <p><strong>Instructions:</strong> ${paymentConfig.instructions || 'Transfer funds from any bank or mobile wallet to the account or QR code below.'}</p>
+                    ${paymentConfig.qrUrl ? `<div class="mt-2"><p class="font-semibold mb-1">Scan QR Code to Pay:</p><img src="${paymentConfig.qrUrl}" class="w-36 h-36 object-contain border rounded p-1 bg-white cursor-pointer" onclick="viewFullImage('${paymentConfig.qrUrl}')" alt="QR Code"></div>` : ''}
+                `;
             }
             loadStudentPaymentHistory(name);
         }
@@ -736,8 +792,19 @@
             const ref = document.getElementById('payRefNumber').value.trim();
             const amount = document.getElementById('payAmount').value.trim();
             const receipt_url = document.getElementById('payReceiptUrl').value.trim();
+
+            if (!receipt_url) {
+                alert("Please upload a receipt photo.");
+                return;
+            }
+
             await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, receipt_url, date: new Date().toLocaleDateString() }]);
-            alert("Payment reference submitted!");
+            alert("Payment reference and receipt uploaded successfully!");
+            document.getElementById('payRefNumber').value = '';
+            document.getElementById('payAmount').value = '';
+            document.getElementById('payReceiptFile').value = '';
+            document.getElementById('payReceiptUrl').value = '';
+            document.getElementById('receiptPreviewContainer').innerHTML = '';
             loadStudentPaymentHistory(currentStudentName);
         }
 
@@ -747,7 +814,11 @@
             list.innerHTML = '<p class="font-semibold text-slate-700">Submitted Payment History:</p>';
             if (!history || history.length === 0) { list.innerHTML += `<p class="text-slate-400">No payment history yet.</p>`; return; }
             history.forEach(h => {
-                list.innerHTML += `<div class="p-2 bg-slate-50 border rounded flex justify-between items-center text-xs"><div><strong>Ref:</strong> ${h.ref} | <strong>Amount:</strong> ${h.amount}</div>${h.receipt_url ? `<a href="${h.receipt_url}" target="_blank" class="text-indigo-600 underline">View Receipt</a>` : ''}</div>`;
+                list.innerHTML += `
+                    <div class="p-2 bg-slate-50 border rounded flex justify-between items-center text-xs">
+                        <div><strong>Ref:</strong> ${h.ref} | <strong>Amount:</strong> ${h.amount} <span class="text-slate-400">(${h.date})</span></div>
+                        ${h.receipt_url ? `<button onclick="viewFullImage('${h.receipt_url}')" class="text-indigo-600 font-medium underline flex items-center gap-1"><i class="fa-solid fa-image"></i> View Receipt Photo</button>` : ''}
+                    </div>`;
             });
         }
 
