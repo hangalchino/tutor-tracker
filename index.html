@@ -419,27 +419,33 @@
         </main>
     </div>
 
-    <!-- Modals -->
-    <div id="absentModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+    <!-- Modals for Student Cancel Class & Teacher Absence -->
+    <div id="cancelClassModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <h3 class="font-bold text-slate-800 text-sm">Notify Teacher of Absence</h3>
-            <input type="hidden" id="absentSessionId">
-            <textarea id="absentReason" rows="3" placeholder="Reason..." class="w-full p-2 border rounded"></textarea>
+            <h3 class="font-bold text-slate-800 text-sm">Request Class Cancellation</h3>
+            <input type="hidden" id="cancelSessionId">
+            <div>
+                <label class="block font-semibold uppercase mb-1">Reason for Cancellation</label>
+                <textarea id="cancelReason" rows="3" placeholder="State reason for canceling class..." class="w-full p-2 border rounded"></textarea>
+            </div>
             <div class="flex space-x-2 pt-2">
-                <button onclick="sendAbsentNotice()" class="flex-1 bg-rose-600 text-white py-2 rounded">Send Notice</button>
-                <button onclick="closeAbsentModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Cancel</button>
+                <button onclick="sendClassCancellation()" class="flex-1 bg-rose-600 text-white py-2 rounded font-bold">Submit Cancellation</button>
+                <button onclick="closeCancelClassModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Close</button>
             </div>
         </div>
     </div>
 
-    <div id="adminReplyModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+    <div id="teacherAbsentModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <h3 class="font-bold text-slate-800 text-sm">Reply to Notice</h3>
-            <input type="hidden" id="replySessionId">
-            <textarea id="adminReplyText" rows="3" placeholder="Reply..." class="w-full p-2 border rounded"></textarea>
+            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> Tag Teacher Absence / Emergency</h3>
+            <input type="hidden" id="teacherAbsentSessionId">
+            <div>
+                <label class="block font-semibold uppercase mb-1">Reason / Message to Student</label>
+                <textarea id="teacherAbsentReason" rows="4" placeholder="e.g., Sorry, Teacher Ann has an emergency and cannot attend today. We will reschedule this session." class="w-full p-2 border rounded"></textarea>
+            </div>
             <div class="flex space-x-2 pt-2">
-                <button onclick="sendAdminReply()" class="flex-1 bg-indigo-600 text-white py-2 rounded">Send Reply</button>
-                <button onclick="closeAdminReplyModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Cancel</button>
+                <button onclick="saveTeacherAbsentNotice()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-2 rounded font-bold">Save & Notify Student</button>
+                <button onclick="closeTeacherAbsentModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Cancel</button>
             </div>
         </div>
     </div>
@@ -495,7 +501,6 @@
             const message = document.getElementById('visitorMessage').value.trim();
             const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            // Anyone can comment freely without pre-checking registration
             const { error } = await _supabase.from('community_comments').insert([{ name, message, date, replies: [] }]);
             if (error) { alert("Error posting comment: " + error.message); return; }
 
@@ -546,7 +551,6 @@
         }
 
         async function promptDeleteComment(id, authorName) {
-            // If Admin is logged in, delete instantly
             if (isAdminLoggedIn) {
                 if (confirm(`Admin action: Delete comment by "${authorName}"?`)) {
                     const { error } = await _supabase.from('community_comments').delete().eq('id', id);
@@ -558,11 +562,9 @@
                 return;
             }
 
-            // Regular user deletion prompt requiring registered account password matching author name
             const enteredPassword = prompt(`To delete this comment by "${authorName}", please enter the registered account password for this name:`);
             if (enteredPassword === null) return;
 
-            // Verify password against database student record matching authorName
             const { data: studentData, error } = await _supabase.from('students').select('*').ilike('name', authorName);
             if (error || !studentData || studentData.length === 0) {
                 alert("Deletion restricted: Only registered users can delete comments using their account password.");
@@ -575,7 +577,6 @@
                 return;
             }
 
-            // Password matches, proceed with deletion
             const { error: deleteError } = await _supabase.from('community_comments').delete().eq('id', id);
             if (deleteError) { alert("Error deleting comment: " + deleteError.message); return; }
             loadPublicComments();
@@ -620,7 +621,6 @@
                         
                         ${repliesHtml}
 
-                        <!-- Admin Reply Input -->
                         <div class="mt-3 pt-3 border-t">
                             <form onsubmit="submitAdminCommentReply(event, ${c.id})" class="flex gap-2">
                                 <input type="text" id="adminWallReplyInput-${c.id}" required placeholder="Reply as ADMIN..." class="flex-grow p-2 border rounded text-xs bg-white">
@@ -741,7 +741,6 @@
             openChatWithStudent(studentName);
         }
 
-        // Multiple Recording Inputs Handler
         function addRecordingField(title = '', url = '') {
             const container = document.getElementById('recordingFieldsContainer');
             const div = document.createElement('div');
@@ -1021,14 +1020,21 @@
             if (allSessions.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No sessions scheduled.</p>`; return; }
 
             allSessions.forEach(s => {
-                let statusBadge = s.absent_status ? `<div class="mt-2 p-2 bg-rose-50 border rounded text-rose-800"><strong>Absent Notice:</strong> ${s.absent_reason} ${s.admin_reply ? `<br><strong>Reply:</strong> ${s.admin_reply}` : `<button onclick="openAdminReplyModal(${s.id})" class="mt-1 bg-indigo-600 text-white px-2 py-1 rounded text-[10px]">Reply</button>`}</div>` : '';
+                let studentCancellationBadge = s.student_cancelled ? `<div class="mt-2 p-2 bg-rose-50 border rounded text-rose-800"><strong>Student Cancel Request:</strong> ${s.student_cancel_reason || 'No reason provided'}</div>` : '';
+                let teacherAbsentBadge = s.teacher_absent ? `<div class="mt-2 p-2 bg-amber-50 border rounded text-amber-800"><strong>Teacher Absent Tagged:</strong> ${s.teacher_absent_reason}</div>` : '';
+
                 container.innerHTML += `
-                    <div class="p-3 border rounded text-xs bg-slate-50 flex justify-between items-start">
-                        <div><strong>${s.student_name}</strong> - <span class="text-indigo-600">${s.subject}</span> (${s.date} [${s.slot}])<br>${s.notes || ''} ${statusBadge}</div>
-                        <div class="flex items-center space-x-1">
-                            <button onclick="editSession(${s.id})" class="text-indigo-500 p-2" title="Edit Session"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteSession(${s.id})" class="text-rose-500 p-2" title="Delete Session"><i class="fa-solid fa-trash"></i></button>
+                    <div class="p-3 border rounded text-xs bg-slate-50 flex flex-col gap-2">
+                        <div class="flex justify-between items-start">
+                            <div><strong>${s.student_name}</strong> - <span class="text-indigo-600">${s.subject}</span> (${s.date} [${s.slot}])<br>${s.notes || ''}</div>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="openTeacherAbsentModal(${s.id})" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1.5 rounded font-medium" title="Tag Teacher Absent"><i class="fa-solid fa-triangle-exclamation"></i> Tag Absent</button>
+                                <button onclick="editSession(${s.id})" class="text-indigo-500 p-2" title="Edit Session"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteSession(${s.id})" class="text-rose-500 p-2" title="Delete Session"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
+                        ${studentCancellationBadge}
+                        ${teacherAbsentBadge}
                     </div>`;
             });
         }
@@ -1042,15 +1048,20 @@
 
             if (sessions) {
                 sessions.forEach(s => {
-                    let replyBox = s.absent_status ? `<p class="text-rose-600 font-bold mt-1">Absent Notice Sent (${s.absent_reason})</p>${s.admin_reply ? `<p class="text-indigo-700 font-semibold mt-1 bg-indigo-50 p-1 rounded">Teacher Reply: ${s.admin_reply}</p>` : ''}` : '';
+                    let studentNoticeBox = s.student_cancelled ? `<p class="text-rose-600 font-bold mt-1"><i class="fa-solid fa-ban"></i> You requested to cancel this class (${s.student_cancel_reason})</p>` : '';
+                    let teacherAbsentBox = s.teacher_absent ? `<div class="mt-2 p-3 bg-amber-50 border border-amber-300 rounded text-amber-900"><strong class="block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Notice from Teacher:</strong> Teacher Ann has tagged herself absent for this session.<br><em>"${s.teacher_absent_reason}"</em></div>` : '';
                     
                     if (s.date >= today) {
                         scheduleContainer.innerHTML += `
-                            <div class="p-4 bg-slate-50 border rounded flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs gap-3">
-                                <div><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''} ${replyBox}</div>
-                                <div class="flex gap-2">
-                                    ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded font-medium"><i class="fa-solid fa-video mr-1"></i> Join Meeting</a>` : ''}
-                                    <button onclick="openAbsentModal(${s.id})" class="bg-rose-50 text-rose-700 px-3 py-2 rounded">Mark Absent</button>
+                            <div class="p-4 bg-slate-50 border rounded flex flex-col justify-between items-start text-xs gap-3">
+                                <div class="w-full"><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''} ${studentNoticeBox} ${teacherAbsentBox}</div>
+                                <div class="flex gap-2 w-full justify-between items-center pt-2 border-t">
+                                    <div>
+                                        ${s.link && !s.teacher_absent ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded font-medium inline-block"><i class="fa-solid fa-video mr-1"></i> Join Meeting</a>` : ''}
+                                    </div>
+                                    <div>
+                                        ${!s.student_cancelled ? `<button onclick="openCancelClassModal(${s.id})" class="bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 px-3 py-2 rounded font-medium"><i class="fa-solid fa-xmark mr-1"></i> Cancel Class</button>` : '<span class="text-slate-400 font-medium">Cancellation Submitted</span>'}
+                                    </div>
                                 </div>
                             </div>`;
                     } else {
@@ -1074,7 +1085,7 @@
 
                         historyContainer.innerHTML += `
                             <div class="p-4 bg-slate-50 border rounded space-y-2 text-xs">
-                                <div><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''}</div>
+                                <div><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''} ${teacherAbsentBox}</div>
                                 <div>${recsHtml}</div>
                             </div>`;
                     }
@@ -1083,6 +1094,44 @@
 
             loadStudentPaymentInfo();
             loadStudentPaymentHistory(name);
+        }
+
+        // Student Cancel Class Functions
+        function openCancelClassModal(id) {
+            document.getElementById('cancelSessionId').value = id;
+            document.getElementById('cancelReason').value = '';
+            document.getElementById('cancelClassModal').classList.remove('hidden');
+        }
+        function closeCancelClassModal() {
+            document.getElementById('cancelClassModal').classList.add('hidden');
+        }
+        async function sendClassCancellation() {
+            const id = document.getElementById('cancelSessionId').value;
+            const reason = document.getElementById('cancelReason').value.trim() || 'Student requested class cancellation.';
+            const { error } = await _supabase.from('sessions').update({ student_cancelled: true, student_cancel_reason: reason }).eq('id', id);
+            if (error) { alert("Error submitting cancellation: " + error.message); return; }
+            alert("Class cancellation request sent to Teacher Ann.");
+            closeCancelClassModal();
+            loadStudentPortal(currentStudentName);
+        }
+
+        // Teacher Tag Absent Functions
+        function openTeacherAbsentModal(id) {
+            document.getElementById('teacherAbsentSessionId').value = id;
+            document.getElementById('teacherAbsentReason').value = '';
+            document.getElementById('teacherAbsentModal').classList.remove('hidden');
+        }
+        function closeTeacherAbsentModal() {
+            document.getElementById('teacherAbsentModal').classList.add('hidden');
+        }
+        async function saveTeacherAbsentNotice() {
+            const id = document.getElementById('teacherAbsentSessionId').value;
+            const reason = document.getElementById('teacherAbsentReason').value.trim() || 'Teacher is unavailable or handling an emergency.';
+            const { error } = await _supabase.from('sessions').update({ teacher_absent: true, teacher_absent_reason: reason }).eq('id', id);
+            if (error) { alert("Error saving notice: " + error.message); return; }
+            alert("Teacher absence tagged successfully. The student will now see your message!");
+            closeTeacherAbsentModal();
+            loadAdminData();
         }
 
         async function loadStudentPaymentInfo() {
@@ -1108,24 +1157,6 @@
             } else {
                 paymentContainer.innerHTML = `<p class="text-slate-400">Payment information has not been configured by the teacher yet.</p>`;
             }
-        }
-
-        function openAbsentModal(id) { document.getElementById('absentSessionId').value = id; document.getElementById('absentModal').classList.remove('hidden'); }
-        function closeAbsentModal() { document.getElementById('absentModal').classList.add('hidden'); }
-        async function sendAbsentNotice() {
-            const id = document.getElementById('absentSessionId').value;
-            const reason = document.getElementById('absentReason').value.trim() || 'No reason';
-            await _supabase.from('sessions').update({ absent_status: true, absent_reason: reason }).eq('id', id);
-            alert("Notice sent!"); closeAbsentModal(); loadStudentPortal(currentStudentName);
-        }
-
-        function openAdminReplyModal(id) { document.getElementById('replySessionId').value = id; document.getElementById('adminReplyModal').classList.remove('hidden'); }
-        function closeAdminReplyModal() { document.getElementById('adminReplyModal').classList.add('hidden'); }
-        async function sendAdminReply() {
-            const id = document.getElementById('replySessionId').value;
-            const reply = document.getElementById('adminReplyText').value.trim();
-            await _supabase.from('sessions').update({ admin_reply: reply }).eq('id', id);
-            alert("Reply sent!"); closeAdminReplyModal(); loadAdminData();
         }
 
         async function submitPaymentProof(e) {
