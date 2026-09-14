@@ -137,10 +137,10 @@
                 <div class="text-center space-y-2">
                     <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Community Wall</h3>
                     <h4 class="text-2xl font-bold text-slate-900">Leave a Comment or Inquiry</h4>
-                    <p class="text-xs text-slate-500">Anyone can join! To delete your comment, enter your registered account password when prompted.</p>
+                    <p class="text-xs text-slate-500">Anyone can comment! Only registered users can delete comments by providing their account password.</p>
                 </div>
                 <form onsubmit="submitPublicComment(event)" class="bg-white p-6 rounded-xl shadow-sm border space-y-3 text-xs">
-                    <div><label class="block font-semibold uppercase mb-1">Your Name (Must match account name)</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold uppercase mb-1">Your Name</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
                     <div><label class="block font-semibold uppercase mb-1">Your Message / Question</label><textarea id="visitorMessage" rows="3" required placeholder="Inquire about slots..." class="w-full p-2 border rounded"></textarea></div>
                     <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded">Post Comment</button>
                 </form>
@@ -495,16 +495,11 @@
             const message = document.getElementById('visitorMessage').value.trim();
             const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            // Check if student exists in database so they have a registered password
-            const { data: studentCheck } = await _supabase.from('students').select('*').ilike('name', name);
-            if (!studentCheck || studentCheck.length === 0) {
-                alert("Please use the exact registered student name so you can verify with your account password when deleting comments.");
-                return;
-            }
-
+            // Anyone can comment freely without pre-checking registration
             const { error } = await _supabase.from('community_comments').insert([{ name, message, date, replies: [] }]);
             if (error) { alert("Error posting comment: " + error.message); return; }
 
+            document.getElementById('visitorName').value = '';
             document.getElementById('visitorMessage').value = '';
             loadPublicComments();
         }
@@ -563,20 +558,20 @@
                 return;
             }
 
-            // Regular user deletion prompt requiring account password
-            const enteredPassword = prompt(`To delete this comment by ${authorName}, please enter your account password:`);
+            // Regular user deletion prompt requiring registered account password matching author name
+            const enteredPassword = prompt(`To delete this comment by "${authorName}", please enter the registered account password for this name:`);
             if (enteredPassword === null) return;
 
-            // Verify password against database student record
+            // Verify password against database student record matching authorName
             const { data: studentData, error } = await _supabase.from('students').select('*').ilike('name', authorName);
             if (error || !studentData || studentData.length === 0) {
-                alert("Account verification failed.");
+                alert("Deletion restricted: Only registered users can delete comments using their account password.");
                 return;
             }
 
             const student = studentData[0];
             if (student.password !== enteredPassword) {
-                alert("Incorrect password! You can only delete your own comments by providing your correct account password.");
+                alert("Incorrect account password! You can only delete comments matching your registered account credentials.");
                 return;
             }
 
