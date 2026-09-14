@@ -79,7 +79,7 @@
                 <h4 class="text-lg font-bold">Why Choose Learn with Teacher Ann?</h4>
                 <ul class="space-y-2 text-xs">
                     <li><i class="fa-solid fa-check mr-2"></i> One-on-one & interactive guided sessions</li>
-                    <li><i class="fa-solid fa-check mr-2"></i> Class recordings available for easy review</li>
+                    <li><i class="fa-solid fa-check mr-2"></i> Multiple class recordings available for daily review</li>
                     <li><i class="fa-solid fa-check mr-2"></i> Transparent scheduling, homework notes & parent tracking</li>
                     <li><i class="fa-solid fa-check mr-2"></i> Convenient tuition payment via any bank to QR code</li>
                 </ul>
@@ -101,7 +101,7 @@
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border space-y-3">
                         <div class="text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <p class="text-xs text-slate-600 italic">"The math and English sessions are top-notch. Having access to class recordings and the portal makes tracking homework super convenient."</p>
+                        <p class="text-xs text-slate-600 italic">"The math and English sessions are top-notch. Having access to multiple daily class recordings and the portal makes tracking homework super convenient."</p>
                         <p class="text-[11px] font-bold text-slate-900">— Parent from Canada</p>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="bg-white p-4 rounded-xl border space-y-2">
                     <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold">Homework Hub</span>
-                    <p class="text-xs text-slate-500">All students can now view custom session notes and recorded video links in their portal.</p>
+                    <p class="text-xs text-slate-500">All students can now view custom session notes and multiple daily recorded video links in their portal.</p>
                 </div>
             </div>
         </section>
@@ -261,7 +261,21 @@
                             <div><label class="block text-xs font-semibold uppercase mb-1">Time Slot</label><input type="text" id="sessionSlot" required placeholder="3:00 - 4:00 PM" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
                         </div>
                         <div><label class="block text-xs font-semibold uppercase mb-1">Meeting Link</label><input type="url" id="sessionLink" placeholder="https://meet.google.com/..." class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Class Recording URL</label><input type="url" id="sessionRecording" placeholder="https://drive.google.com/..." class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                        
+                        <!-- Multiple Recordings Container -->
+                        <div class="space-y-2 border-t border-b py-3">
+                            <div class="flex justify-between items-center">
+                                <label class="block text-xs font-semibold uppercase text-indigo-600">Class Recording Links (Multiple)</label>
+                                <button type="button" onclick="addRecordingField()" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold"><i class="fa-solid fa-plus"></i> Add Recording</button>
+                            </div>
+                            <div id="recordingFieldsContainer" class="space-y-2">
+                                <div class="flex gap-2">
+                                    <input type="url" placeholder="Recording Title / Label (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
+                                    <input type="url" placeholder="https://drive.google.com/..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
+                                </div>
+                            </div>
+                        </div>
+
                         <div><label class="block text-xs font-semibold uppercase mb-1">Notes / Homework</label><textarea id="sessionNotes" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea></div>
                         <div class="flex space-x-2 pt-2">
                             <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm">Save Session</button>
@@ -422,11 +436,11 @@
         </div>
     </div>
 
-    <!-- Modal for viewing receipt image -->
+    <!-- Modal for viewing image / receipt -->
     <div id="imageModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4" onclick="closeImageModal()">
         <div class="bg-white rounded-xl p-4 max-w-lg w-full text-center space-y-3">
-            <h3 class="font-bold text-slate-800 text-sm">Payment Image</h3>
-            <img id="modalImageDisplay" src="" class="max-h-[400px] mx-auto object-contain border rounded" alt="Image">
+            <h3 class="font-bold text-slate-800 text-sm">Image Preview</h3>
+            <img id="modalImageDisplay" src="" class="max-h-[400px] mx-auto object-contain border rounded" alt="Preview">
             <p class="text-[10px] text-slate-400">Click anywhere to close</p>
         </div>
     </div>
@@ -554,18 +568,30 @@
             else if (tab === 'payment') { 
                 document.getElementById('studentPaymentView').classList.remove('hidden'); 
                 document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; 
-                loadStudentPaymentInfo(); // <--- Instantly loads payment info and QR code!
+                loadStudentPaymentInfo(); 
             }
             else if (tab === 'chat') { document.getElementById('studentChatView').classList.remove('hidden'); document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadChatMessages(currentStudentName); }
         }
 
-        // Direct Chat from Registered Accounts
         function openChatWithStudent(studentName) {
             switchTab('adminChat');
             selectAdminChatStudent(studentName);
         }
 
-        // Image Converters for Direct Uploads
+        // Multiple Recording Inputs Handler
+        function addRecordingField(title = '', url = '') {
+            const container = document.getElementById('recordingFieldsContainer');
+            const div = document.createElement('div');
+            div.className = 'flex gap-2 items-center';
+            div.innerHTML = `
+                <input type="text" placeholder="Title (e.g. Session 1)" value="${title}" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
+                <input type="url" placeholder="https://drive.google.com/..." value="${url}" class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
+                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700 px-2"><i class="fa-solid fa-trash"></i></button>
+            `;
+            container.appendChild(div);
+        }
+
+        // Image Converters
         function previewQrUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -671,7 +697,6 @@
             });
         }
 
-        // Save Payment Info to Supabase Cloud Table (with LocalStorage Fallback)
         async function savePaymentInfo(e) {
             e.preventDefault();
             const paymaya = document.getElementById('paymayaDetails').value.trim();
@@ -688,9 +713,9 @@
                 } else {
                     await _supabase.from('payment_config').insert([paymentObj]);
                 }
-                alert("Bank payment & QR code configuration saved successfully to Cloud & Local!");
+                alert("Bank payment & QR code configuration saved successfully!");
             } catch (err) {
-                alert("Saved locally! (Cloud sync optional)");
+                alert("Saved locally!");
             }
         }
 
@@ -716,22 +741,72 @@
             }
         }
 
+        // Save or Update Session
         async function saveSession(e) {
             e.preventDefault();
             const id = document.getElementById('sessionId').value;
+
+            // Gather all recording inputs
+            const recordings = [];
+            document.querySelectorAll('#recordingFieldsContainer > div').forEach(div => {
+                const title = div.querySelector('.rec-title').value.trim();
+                const url = div.querySelector('.rec-url').value.trim();
+                if (url) recordings.push({ title: title || 'Recording', url });
+            });
+
             const sessionData = {
                 student_name: document.getElementById('studentName').value,
                 subject: document.getElementById('sessionSubject').value,
                 date: document.getElementById('sessionDate').value,
                 slot: document.getElementById('sessionSlot').value.trim(),
                 link: document.getElementById('sessionLink').value.trim(),
-                recording_url: document.getElementById('sessionRecording').value.trim(),
+                recording_url: recordings.length > 0 ? JSON.stringify(recordings) : document.getElementById('sessionRecording')?.value || '',
                 notes: document.getElementById('sessionNotes').value.trim()
             };
-            if (id) await _supabase.from('sessions').update(sessionData).eq('id', id);
-            else await _supabase.from('sessions').insert([sessionData]);
+
+            if (id) {
+                const { error } = await _supabase.from('sessions').update(sessionData).eq('id', id);
+                if (error) { alert("Error updating session: " + error.message); return; }
+                alert("Session updated successfully!");
+            } else {
+                const { error } = await _supabase.from('sessions').insert([sessionData]);
+                if (error) { alert("Error scheduling session: " + error.message); return; }
+                alert("Session scheduled successfully!");
+            }
+
             resetSessionForm();
             loadAdminData();
+        }
+
+        function editSession(id) {
+            const session = allSessions.find(s => s.id === id);
+            if (!session) return;
+
+            document.getElementById('sessionId').value = session.id;
+            document.getElementById('studentName').value = session.student_name;
+            document.getElementById('sessionSubject').value = session.subject;
+            document.getElementById('sessionDate').value = session.date;
+            document.getElementById('sessionSlot').value = session.slot || '';
+            document.getElementById('sessionLink').value = session.link || '';
+            document.getElementById('sessionNotes').value = session.notes || '';
+
+            // Populate recordings
+            const container = document.getElementById('recordingFieldsContainer');
+            container.innerHTML = '';
+            try {
+                const recs = JSON.parse(session.recording_url);
+                if (Array.isArray(recs) && recs.length > 0) {
+                    recs.forEach(r => addRecordingField(r.title, r.url));
+                } else {
+                    addRecordingField('Recording', session.recording_url || '');
+                }
+            } catch (e) {
+                addRecordingField('Recording', session.recording_url || '');
+            }
+
+            document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> Edit Session`;
+            document.getElementById('cancelSessionBtn').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function resetSessionForm() {
@@ -739,6 +814,12 @@
             document.getElementById('sessionId').value = '';
             document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Session`;
             document.getElementById('cancelSessionBtn').classList.add('hidden');
+            const container = document.getElementById('recordingFieldsContainer');
+            container.innerHTML = `
+                <div class="flex gap-2">
+                    <input type="text" placeholder="Recording Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
+                    <input type="url" placeholder="https://drive.google.com/..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
+                </div>`;
         }
 
         async function loadAdminData() {
@@ -760,8 +841,8 @@
                     <div class="p-3 border rounded text-xs bg-slate-50 flex justify-between items-start">
                         <div><strong>${s.student_name}</strong> - <span class="text-indigo-600">${s.subject}</span> (${s.date} [${s.slot}])<br>${s.notes || ''} ${statusBadge}</div>
                         <div class="flex items-center space-x-1">
-                            <button onclick="editSession(${s.id})" class="text-indigo-500 p-2"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteSession(${s.id})" class="text-rose-500 p-2"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="editSession(${s.id})" class="text-indigo-500 p-2" title="Edit Session"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteSession(${s.id})" class="text-rose-500 p-2" title="Delete Session"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>`;
             });
@@ -777,10 +858,41 @@
             if (sessions) {
                 sessions.forEach(s => {
                     let replyBox = s.absent_status ? `<p class="text-rose-600 font-bold mt-1">Absent Notice Sent (${s.absent_reason})</p>${s.admin_reply ? `<p class="text-indigo-700 font-semibold mt-1 bg-indigo-50 p-1 rounded">Teacher Reply: ${s.admin_reply}</p>` : ''}` : '';
+                    
                     if (s.date >= today) {
-                        scheduleContainer.innerHTML += `<div class="p-4 bg-slate-50 border rounded flex justify-between items-center text-xs"><div><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''} ${replyBox}</div><div class="flex gap-2">${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 text-white px-3 py-2 rounded">Join</a>` : ''}<button onclick="openAbsentModal(${s.id})" class="bg-rose-50 text-rose-700 px-3 py-2 rounded">Mark Absent</button></div></div>`;
+                        scheduleContainer.innerHTML += `
+                            <div class="p-4 bg-slate-50 border rounded flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs gap-3">
+                                <div><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''} ${replyBox}</div>
+                                <div class="flex gap-2">
+                                    ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded font-medium"><i class="fa-solid fa-video mr-1"></i> Join Meeting</a>` : ''}
+                                    <button onclick="openAbsentModal(${s.id})" class="bg-rose-50 text-rose-700 px-3 py-2 rounded">Mark Absent</button>
+                                </div>
+                            </div>`;
                     } else {
-                        historyContainer.innerHTML += `<div class="p-4 bg-slate-50 border rounded flex justify-between items-center text-xs"><div><strong>${s.subject}</strong> - ${s.date}<br>${s.notes || ''}</div>${s.recording_url ? `<a href="${s.recording_url}" target="_blank" class="bg-indigo-600 text-white px-3 py-2 rounded">Watch Recording</a>` : '<span class="text-slate-400">No recording</span>'}</div>`;
+                        // Parse multiple recordings
+                        let recsHtml = '<span class="text-slate-400">No recording</span>';
+                        if (s.recording_url) {
+                            try {
+                                const recs = JSON.parse(s.recording_url);
+                                if (Array.isArray(recs) && recs.length > 0) {
+                                    recsHtml = '<div class="flex flex-wrap gap-1.5 mt-1">';
+                                    recs.forEach(r => {
+                                        recsHtml += `<a href="${r.url}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded text-[11px] font-medium"><i class="fa-solid fa-play mr-1"></i> ${r.title}</a>`;
+                                    });
+                                    recsHtml += '</div>';
+                                } else {
+                                    recsHtml = `<a href="${s.recording_url}" target="_blank" class="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-medium"><i class="fa-solid fa-play mr-1"></i> Watch Recording</a>`;
+                                }
+                            } catch (e) {
+                                recsHtml = `<a href="${s.recording_url}" target="_blank" class="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-medium"><i class="fa-solid fa-play mr-1"></i> Watch Recording</a>`;
+                            }
+                        }
+
+                        historyContainer.innerHTML += `
+                            <div class="p-4 bg-slate-50 border rounded space-y-2 text-xs">
+                                <div><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''}</div>
+                                <div>${recsHtml}</div>
+                            </div>`;
                     }
                 });
             }
@@ -789,7 +901,6 @@
             loadStudentPaymentHistory(name);
         }
 
-        // Dedicated Function to Load Payment Info & QR Code for Students
         async function loadStudentPaymentInfo() {
             const paymentContainer = document.getElementById('studentPaymentInfo');
             let config = null;
