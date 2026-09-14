@@ -300,14 +300,14 @@
 
             <!-- TAB 3: PAYMENT SETUP -->
             <div id="paymentTab" class="hidden max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-wallet text-indigo-600 mr-2"></i> Configure Bank Transfer & QR Code</h2>
+                <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-wallet text-indigo-600 mr-2"></i> Configure Bank Transfer & QR Code (Cloud Sync)</h2>
                 <form onsubmit="savePaymentInfo(event)" class="space-y-4 text-xs">
                     <div><label class="block font-semibold uppercase mb-1">Bank Account / Mobile Wallet Details (Name, Account No)</label><input type="text" id="paymayaDetails" required placeholder="e.g., Bank Name / Account Name / Number" class="w-full p-2.5 border rounded-lg"></div>
                     <div><label class="block font-semibold uppercase mb-1">Payment Instructions</label><textarea id="worldremitInstructions" rows="3" placeholder="Transfer from any bank directly to our account or scan QR code below." class="w-full p-2.5 border rounded-lg"></textarea></div>
                     <div><label class="block font-semibold uppercase mb-1">Upload QR Code Image</label><input type="file" id="paymayaQrFile" accept="image/*" class="w-full p-2 border rounded-lg bg-slate-50" onchange="previewQrUpload(event)"></div>
                     <input type="hidden" id="paymayaQrUrl">
                     <div id="qrPreviewContainer" class="mt-2"></div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Save Payment Configuration</button>
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Save Payment Configuration to Cloud</button>
                 </form>
             </div>
 
@@ -551,7 +551,7 @@
 
             if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; }
             else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; }
-            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; }
+            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadStudentPortal(currentStudentName); }
             else if (tab === 'chat') { document.getElementById('studentChatView').classList.remove('hidden'); document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadChatMessages(currentStudentName); }
         }
 
@@ -667,23 +667,33 @@
             });
         }
 
+        // Save Payment Info to Supabase Cloud Table
         async function savePaymentInfo(e) {
             e.preventDefault();
             const paymaya = document.getElementById('paymayaDetails').value.trim();
             const instructions = document.getElementById('worldremitInstructions').value.trim();
-            const qrUrl = document.getElementById('paymayaQrUrl').value.trim();
-            localStorage.setItem('tutor_payment_info', JSON.stringify({ paymaya, instructions, qrUrl }));
-            alert("Bank payment & QR code configuration saved successfully!");
+            const qr_url = document.getElementById('paymayaQrUrl').value.trim();
+
+            // Check if config already exists
+            const { data: existing } = await _supabase.from('payment_config').select('*');
+            if (existing && existing.length > 0) {
+                await _supabase.from('payment_config').update({ paymaya, instructions, qr_url }).eq('id', existing[0].id);
+            } else {
+                await _supabase.from('payment_config').insert([{ paymaya, instructions, qr_url }]);
+            }
+
+            alert("Bank payment & QR code configuration saved to cloud successfully!");
         }
 
-        function loadPaymentConfig() {
-            const saved = JSON.parse(localStorage.getItem('tutor_payment_info'));
-            if (saved) {
-                document.getElementById('paymayaDetails').value = saved.paymaya || '';
-                document.getElementById('worldremitInstructions').value = saved.instructions || '';
-                document.getElementById('paymayaQrUrl').value = saved.qrUrl || '';
-                if (saved.qrUrl) {
-                    document.getElementById('qrPreviewContainer').innerHTML = `<img src="${saved.qrUrl}" class="w-32 h-32 object-contain border rounded mt-1 bg-white" alt="QR Code">`;
+        async function loadPaymentConfig() {
+            const { data } = await _supabase.from('payment_config').select('*');
+            if (data && data.length > 0) {
+                const config = data[0];
+                document.getElementById('paymayaDetails').value = config.paymaya || '';
+                document.getElementById('worldremitInstructions').value = config.instructions || '';
+                document.getElementById('paymayaQrUrl').value = config.qr_url || '';
+                if (config.qr_url) {
+                    document.getElementById('qrPreviewContainer').innerHTML = `<img src="${config.qr_url}" class="w-32 h-32 object-contain border rounded mt-1 bg-white" alt="QR Code">`;
                 }
             }
         }
@@ -757,15 +767,20 @@
                 });
             }
 
-            const paymentConfig = JSON.parse(localStorage.getItem('tutor_payment_info'));
+            // Load Payment Configuration from Supabase Cloud
+            const { data: payData } = await _supabase.from('payment_config').select('*');
             const paymentContainer = document.getElementById('studentPaymentInfo');
-            if (paymentConfig) {
+            if (payData && payData.length > 0) {
+                const config = payData[0];
                 paymentContainer.innerHTML = `
-                    <p><strong>Bank / Wallet Account Details:</strong> ${paymentConfig.paymaya || 'N/A'}</p>
-                    <p><strong>Instructions:</strong> ${paymentConfig.instructions || 'Transfer funds from any bank or mobile wallet to the account or QR code below.'}</p>
-                    ${paymentConfig.qrUrl ? `<div class="mt-2"><p class="font-semibold mb-1">Scan QR Code to Pay:</p><img src="${paymentConfig.qrUrl}" class="w-36 h-36 object-contain border rounded p-1 bg-white cursor-pointer" onclick="viewFullImage('${paymentConfig.qrUrl}')" alt="QR Code"></div>` : ''}
+                    <p><strong>Bank / Wallet Account Details:</strong> ${config.paymaya || 'N/A'}</p>
+                    <p><strong>Instructions:</strong> ${config.instructions || 'Transfer funds from any bank or mobile wallet to the account or QR code below.'}</p>
+                    ${config.qr_url ? `<div class="mt-2"><p class="font-semibold mb-1">Scan QR Code to Pay:</p><img src="${config.qr_url}" class="w-36 h-36 object-contain border rounded p-1 bg-white cursor-pointer" onclick="viewFullImage('${config.qr_url}')" alt="QR Code"></div>` : ''}
                 `;
+            } else {
+                paymentContainer.innerHTML = `<p class="text-slate-400">Payment information has not been configured by the teacher yet.</p>`;
             }
+
             loadStudentPaymentHistory(name);
         }
 
