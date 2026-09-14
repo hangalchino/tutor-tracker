@@ -231,7 +231,7 @@
                 <div class="flex items-center space-x-3">
                     <div class="flex bg-indigo-700/60 p-1 rounded-lg text-xs">
                         <button onclick="switchTab('schedule')" id="navScheduleBtn" class="px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all">Schedule</button>
-                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Registered Accounts</button>
+                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Registered Accounts & Payments</button>
                         <button onclick="switchTab('payment')" id="navPaymentBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Payment Setup</button>
                         <button onclick="switchTab('adminChat')" id="navAdminChatBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Support Chat</button>
                     </div>
@@ -290,7 +290,7 @@
                 </section>
             </div>
 
-            <!-- TAB 2: REGISTERED ACCOUNTS / STUDENTS -->
+            <!-- TAB 2: REGISTERED ACCOUNTS & PAYMENT TRACKING -->
             <div id="studentsTab" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit">
                     <h2 id="studentFormTitle" class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-user-plus text-indigo-600 mr-2"></i> Add / Edit Student Account</h2>
@@ -308,8 +308,8 @@
                     </form>
                 </section>
                 <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-users text-indigo-600 mr-2"></i> Registered Student Accounts</h2>
-                    <div id="studentsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow"></div>
+                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-users text-indigo-600 mr-2"></i> Registered Student Accounts & Payment Status</h2>
+                    <div id="studentsContainer" class="space-y-4 overflow-y-auto max-h-[600px] flex-grow"></div>
                 </section>
             </div>
 
@@ -522,7 +522,6 @@
                     });
                 }
 
-                // Allow users to delete their own comment by inputting their exact name
                 container.innerHTML += `
                     <div class="p-4 bg-white border rounded-xl shadow-sm text-xs space-y-2">
                         <div class="flex justify-between items-start font-bold text-slate-900">
@@ -535,7 +534,7 @@
                         
                         ${repliesHtml}
 
-                        <!-- Admin Reply Input (Visible only if Admin is logged in) -->
+                        <!-- Admin Reply Box -->
                         <div id="adminReplyBox-${c.id}" class="${isAdminLoggedIn ? 'block' : 'hidden'} mt-3 pt-2 border-t">
                             <form onsubmit="submitAdminCommentReply(event, ${c.id})" class="flex gap-2">
                                 <input type="text" id="adminReplyInput-${c.id}" required placeholder="Reply as ADMIN..." class="flex-grow p-1.5 border rounded text-xs bg-slate-50">
@@ -566,7 +565,6 @@
             const replyMsg = inputEl.value.trim();
             if (!replyMsg) return;
 
-            // Fetch current comment replies
             const { data } = await _supabase.from('community_comments').select('replies').eq('id', commentId).single();
             let currentReplies = data && data.replies ? data.replies : [];
 
@@ -583,7 +581,7 @@
             loadPublicComments();
         }
 
-        // Student Login with Password Verification
+        // Student Login
         async function handleStudentLogin(e) {
             e.preventDefault();
             const name = document.getElementById('studentLoginName').value.trim();
@@ -659,13 +657,21 @@
             selectAdminChatStudent(studentName);
         }
 
+        // Quick Ping / Reminder Action from Admin to Student Chat
+        async function pingStudentPayment(studentName) {
+            const reminderMsg = "Hello! This is a gentle reminder regarding your tuition payment. Please let me know if you are having any trouble or if you need assistance with the bank QR code.";
+            await _supabase.from('chat_messages').insert([{ student_name: studentName, sender: 'admin', message: reminderMsg, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+            alert(`Payment reminder ping sent to ${studentName}! You can view it in the Support Chat.`);
+            openChatWithStudent(studentName);
+        }
+
         // Multiple Recording Inputs Handler
         function addRecordingField(title = '', url = '') {
             const container = document.getElementById('recordingFieldsContainer');
             const div = document.createElement('div');
             div.className = 'flex gap-2 items-center';
             div.innerHTML = `
-                <input type="text" placeholder="Title (e.g. Session 1)" value="${title}" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
+                <input type="text" placeholder="Title (e.g. Part 1)" value="${title}" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
                 <input type="url" placeholder="https://drive.google.com/..." value="${url}" class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
                 <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700 px-2"><i class="fa-solid fa-trash"></i></button>
             `;
@@ -751,28 +757,57 @@
             document.getElementById('cancelStudentBtn').classList.add('hidden');
         }
 
+        // Load Registered Students WITH Payment Tracking Status
         async function loadStudentsList() {
             const { data: students } = await _supabase.from('students').select('*').order('name', { ascending: true });
+            const { data: payments } = await _supabase.from('payment_history').select('*');
             allStudentsCache = students || [];
+            
             const container = document.querySelector('#studentsTab #studentsContainer');
             container.innerHTML = '';
             if (!students || students.length === 0) {
                 container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No registered student accounts found.</p>`;
                 return;
             }
+
             students.forEach(s => {
+                // Find payment history for this student
+                const studentPayments = payments ? payments.filter(p => p.student_name && p.student_name.toLowerCase() === s.name.toLowerCase()) : [];
+                const hasPaid = studentPayments.length > 0;
+
+                let paymentHtml = `<div class="mt-2 pt-2 border-t text-[11px] text-slate-600 space-y-1"><strong>Submitted Payments:</strong>`;
+                if (hasPaid) {
+                    studentPayments.forEach(p => {
+                        paymentHtml += `<div class="flex justify-between items-center bg-white p-1.5 border rounded"><span>Ref: <strong>${p.ref}</strong> | Amount: <strong>${p.amount}</strong> (${p.date})</span> ${p.receipt_url ? `<button onclick="viewFullImage('${p.receipt_url}')" class="text-indigo-600 underline font-medium"><i class="fa-solid fa-image"></i> View Receipt</button>` : ''}</div>`;
+                    });
+                } else {
+                    paymentHtml += `<p class="text-amber-600 italic">No payment proofs uploaded yet.</p>`;
+                }
+                paymentHtml += `</div>`;
+
+                const statusBadge = hasPaid 
+                    ? `<span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold uppercase"><i class="fa-solid fa-circle-check mr-1"></i> Paid</span>` 
+                    : `<span class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded font-bold uppercase"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Pending Payment</span>`;
+
                 container.innerHTML += `
-                    <div class="p-3 border rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 gap-2">
-                        <div class="space-y-0.5">
-                            <strong>${s.name}</strong> ${s.parent ? `(Guardian: ${s.parent})` : ''}<br>
-                            <span class="text-slate-500"><i class="fa-solid fa-envelope mr-1"></i> Contact: ${s.email_or_mobile || 'N/A'} | <i class="fa-solid fa-key mr-1"></i> Password: <strong>${s.password || 'None'}</strong></span>
-                            ${s.notes ? `<br><span class="text-indigo-600">Notes: ${s.notes}</span>` : ''}
+                    <div class="p-3 border rounded-xl text-xs flex flex-col bg-slate-50 gap-2 shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <div class="space-y-0.5">
+                                <div class="flex items-center gap-2">
+                                    <strong class="text-sm text-slate-900">${s.name}</strong> ${s.parent ? `(Guardian: ${s.parent})` : ''}
+                                    ${statusBadge}
+                                </div>
+                                <span class="text-slate-500"><i class="fa-solid fa-envelope mr-1"></i> Contact: ${s.email_or_mobile || 'N/A'} | <i class="fa-solid fa-key mr-1"></i> Password: <strong>${s.password || 'None'}</strong></span>
+                                ${s.notes ? `<br><span class="text-indigo-600">${s.notes}</span>` : ''}
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="pingStudentPayment('${s.name}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1.5 rounded font-medium flex items-center gap-1" title="Ping Payment Reminder"><i class="fa-solid fa-bell"></i> Ping</button>
+                                <button onclick="openChatWithStudent('${s.name}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded font-medium flex items-center gap-1" title="Chat Directly"><i class="fa-solid fa-comments"></i> Chat</button>
+                                <button onclick="editStudent(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteStudent(${s.id})" class="text-rose-500 hover:text-rose-700 p-2" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
-                        <div class="flex items-center space-x-1">
-                            <button onclick="openChatWithStudent('${s.name}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded font-medium flex items-center gap-1" title="Chat Directly"><i class="fa-solid fa-comments"></i> Chat Student</button>
-                            <button onclick="editStudent(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteStudent(${s.id})" class="text-rose-500 hover:text-rose-700 p-2" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                        </div>
+                        ${paymentHtml}
                     </div>`;
             });
         }
