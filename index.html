@@ -46,7 +46,8 @@
                 </nav>
                 <div class="flex items-center space-x-2">
                     <button onclick="scrollToEnroll()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm">Enroll Now</button>
-                    <button onclick="openStudentLoginModal()" class="border border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-3 py-2 rounded-lg text-xs font-bold transition-colors">Student Portal</button>
+                    <button onclick="openStudentLoginModal()" class="border border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-3 py-2 rounded-lg text-xs font-bold transition-colors">Student Sign In</button>
+                    <button onclick="openStudentRegisterModal()" class="bg-slate-800 text-white hover:bg-slate-700 px-3 py-2 rounded-lg text-xs font-bold transition-colors">Student Register</button>
                 </div>
             </div>
         </header>
@@ -59,7 +60,7 @@
                 <p class="text-sm text-slate-600 max-w-xl mx-auto">Welcome to my official learning hub! Providing engaging, personalized online lessons designed to help your child excel academically with confidence.</p>
                 <div class="flex justify-center gap-3 pt-2">
                     <button onclick="scrollToEnroll()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl text-xs font-bold shadow-md transition-all">Get Started & Enroll</button>
-                    <button onclick="openStudentLoginModal()" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-6 py-3 rounded-xl text-xs font-bold transition-all">Student Sign In</button>
+                    <button onclick="openStudentLoginModal()" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-6 py-3 rounded-xl text-xs font-bold transition-all">Student Portal Sign In</button>
                 </div>
             </div>
         </section>
@@ -122,7 +123,7 @@
                 </div>
                 <div class="bg-white p-4 rounded-xl border space-y-2">
                     <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold">WorldRemit Support</span>
-                    <p class="text-xs font-slate-500 text-slate-500">Tuition fee processing via WorldRemit to PayMaya is fully active and instant.</p>
+                    <p class="text-xs text-slate-500">Tuition fee processing via WorldRemit to PayMaya is fully active and instant.</p>
                 </div>
                 <div class="bg-white p-4 rounded-xl border space-y-2">
                     <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold">Homework Hub</span>
@@ -131,7 +132,7 @@
             </div>
         </section>
 
-        <!-- Comments & Community Feedback Section -->
+        <!-- Comments Section -->
         <section id="comments" class="py-16 px-4 bg-slate-50 border-t">
             <div class="max-w-2xl mx-auto space-y-6">
                 <div class="text-center space-y-2">
@@ -140,7 +141,7 @@
                 </div>
                 <form onsubmit="submitPublicComment(event)" class="bg-white p-6 rounded-xl shadow-sm border space-y-3 text-xs">
                     <div><label class="block font-semibold uppercase mb-1">Your Name</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
-                    <div><label class="block font-semibold uppercase mb-1">Your Message / Question</label><textarea id="visitorMessage" rows="3" required placeholder="Inquire about slots or leave a kind remark..." class="w-full p-2 border rounded"></textarea></div>
+                    <div><label class="block font-semibold uppercase mb-1">Your Message / Question</label><textarea id="visitorMessage" rows="3" required placeholder="Inquire about slots..." class="w-full p-2 border rounded"></textarea></div>
                     <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded">Post Comment</button>
                 </form>
                 <div id="publicCommentsContainer" class="space-y-3"></div>
@@ -155,18 +156,10 @@
                     <p class="text-xs text-emerald-100">Fill out the form below to register your child for tutoring sessions.</p>
                 </div>
                 <form onsubmit="handlePublicEnrollment(event)" class="space-y-4 text-xs text-slate-800">
-                    <div>
-                        <label class="block font-semibold text-white uppercase mb-1">Student Full Name</label>
-                        <input type="text" id="enrollStudentName" required placeholder="e.g., John Smith" class="w-full p-2.5 rounded-lg border-0">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-white uppercase mb-1">Parent / Guardian Name</label>
-                        <input type="text" id="enrollParentName" required placeholder="e.g., Sarah Smith" class="w-full p-2.5 rounded-lg border-0">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-white uppercase mb-1">Contact Email / WhatsApp / Phone</label>
-                        <input type="text" id="enrollContact" required placeholder="email@domain.com or phone" class="w-full p-2.5 rounded-lg border-0">
-                    </div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Student Full Name</label><input type="text" id="enrollStudentName" required placeholder="e.g., John Smith" class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Parent / Guardian Name</label><input type="text" id="enrollParentName" required placeholder="e.g., Sarah Smith" class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Email or Mobile Number (For Verification)</label><input type="text" id="enrollContact" required placeholder="email@domain.com or +639..." class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Create Portal Password</label><input type="password" id="enrollPassword" required placeholder="••••••••" class="w-full p-2.5 rounded-lg border-0"></div>
                     <div>
                         <label class="block font-semibold text-white uppercase mb-1">Preferred Subject(s)</label>
                         <select id="enrollSubject" class="w-full p-2.5 rounded-lg border-0 bg-white">
@@ -176,7 +169,7 @@
                             <option value="All Subjects Bundle">🌟 All Subjects Bundle</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg transition-colors">Submit Enrollment</button>
+                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg transition-colors">Submit Enrollment & Create Account</button>
                 </form>
             </div>
         </section>
@@ -201,10 +194,27 @@
                 <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-user-graduate text-emerald-600 mr-2"></i> Student Portal Sign In</h3>
                 <button onclick="closeStudentLoginModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p class="text-xs text-slate-500">Enter your exact registered full name to access your schedule, homework, chat, and payment records.</p>
             <form onsubmit="handleStudentLogin(event)" class="space-y-3 text-xs">
-                <input type="text" id="studentLoginName" required placeholder="e.g., John Smith" class="w-full p-2.5 border rounded-lg">
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg">Access Portal</button>
+                <div><label class="block font-semibold uppercase mb-1">Student Full Name</label><input type="text" id="studentLoginName" required placeholder="e.g., John Smith" class="w-full p-2.5 border rounded-lg"></div>
+                <div><label class="block font-semibold uppercase mb-1">Password</label><input type="password" id="studentLoginPass" required placeholder="••••••••" class="w-full p-2.5 border rounded-lg"></div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= STUDENT REGISTER MODAL ================= -->
+    <div id="studentRegisterModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-user-plus text-emerald-600 mr-2"></i> Student Account Registration</h3>
+                <button onclick="closeStudentRegisterModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="handleStudentRegistration(event)" class="space-y-3 text-xs">
+                <div><label class="block font-semibold uppercase mb-1">Full Name</label><input type="text" id="regStudentName" required placeholder="e.g., John Smith" class="w-full p-2.5 border rounded-lg"></div>
+                <div><label class="block font-semibold uppercase mb-1">Parent/Guardian</label><input type="text" id="regParentName" placeholder="e.g., Sarah Smith" class="w-full p-2.5 border rounded-lg"></div>
+                <div><label class="block font-semibold uppercase mb-1">Email or Mobile Number</label><input type="text" id="regContact" required placeholder="email@domain.com or +639..." class="w-full p-2.5 border rounded-lg"></div>
+                <div><label class="block font-semibold uppercase mb-1">Create Password</label><input type="password" id="regPassword" required placeholder="••••••••" class="w-full p-2.5 border rounded-lg"></div>
+                <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-lg">Register Account</button>
             </form>
         </div>
     </div>
@@ -216,7 +226,7 @@
                 <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-lock text-indigo-600 mr-2"></i> Tutor Admin Access</h3>
                 <button onclick="closeAdminLoginModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form id="adminAuthForm" class="space-y-3 text-xs" onsubmit="handleAdminAuth(event)">
+            <form onsubmit="handleAdminAuth(event)" class="space-y-3 text-xs">
                 <div><label class="block font-semibold uppercase mb-1">Email</label><input type="email" id="adminEmail" required placeholder="admin@email.com" class="w-full p-2.5 border rounded-lg"></div>
                 <div><label class="block font-semibold uppercase mb-1">Password</label><input type="password" id="adminPassword" required placeholder="••••••••" class="w-full p-2.5 border rounded-lg"></div>
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg">Sign In as Admin</button>
@@ -254,12 +264,9 @@
                     <h2 id="sessionFormTitle" class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Session</h2>
                     <form id="sessionForm" class="space-y-4" onsubmit="saveSession(event)">
                         <input type="hidden" id="sessionId">
+                        <div><label class="block text-xs font-semibold uppercase mb-1">Student Name</label><select id="studentName" required class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="" disabled selected>Select student...</option></select></div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Student Name</label>
-                            <select id="studentName" required class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="" disabled selected>Select student...</option></select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Subject Area</label>
+                            <label class="block text-xs font-semibold uppercase mb-1">Subject Area</label>
                             <select id="sessionSubject" required class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
                                 <option value="Reading">📖 Reading</option>
                                 <option value="English">📚 English</option>
@@ -293,8 +300,9 @@
                     <form id="studentForm" class="space-y-4" onsubmit="saveStudentDirect(event)">
                         <div><label class="block text-xs font-semibold uppercase mb-1">Full Name</label><input type="text" id="dirStudentName" required class="w-full px-3 py-2 border rounded-lg text-sm"></div>
                         <div><label class="block text-xs font-semibold uppercase mb-1">Parent/Guardian</label><input type="text" id="dirParentName" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Contact / Email</label><input type="text" id="dirContact" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Notes</label><textarea id="dirNotes" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea></div>
+                        <div><label class="block text-xs font-semibold uppercase mb-1">Email or Mobile</label><input type="text" id="dirContact" required class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                        <div><label class="block text-xs font-semibold uppercase mb-1">Password</label><input type="password" id="dirPassword" required class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                        <div><label class="block text-xs font-semibold uppercase mb-1">Notes</label><textarea id="dirNotes" rows="2" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea></div>
                         <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2 rounded-lg text-sm">Save Student</button>
                     </form>
                 </section>
@@ -427,14 +435,14 @@
         let activeAdminChatStudent = '';
         let allSessions = [];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadPublicComments();
-        });
+        window.addEventListener('DOMContentLoaded', () => { loadPublicComments(); });
 
         // Navigation Modals
         function scrollToEnroll() { document.getElementById('enroll').scrollIntoView({ behavior: 'smooth' }); }
         function openStudentLoginModal() { document.getElementById('studentLoginModal').classList.remove('hidden'); }
         function closeStudentLoginModal() { document.getElementById('studentLoginModal').classList.add('hidden'); }
+        function openStudentRegisterModal() { document.getElementById('studentRegisterModal').classList.remove('hidden'); }
+        function closeStudentRegisterModal() { document.getElementById('studentRegisterModal').classList.add('hidden'); }
         function openAdminLoginModal() { document.getElementById('adminLoginModal').classList.remove('hidden'); }
         function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
 
@@ -444,14 +452,31 @@
             const name = document.getElementById('enrollStudentName').value.trim();
             const parent = document.getElementById('enrollParentName').value.trim();
             const contact = document.getElementById('enrollContact').value.trim();
+            const password = document.getElementById('enrollPassword').value.trim();
             const subject = document.getElementById('enrollSubject').value;
 
-            const { error } = await _supabase.from('students').insert([{ name, parent, contact, notes: `Enrolled in: ${subject}` }]);
+            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile: contact, password, notes: `Enrolled in: ${subject}` }]);
             if (error) { alert("Enrollment error: " + error.message); return; }
-            alert("Enrollment successful! Welcome to Learn with Teacher Ann. You can now sign in through the Student Portal using your exact name.");
+            alert("Enrollment & account registration successful! You can now sign in through the Student Portal using your name and password.");
             document.getElementById('enrollStudentName').value = '';
             document.getElementById('enrollParentName').value = '';
             document.getElementById('enrollContact').value = '';
+            document.getElementById('enrollPassword').value = '';
+        }
+
+        // Student Manual Registration
+        async function handleStudentRegistration(e) {
+            e.preventDefault();
+            const name = document.getElementById('regStudentName').value.trim();
+            const parent = document.getElementById('regParentName').value.trim();
+            const contact = document.getElementById('regContact').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+
+            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile: contact, password }]);
+            if (error) { alert("Registration error: " + error.message); return; }
+            alert("Account registered successfully! You can now sign in.");
+            closeStudentRegisterModal();
+            openStudentLoginModal();
         }
 
         // Public Comments
@@ -459,15 +484,13 @@
             e.preventDefault();
             const name = document.getElementById('visitorName').value.trim();
             const message = document.getElementById('visitorMessage').value.trim();
-
             let comments = JSON.parse(localStorage.getItem('public_comments')) || [];
             comments.unshift({ name, message, date: new Date().toLocaleDateString() });
             localStorage.setItem('public_comments', JSON.stringify(comments));
-
             document.getElementById('visitorName').value = '';
             document.getElementById('visitorMessage').value = '';
             loadPublicComments();
-            alert("Comment posted successfully!");
+            alert("Comment posted!");
         }
 
         function loadPublicComments() {
@@ -475,29 +498,31 @@
             if (!container) return;
             let comments = JSON.parse(localStorage.getItem('public_comments')) || [];
             container.innerHTML = '';
-            if (comments.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center">No comments yet. Be the first to leave a remark!</p>`;
-                return;
-            }
+            if (comments.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 text-center">No comments yet.</p>`; return; }
             comments.forEach(c => {
-                container.innerHTML += `
-                    <div class="p-3 bg-white border rounded-lg text-xs space-y-1">
-                        <div class="flex justify-between font-bold text-slate-800"><span>${c.name}</span><span class="text-[10px] text-slate-400">${c.date}</span></div>
-                        <p class="text-slate-600">${c.message}</p>
-                    </div>`;
+                container.innerHTML += `<div class="p-3 bg-white border rounded text-xs space-y-1"><div class="flex justify-between font-bold"><span>${c.name}</span><span class="text-[10px] text-slate-400">${c.date}</span></div><p class="text-slate-600">${c.message}</p></div>`;
             });
         }
 
-        // Student Login
+        // Student Login with Password Verification
         async function handleStudentLogin(e) {
             e.preventDefault();
             const name = document.getElementById('studentLoginName').value.trim();
+            const password = document.getElementById('studentLoginPass').value.trim();
+
             const { data, error } = await _supabase.from('students').select('*').ilike('name', name);
             if (error || !data || data.length === 0) {
-                alert("Name not found in student directory. Please check spelling or enroll first.");
+                alert("Student name not found.");
                 return;
             }
-            currentStudentName = data[0].name;
+
+            const student = data[0];
+            if (student.password && student.password !== password) {
+                alert("Incorrect password. Please check your credentials.");
+                return;
+            }
+
+            currentStudentName = student.name;
             closeStudentLoginModal();
             document.getElementById('publicLandingPage').classList.add('hidden');
             document.getElementById('studentAppContainer').classList.remove('hidden');
@@ -544,19 +569,19 @@
             else if (tab === 'chat') { document.getElementById('studentChatView').classList.remove('hidden'); document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadChatMessages(currentStudentName); }
         }
 
-        // Admin & Student Portal Data Functions
         async function saveStudentDirect(e) {
             e.preventDefault();
             await _supabase.from('students').insert([{
                 name: document.getElementById('dirStudentName').value.trim(),
                 parent: document.getElementById('dirParentName').value.trim(),
-                contact: document.getElementById('dirContact').value.trim(),
+                email_or_mobile: document.getElementById('dirContact').value.trim(),
+                password: document.getElementById('dirPassword').value.trim(),
                 notes: document.getElementById('dirNotes').value.trim()
             }]);
             document.getElementById('studentForm').reset();
             loadStudentsList();
             loadAdminData();
-            alert("Student added successfully!");
+            alert("Student saved successfully!");
         }
 
         async function savePaymentInfo(e) {
@@ -630,7 +655,7 @@
             container.innerHTML = '';
             if (!students) return;
             students.forEach(s => {
-                container.innerHTML += `<div class="p-3 border rounded text-xs flex justify-between items-center bg-slate-50"><div><strong>${s.name}</strong> (${s.parent || ''})<br>${s.contact || ''}</div><button onclick="deleteStudent(${s.id})" class="text-rose-500"><i class="fa-solid fa-trash"></i></button></div>`;
+                container.innerHTML += `<div class="p-3 border rounded text-xs flex justify-between items-center bg-slate-50"><div><strong>${s.name}</strong> (${s.parent || ''})<br>Contact: ${s.email_or_mobile || 'N/A'}</div><button onclick="deleteStudent(${s.id})" class="text-rose-500"><i class="fa-solid fa-trash"></i></button></div>`;
             });
         }
 
