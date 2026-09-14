@@ -131,12 +131,13 @@
             </div>
         </section>
 
-        <!-- Comments Section -->
+        <!-- Comments / Community Wall Section -->
         <section id="comments" class="py-16 px-4 bg-slate-50 border-t">
             <div class="max-w-2xl mx-auto space-y-6">
                 <div class="text-center space-y-2">
                     <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Community Wall</h3>
                     <h4 class="text-2xl font-bold text-slate-900">Leave a Comment or Inquiry</h4>
+                    <p class="text-xs text-slate-500">Anyone can join the conversation! You can also delete your own comment anytime.</p>
                 </div>
                 <form onsubmit="submitPublicComment(event)" class="bg-white p-6 rounded-xl shadow-sm border space-y-3 text-xs">
                     <div><label class="block font-semibold uppercase mb-1">Your Name</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
@@ -270,7 +271,7 @@
                             </div>
                             <div id="recordingFieldsContainer" class="space-y-2">
                                 <div class="flex gap-2">
-                                    <input type="url" placeholder="Recording Title / Label (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
+                                    <input type="text" placeholder="Recording Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
                                     <input type="url" placeholder="https://drive.google.com/..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
                                 </div>
                             </div>
@@ -451,6 +452,7 @@
         let activeAdminChatStudent = '';
         let allSessions = [];
         let allStudentsCache = [];
+        let isAdminLoggedIn = false;
 
         window.addEventListener('DOMContentLoaded', () => { loadPublicComments(); });
 
@@ -479,29 +481,106 @@
             document.getElementById('enrollPassword').value = '';
         }
 
-        // Public Comments
+        // ================= PUBLIC COMMENTS & INTERACTION =================
         async function submitPublicComment(e) {
             e.preventDefault();
             const name = document.getElementById('visitorName').value.trim();
             const message = document.getElementById('visitorMessage').value.trim();
-            let comments = JSON.parse(localStorage.getItem('public_comments')) || [];
-            comments.unshift({ name, message, date: new Date().toLocaleDateString() });
-            localStorage.setItem('public_comments', JSON.stringify(comments));
-            document.getElementById('visitorName').value = '';
+            const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const { error } = await _supabase.from('community_comments').insert([{ name, message, date, replies: [] }]);
+            if (error) { alert("Error posting comment: " + error.message); return; }
+
             document.getElementById('visitorMessage').value = '';
             loadPublicComments();
-            alert("Comment posted!");
         }
 
-        function loadPublicComments() {
+        async function loadPublicComments() {
             const container = document.getElementById('publicCommentsContainer');
             if (!container) return;
-            let comments = JSON.parse(localStorage.getItem('public_comments')) || [];
+
+            const { data: comments, error } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
             container.innerHTML = '';
-            if (comments.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 text-center">No comments yet.</p>`; return; }
+
+            if (error || !comments || comments.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No comments yet. Be the first to leave a message!</p>`;
+                return;
+            }
+
             comments.forEach(c => {
-                container.innerHTML += `<div class="p-3 bg-white border rounded text-xs space-y-1"><div class="flex justify-between font-bold"><span>${c.name}</span><span class="text-[10px] text-slate-400">${c.date}</span></div><p class="text-slate-600">${c.message}</p></div>`;
+                let repliesHtml = '';
+                if (c.replies && Array.isArray(c.replies)) {
+                    c.replies.forEach(r => {
+                        repliesHtml += `
+                            <div class="mt-2 ml-4 p-2.5 bg-indigo-50/70 border-l-2 border-indigo-600 rounded text-xs space-y-1">
+                                <div class="flex justify-between font-bold text-indigo-900">
+                                    <span>${r.name} <span class="bg-indigo-600 text-white text-[9px] px-1.5 py-0.5 rounded ml-1 font-semibold uppercase tracking-wider">ADMIN</span></span>
+                                    <span class="text-[10px] text-indigo-400 font-normal">${r.date}</span>
+                                </div>
+                                <p class="text-slate-700">${r.message}</p>
+                            </div>`;
+                    });
+                }
+
+                // Allow users to delete their own comment by inputting their exact name
+                container.innerHTML += `
+                    <div class="p-4 bg-white border rounded-xl shadow-sm text-xs space-y-2">
+                        <div class="flex justify-between items-start font-bold text-slate-900">
+                            <div><i class="fa-solid fa-user-circle text-emerald-600 mr-1.5"></i>${c.name} <span class="text-[10px] font-normal text-slate-400 ml-1">${c.date}</span></div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="promptDeleteComment(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="text-rose-500 hover:text-rose-700 text-[11px]" title="Delete Comment"><i class="fa-solid fa-trash"></i> Delete</button>
+                            </div>
+                        </div>
+                        <p class="text-slate-700 leading-relaxed">${c.message}</p>
+                        
+                        ${repliesHtml}
+
+                        <!-- Admin Reply Input (Visible only if Admin is logged in) -->
+                        <div id="adminReplyBox-${c.id}" class="${isAdminLoggedIn ? 'block' : 'hidden'} mt-3 pt-2 border-t">
+                            <form onsubmit="submitAdminCommentReply(event, ${c.id})" class="flex gap-2">
+                                <input type="text" id="adminReplyInput-${c.id}" required placeholder="Reply as ADMIN..." class="flex-grow p-1.5 border rounded text-xs bg-slate-50">
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded font-medium text-xs">Reply [ADMIN]</button>
+                            </form>
+                        </div>
+                    </div>`;
             });
+        }
+
+        async function promptDeleteComment(id, authorName) {
+            const enteredName = prompt(`To delete this comment, please enter the exact name ("${authorName}") used when posting:`);
+            if (enteredName === null) return;
+            if (enteredName.trim().toLowerCase() !== authorName.toLowerCase()) {
+                alert("Name did not match. You can only delete your own comments.");
+                return;
+            }
+
+            const { error } = await _supabase.from('community_comments').delete().eq('id', id);
+            if (error) { alert("Error deleting comment: " + error.message); return; }
+            loadPublicComments();
+            alert("Comment deleted successfully.");
+        }
+
+        async function submitAdminCommentReply(e, commentId) {
+            e.preventDefault();
+            const inputEl = document.getElementById(`adminReplyInput-${commentId}`);
+            const replyMsg = inputEl.value.trim();
+            if (!replyMsg) return;
+
+            // Fetch current comment replies
+            const { data } = await _supabase.from('community_comments').select('replies').eq('id', commentId).single();
+            let currentReplies = data && data.replies ? data.replies : [];
+
+            currentReplies.push({
+                name: 'Teacher Ann',
+                message: replyMsg,
+                date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+
+            const { error } = await _supabase.from('community_comments').update({ replies: currentReplies }).eq('id', commentId);
+            if (error) { alert("Error sending reply: " + error.message); return; }
+
+            inputEl.value = '';
+            loadPublicComments();
         }
 
         // Student Login with Password Verification
@@ -538,6 +617,8 @@
             const password = document.getElementById('adminPassword').value.trim();
             const { error } = await _supabase.auth.signInWithPassword({ email, password });
             if (error) { alert("Admin login failed: " + error.message); return; }
+            
+            isAdminLoggedIn = true;
             closeAdminLoginModal();
             document.getElementById('publicLandingPage').classList.add('hidden');
             document.getElementById('adminAppContainer').classList.remove('hidden');
@@ -545,7 +626,7 @@
             loadPaymentConfig();
         }
 
-        function adminLogout() { location.reload(); }
+        function adminLogout() { isAdminLoggedIn = false; location.reload(); }
         function studentLogout() { location.reload(); }
 
         // Tabs Switching
@@ -591,7 +672,6 @@
             container.appendChild(div);
         }
 
-        // Image Converters
         function previewQrUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -746,7 +826,6 @@
             e.preventDefault();
             const id = document.getElementById('sessionId').value;
 
-            // Gather all recording inputs
             const recordings = [];
             document.querySelectorAll('#recordingFieldsContainer > div').forEach(div => {
                 const title = div.querySelector('.rec-title').value.trim();
@@ -790,7 +869,6 @@
             document.getElementById('sessionLink').value = session.link || '';
             document.getElementById('sessionNotes').value = session.notes || '';
 
-            // Populate recordings
             const container = document.getElementById('recordingFieldsContainer');
             container.innerHTML = '';
             try {
@@ -869,7 +947,6 @@
                                 </div>
                             </div>`;
                     } else {
-                        // Parse multiple recordings
                         let recsHtml = '<span class="text-slate-400">No recording</span>';
                         if (s.recording_url) {
                             try {
