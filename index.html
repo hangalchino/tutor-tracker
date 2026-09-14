@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TutorSchedule Pro - Live Cloud</title>
+    <title>TutorSchedule Pro - Secure Cloud Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase JS Client CDN -->
@@ -14,145 +14,287 @@
     <!-- CONFIGURATION SCRIPT -->
     <script>
         // ==========================================
-        // YOUR SUPABASE CONFIGURATION
+        // PASTE YOUR SUPABASE CREDENTIALS HERE
         // ==========================================
         const SUPABASE_URL = 'https://yprnrpxiilvfbhmtxjmh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable__OHnitAo4WatbiwqDSYAkA_1R21V-D3';
         // ==========================================
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    </script> 
+    </script>
 
-    <!-- LOGIN SCREEN -->
+    <!-- ================= LOGIN / PORTAL ACCESS MODAL ================= -->
     <div id="authScreen" class="fixed inset-0 bg-slate-900 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 space-y-6">
             <div class="text-center space-y-2">
                 <div class="bg-indigo-600 text-white w-12 h-12 rounded-xl flex items-center justify-center mx-auto text-xl font-bold">
                     <i class="fa-solid fa-graduation-cap"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-slate-900">Tutor Portal</h1>
-                <p class="text-xs text-slate-500">Cloud Connected System</p>
+                <h1 id="authMainTitle" class="text-2xl font-bold text-slate-900">Tutor Portal</h1>
+                <p id="authMainSubtitle" class="text-xs text-slate-500">Reading &bull; English &bull; Math &bull; Filipino</p>
             </div>
 
-            <div class="flex bg-slate-100 p-1 rounded-xl">
+            <!-- Role Selector -->
+            <div id="roleSelectorContainer" class="flex bg-slate-100 p-1 rounded-xl">
                 <button type="button" onclick="setLoginRole('admin')" id="roleAdminBtn" class="flex-1 py-2 rounded-lg text-xs font-bold bg-white text-indigo-600 shadow-sm transition-all">Tutor Admin</button>
                 <button type="button" onclick="setLoginRole('student')" id="roleStudentBtn" class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 transition-all">Student Portal</button>
             </div>
 
-            <!-- Admin Login -->
-            <form id="adminLoginForm" class="space-y-4" onsubmit="handleAdminLogin(event)">
+            <!-- Admin Login / Register Form -->
+            <form id="adminAuthForm" class="space-y-4" onsubmit="handleAdminAuth(event)">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin Username</label>
-                    <input type="text" id="adminUser" required value="admin" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin Email</label>
+                    <input type="email" id="adminEmail" required placeholder="admin@email.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin Password</label>
-                    <input type="password" id="adminPass" required value="password123" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password</label>
+                    <input type="password" id="adminPassword" required placeholder="••••••••" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors">Access Dashboard</button>
+                <button type="submit" id="adminSubmitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors shadow-sm">
+                    Sign In
+                </button>
+                <div class="flex justify-between items-center text-xs pt-2">
+                    <button type="button" onclick="toggleAdminMode()" id="adminModeToggle" class="text-indigo-600 hover:underline font-medium">Need an account? Register</button>
+                    <button type="button" onclick="showForgotPassword()" class="text-slate-500 hover:underline">Forgot Password?</button>
+                </div>
             </form>
 
-            <!-- Student Login -->
+            <!-- Forgot Password Form -->
+            <form id="forgotPasswordForm" class="hidden space-y-4" onsubmit="handleForgotPassword(event)">
+                <p class="text-xs text-slate-600">Enter your admin email address and we'll send you a password reset link.</p>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin Email</label>
+                    <input type="email" id="resetEmail" required placeholder="admin@email.com" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm">Send Reset Instructions</button>
+                <div class="text-center">
+                    <button type="button" onclick="backToLogin()" class="text-xs text-indigo-600 hover:underline">Back to Login</button>
+                </div>
+            </form>
+
+            <!-- Student Login Form -->
             <form id="studentLoginForm" class="hidden space-y-4" onsubmit="handleStudentLogin(event)">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Enter Your Full Name</label>
-                    <input type="text" id="studentLoginName" required placeholder="e.g., John Smith" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
+                    <input type="text" id="studentLoginName" required placeholder="e.g., John Smith" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <p class="text-[10px] text-slate-400 mt-1">Use the exact name registered by your tutor.</p>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors">View My Schedule</button>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors shadow-sm">
+                    View My Schedule & Links
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- ADMIN APP CONTAINER -->
+    <!-- ================= ADMIN APP CONTAINER ================= -->
     <div id="adminAppContainer" class="hidden flex-grow flex flex-col min-h-screen">
         <header class="bg-indigo-600 text-white shadow-md">
-            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-                <h1 class="text-xl font-bold">TutorSchedule Pro (Live Admin)</h1>
+            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex items-center space-x-3">
-                    <button onclick="switchTab('schedule')" id="navScheduleBtn" class="px-3 py-1.5 rounded bg-white text-indigo-600 text-xs font-semibold">Schedule</button>
-                    <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 text-xs font-semibold">Students</button>
-                    <button onclick="logout()" class="bg-indigo-700 px-3 py-1.5 rounded text-xs">Logout</button>
+                    <div class="bg-white text-indigo-600 p-2 rounded-lg font-bold text-xl"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div>
+                        <h1 class="text-xl font-bold">TutorSchedule Pro (Admin)</h1>
+                        <p class="text-xs text-indigo-200">Reading &bull; English &bull; Math &bull; Filipino</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="flex bg-indigo-700/60 p-1 rounded-lg">
+                        <button onclick="switchTab('schedule')" id="navScheduleBtn" class="px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all">Schedule</button>
+                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all">Students Directory</button>
+                    </div>
+                    <button onclick="adminLogout()" class="bg-indigo-700 hover:bg-indigo-800 text-indigo-200 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
                 </div>
             </div>
         </header>
 
         <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
-            <!-- SCHEDULE TAB -->
+            <!-- TAB 1: SCHEDULE -->
             <div id="scheduleTab" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <section class="bg-white p-6 rounded-xl border border-slate-200 h-fit">
-                    <h2 class="text-lg font-bold mb-4">Add Session</h2>
-                    <form id="sessionForm" onsubmit="saveSession(event)" class="space-y-3">
-                        <select id="studentName" required class="w-full p-2 border rounded text-sm bg-white"><option value="" disabled selected>Select Student...</option></select>
-                        <select id="sessionSubject" required class="w-full p-2 border rounded text-sm bg-white">
-                            <option value="Reading">📖 Reading</option><option value="English">📚 English</option><option value="Math">🔢 Math</option><option value="Filipino">🇵🇭 Filipino</option>
-                        </select>
-                        <input type="date" id="sessionDate" required class="w-full p-2 border rounded text-sm">
-                        <input type="text" id="sessionSlot" required placeholder="3:00 - 4:00 PM" class="w-full p-2 border rounded text-sm">
-                        <input type="url" id="sessionLink" placeholder="Meeting URL" class="w-full p-2 border rounded text-sm">
-                        <textarea id="sessionNotes" placeholder="Notes..." class="w-full p-2 border rounded text-sm"></textarea>
-                        <button type="submit" class="w-full bg-indigo-600 text-white p-2 rounded text-sm font-medium">Save Session</button>
+                <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Session</h2>
+                    <form id="sessionForm" class="space-y-4" onsubmit="saveSession(event)">
+                        <input type="hidden" id="sessionId">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Student Name</label>
+                            <select id="studentName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white">
+                                <option value="" disabled selected>Select student...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Subject Area</label>
+                            <select id="sessionSubject" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white">
+                                <option value="Reading">📖 Reading</option>
+                                <option value="English">📚 English</option>
+                                <option value="Math">🔢 Math</option>
+                                <option value="Filipino">🇵🇭 Filipino</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Date</label><input type="date" id="sessionDate" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                            <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Time Slot</label><input type="text" id="sessionSlot" required placeholder="3:00 - 4:00 PM" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                        </div>
+                        <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Meeting Link</label><input type="url" id="sessionLink" placeholder="https://meet.google.com/..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Session Notes / Homework</label><textarea id="sessionNotes" rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></textarea></div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">Save Session</button>
                     </form>
                 </section>
-                <section class="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200">
-                    <h2 class="text-lg font-bold mb-4">All Cloud Sessions</h2>
-                    <div id="sessionsContainer" class="space-y-2"></div>
+                <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> All Cloud Sessions</h2>
+                    <div id="sessionsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow"></div>
                 </section>
             </div>
 
-            <!-- STUDENTS TAB -->
+            <!-- TAB 2: STUDENTS DIRECTORY -->
             <div id="studentsTab" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <section class="bg-white p-6 rounded-xl border border-slate-200 h-fit">
-                    <h2 class="text-lg font-bold mb-4">Add Student</h2>
-                    <form id="studentForm" onsubmit="saveStudent(event)" class="space-y-3">
-                        <input type="text" id="dirStudentName" required placeholder="Full Name" class="w-full p-2 border rounded text-sm">
-                        <input type="text" id="dirParentName" placeholder="Parent Name" class="w-full p-2 border rounded text-sm">
-                        <input type="text" id="dirContact" placeholder="Contact/Email" class="w-full p-2 border rounded text-sm">
-                        <textarea id="dirNotes" placeholder="Student notes" class="w-full p-2 border rounded text-sm"></textarea>
-                        <button type="submit" class="w-full bg-indigo-600 text-white p-2 rounded text-sm font-medium">Save Student</button>
+                <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-user-plus text-indigo-600 mr-2"></i> Add Student</h2>
+                    <form id="studentForm" class="space-y-4" onsubmit="saveStudent(event)">
+                        <input type="hidden" id="studentId">
+                        <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Full Name</label><input type="text" id="dirStudentName" required class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Parent/Guardian</label><input type="text" id="dirParentName" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Contact / Email</label><input type="text" id="dirContact" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Notes</label><textarea id="dirNotes" rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></textarea></div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">Save Student</button>
                     </form>
                 </section>
-                <section class="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200">
-                    <h2 class="text-lg font-bold mb-4">Cloud Student Directory</h2>
-                    <div id="studentsContainer" class="space-y-2"></div>
+                <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-users text-indigo-600 mr-2"></i> Student Directory</h2>
+                    <div id="studentsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow"></div>
                 </section>
             </div>
         </main>
     </div>
 
-    <!-- STUDENT VIEW CONTAINER -->
+    <!-- ================= STUDENT VIEW CONTAINER ================= -->
     <div id="studentAppContainer" class="hidden flex-grow flex flex-col min-h-screen">
-        <header class="bg-emerald-600 text-white p-4">
-            <div class="max-w-4xl mx-auto flex justify-between items-center">
-                <h1 id="studentWelcomeTitle" class="font-bold">Student Portal</h1>
-                <button onclick="logout()" class="bg-emerald-700 px-3 py-1.5 rounded text-xs">Exit</button>
+        <header class="bg-emerald-600 text-white shadow-md">
+            <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white text-emerald-600 p-2 rounded-lg font-bold text-xl"><i class="fa-solid fa-book-open"></i></div>
+                    <div>
+                        <h1 class="text-lg font-bold" id="studentWelcomeTitle">Student Portal</h1>
+                        <p class="text-xs text-emerald-200">Your personalized schedule & meeting links</p>
+                    </div>
+                </div>
+                <button onclick="studentLogout()" class="bg-emerald-700 hover:bg-emerald-800 text-emerald-100 px-3 py-1.5 rounded-lg text-xs transition-colors"><i class="fa-solid fa-right-from-bracket"></i> Exit Portal</button>
             </div>
         </header>
-        <main class="max-w-4xl w-full mx-auto p-6 flex-grow">
-            <div class="bg-white p-6 rounded-xl border">
-                <h2 class="font-bold mb-4 text-emerald-700">Your Assigned Schedule & Links</h2>
+
+        <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 space-y-4">
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
+                    <i class="fa-solid fa-calendar-days text-emerald-600 mr-2"></i> Your Upcoming Tutorial Sessions
+                </h2>
                 <div id="studentPortalSessions" class="space-y-3"></div>
             </div>
         </main>
     </div>
 
-    <!-- APP SCRIPT LOGIC -->
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
+        let loginRole = 'admin';
+        let isRegisterMode = false;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Check if admin is already logged into Supabase session
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) {
+                showAdminDashboard();
+            }
+        });
+
         function setLoginRole(role) {
+            loginRole = role;
             if (role === 'admin') {
-                document.getElementById('roleAdminBtn').className = "flex-1 py-2 rounded-lg text-xs font-bold bg-white text-indigo-600 shadow-sm";
-                document.getElementById('roleStudentBtn').className = "flex-1 py-2 rounded-lg text-xs font-bold text-slate-500";
-                document.getElementById('adminLoginForm').classList.remove('hidden');
+                document.getElementById('roleAdminBtn').className = "flex-1 py-2 rounded-lg text-xs font-bold bg-white text-indigo-600 shadow-sm transition-all";
+                document.getElementById('roleStudentBtn').className = "flex-1 py-2 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 transition-all";
+                document.getElementById('adminAuthForm').classList.remove('hidden');
                 document.getElementById('studentLoginForm').classList.add('hidden');
+                document.getElementById('forgotPasswordForm').classList.add('hidden');
             } else {
-                document.getElementById('roleStudentBtn').className = "flex-1 py-2 rounded-lg text-xs font-bold bg-white text-emerald-600 shadow-sm";
-                document.getElementById('roleAdminBtn').className = "flex-1 py-2 rounded-lg text-xs font-bold text-slate-500";
+                document.getElementById('roleStudentBtn').className = "flex-1 py-2 rounded-lg text-xs font-bold bg-white text-emerald-600 shadow-sm transition-all";
+                document.getElementById('roleAdminBtn').className = "flex-1 py-2 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 transition-all";
                 document.getElementById('studentLoginForm').classList.remove('hidden');
-                document.getElementById('adminLoginForm').classList.add('hidden');
+                document.getElementById('adminAuthForm').classList.add('hidden');
+                document.getElementById('forgotPasswordForm').classList.add('hidden');
             }
         }
 
-        async function handleAdminLogin(e) {
+        function toggleAdminMode() {
+            isRegisterMode = !isRegisterMode;
+            const title = document.getElementById('authMainTitle');
+            const sub = document.getElementById('authMainSubtitle');
+            const btn = document.getElementById('adminSubmitBtn');
+            const toggleBtn = document.getElementById('adminModeToggle');
+
+            if (isRegisterMode) {
+                title.textContent = "Register Admin Account";
+                sub.textContent = "Create your secure credentials";
+                btn.textContent = "Sign Up";
+                toggleBtn.textContent = "Already have an account? Sign in";
+            } else {
+                title.textContent = "Tutor Portal";
+                sub.textContent = "Reading • English • Math • Filipino";
+                btn.textContent = "Sign In";
+                toggleBtn.textContent = "Need an account? Register";
+            }
+        }
+
+        function showForgotPassword() {
+            document.getElementById('adminAuthForm').classList.add('hidden');
+            document.getElementById('roleSelectorContainer').classList.add('hidden');
+            document.getElementById('forgotPasswordForm').classList.remove('hidden');
+            document.getElementById('authMainTitle').textContent = "Reset Password";
+            document.getElementById('authMainSubtitle').textContent = "We'll email you a recovery link";
+        }
+
+        function backToLogin() {
+            document.getElementById('forgotPasswordForm').classList.add('hidden');
+            document.getElementById('roleSelectorContainer').classList.remove('hidden');
+            document.getElementById('adminAuthForm').classList.remove('hidden');
+            document.getElementById('authMainTitle').textContent = "Tutor Portal";
+            document.getElementById('authMainSubtitle').textContent = "Reading • English • Math • Filipino";
+        }
+
+        async function handleForgotPassword(e) {
             e.preventDefault();
+            const email = document.getElementById('resetEmail').value.trim();
+            const { error } = await _supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.href,
+            });
+
+            if (error) {
+                alert("Error: " + error.message);
+            } else {
+                alert("Password reset instructions sent! Check your email inbox.");
+                backToLogin();
+            }
+        }
+
+        async function handleAdminAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+
+            if (isRegisterMode) {
+                const { data, error } = await _supabase.auth.signUp({ email, password });
+                if (error) {
+                    alert("Registration failed: " + error.message);
+                } else {
+                    alert("Registration successful! Check your email if verification is required, or sign in now.");
+                    toggleAdminMode();
+                }
+            } else {
+                const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+                if (error) {
+                    alert("Login failed: " + error.message);
+                } else {
+                    showAdminDashboard();
+                }
+            }
+        }
+
+        function showAdminDashboard() {
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('adminAppContainer').classList.remove('hidden');
             loadAdminData();
@@ -161,26 +303,40 @@
         async function handleStudentLogin(e) {
             e.preventDefault();
             const name = document.getElementById('studentLoginName').value.trim();
-            const { data } = await _supabase.from('students').select('*').ilike('name', name);
-            if (!data || data.length === 0) {
-                alert("Student name not found in cloud database.");
+            const { data, error } = await _supabase.from('students').select('*').ilike('name', name);
+            
+            if (error || !data || data.length === 0) {
+                alert("Student name not found in cloud database. Please check with your tutor.");
                 return;
             }
+
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('studentAppContainer').classList.remove('hidden');
             document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${data[0].name}!`;
             loadStudentPortal(data[0].name);
         }
 
-        function logout() { location.reload(); }
+        async function adminLogout() {
+            await _supabase.auth.signOut();
+            location.reload();
+        }
+
+        function studentLogout() {
+            location.reload();
+        }
 
         function switchTab(tab) {
             if (tab === 'schedule') {
                 document.getElementById('scheduleTab').classList.remove('hidden');
                 document.getElementById('studentsTab').classList.add('hidden');
+                document.getElementById('navScheduleBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all";
+                document.getElementById('navStudentsBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all";
+                loadAdminData();
             } else {
                 document.getElementById('scheduleTab').classList.add('hidden');
                 document.getElementById('studentsTab').classList.remove('hidden');
+                document.getElementById('navStudentsBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all";
+                document.getElementById('navScheduleBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all";
                 loadStudentsList();
             }
         }
@@ -188,53 +344,75 @@
         // Database Actions
         async function saveStudent(e) {
             e.preventDefault();
-            await _supabase.from('students').insert([{
-                name: document.getElementById('dirStudentName').value,
-                parent: document.getElementById('dirParentName').value,
-                contact: document.getElementById('dirContact').value,
-                notes: document.getElementById('dirNotes').value
+            const { error } = await _supabase.from('students').insert([{
+                name: document.getElementById('dirStudentName').value.trim(),
+                parent: document.getElementById('dirParentName').value.trim(),
+                contact: document.getElementById('dirContact').value.trim(),
+                notes: document.getElementById('dirNotes').value.trim()
             }]);
+            if (error) { alert("Error saving student: " + error.message); return; }
             document.getElementById('studentForm').reset();
-            loadAdminData();
             loadStudentsList();
+            loadAdminData();
         }
 
         async function saveSession(e) {
             e.preventDefault();
-            await _supabase.from('sessions').insert([{
+            const { error } = await _supabase.from('sessions').insert([{
                 student_name: document.getElementById('studentName').value,
                 subject: document.getElementById('sessionSubject').value,
                 date: document.getElementById('sessionDate').value,
-                slot: document.getElementById('sessionSlot').value,
-                link: document.getElementById('sessionLink').value,
-                notes: document.getElementById('sessionNotes').value
+                slot: document.getElementById('sessionSlot').value.trim(),
+                link: document.getElementById('sessionLink').value.trim(),
+                notes: document.getElementById('sessionNotes').value.trim()
             }]);
+            if (error) { alert("Error saving session: " + error.message); return; }
             document.getElementById('sessionForm').reset();
             loadAdminData();
         }
 
         async function loadAdminData() {
-            // Load dropdown
             const { data: students } = await _supabase.from('students').select('*');
             const dropdown = document.getElementById('studentName');
-            dropdown.innerHTML = '<option value="" disabled selected>Select Student...</option>';
+            dropdown.innerHTML = '<option value="" disabled selected>Select student...</option>';
             if (students) students.forEach(s => dropdown.innerHTML += `<option value="${s.name}">${s.name}</option>`);
 
-            // Load sessions list
-            const { data: sessions } = await _supabase.from('sessions').select('*');
+            const { data: sessions } = await _supabase.from('sessions').select('*').order('date', { ascending: true });
             const container = document.getElementById('sessionsContainer');
             container.innerHTML = '';
-            if (sessions) sessions.forEach(s => {
-                container.innerHTML += `<div class="p-3 border rounded text-xs flex justify-between items-center"><div><strong>${s.student_name}</strong> (${s.subject}) - ${s.date} [${s.slot}]</div><button onclick="deleteSession(${s.id})" class="text-rose-500"><i class="fa-solid fa-trash"></i></button></div>`;
+            if (!sessions || sessions.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No sessions scheduled yet.</p>`;
+                return;
+            }
+            sessions.forEach(s => {
+                container.innerHTML += `
+                    <div class="p-3 border rounded-lg text-xs flex justify-between items-center bg-slate-50">
+                        <div>
+                            <strong>${s.student_name}</strong> - <span class="text-indigo-600 font-semibold">${s.subject}</span><br>
+                            ${s.date} [${s.slot}] ${s.link ? `| <a href="${s.link}" target="_blank" class="text-emerald-600 underline">Link</a>` : ''}
+                        </div>
+                        <button onclick="deleteSession(${s.id})" class="text-rose-500 hover:text-rose-700 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                    </div>`;
             });
         }
 
         async function loadStudentsList() {
-            const { data: students } = await _supabase.from('students').select('*');
+            const { data: students } = await _supabase.from('students').select('*').order('name', { ascending: true });
             const container = document.querySelector('#studentsTab #studentsContainer');
             container.innerHTML = '';
-            if (students) students.forEach(s => {
-                container.innerHTML += `<div class="p-3 border rounded text-xs flex justify-between items-center"><div><strong>${s.name}</strong> (${s.contact || 'No contact'})</div><button onclick="deleteStudent(${s.id})" class="text-rose-500"><i class="fa-solid fa-trash"></i></button></div>`;
+            if (!students || students.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No students registered yet.</p>`;
+                return;
+            }
+            students.forEach(s => {
+                container.innerHTML += `
+                    <div class="p-3 border rounded-lg text-xs flex justify-between items-center bg-slate-50">
+                        <div>
+                            <strong>${s.name}</strong> ${s.parent ? `(Guardian: ${s.parent})` : ''}<br>
+                            <span class="text-slate-500">${s.contact || 'No contact provided'}</span>
+                        </div>
+                        <button onclick="deleteStudent(${s.id})" class="text-rose-500 hover:text-rose-700 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                    </div>`;
             });
         }
 
@@ -243,23 +421,38 @@
             const container = document.getElementById('studentPortalSessions');
             container.innerHTML = '';
             if (!sessions || sessions.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400">No scheduled sessions found.</p>`;
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No scheduled sessions found for you right now.</p>`;
                 return;
             }
             sessions.forEach(s => {
-                container.innerHTML += `<div class="p-3 bg-slate-50 border rounded flex justify-between items-center text-xs"><div><strong>${s.subject}</strong> - ${s.date} (${s.slot})<br><em>${s.notes || ''}</em></div>${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 text-white px-3 py-1.5 rounded font-medium">Join Class</a>` : ''}</div>`;
+                container.innerHTML += `
+                    <div class="p-4 bg-slate-50 border rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div class="space-y-1 text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-800 text-sm">${s.subject}</span>
+                                <span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">${s.slot}</span>
+                                <span class="text-slate-500">${s.date}</span>
+                            </div>
+                            ${s.notes ? `<p class="text-slate-600"><strong>Notes:</strong> ${s.notes}</p>` : ''}
+                        </div>
+                        ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2 rounded-lg font-medium shadow-sm transition-colors flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join Class</a>` : ''}
+                    </div>`;
             });
         }
 
         async function deleteSession(id) {
-            await _supabase.from('sessions').delete().eq('id', id);
-            loadAdminData();
+            if (confirm("Are you sure you want to delete this session?")) {
+                await _supabase.from('sessions').delete().eq('id', id);
+                loadAdminData();
+            }
         }
 
         async function deleteStudent(id) {
-            await _supabase.from('students').delete().eq('id', id);
-            loadStudentsList();
-            loadAdminData();
+            if (confirm("Are you sure you want to delete this student?")) {
+                await _supabase.from('students').delete().eq('id', id);
+                loadStudentsList();
+                loadAdminData();
+            }
         }
     </script>
 </body>
