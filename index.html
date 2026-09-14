@@ -144,7 +144,7 @@
                     </form>
                 </section>
                 <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> All Cloud Sessions & Absent Notices</h2>
+                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> All Cloud Sessions & Student Notices</h2>
                     <div id="sessionsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow"></div>
                 </section>
             </div>
@@ -198,14 +198,15 @@
                     <div class="bg-white text-emerald-600 p-2 rounded-lg font-bold text-xl"><i class="fa-solid fa-book-open"></i></div>
                     <div>
                         <h1 class="text-lg font-bold" id="studentWelcomeTitle">Student Portal</h1>
-                        <p class="text-xs text-emerald-200">Your schedule, history & payment info</p>
+                        <p class="text-xs text-emerald-200">Your schedule, history & support chat</p>
                     </div>
                 </div>
                 <!-- Student Portal Nav Tabs -->
                 <div class="flex bg-emerald-700/60 p-1 rounded-lg text-xs">
-                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all">Upcoming Schedule</button>
+                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all">Schedule</button>
                     <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Lessons & Recordings</button>
                     <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Tuition Payment</button>
+                    <button onclick="switchStudentTab('chat')" id="stdNavChat" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Support Chat</button>
                 </div>
                 <button onclick="studentLogout()" class="bg-emerald-700 hover:bg-emerald-800 text-emerald-100 px-3 py-1.5 rounded-lg text-xs transition-colors"><i class="fa-solid fa-right-from-bracket"></i> Exit</button>
             </div>
@@ -244,20 +245,38 @@
                 <!-- Submit Payment Reference Form -->
                 <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                     <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
-                        <i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference / Receipt
+                        <i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference & Receipt Screenshot
                     </h2>
                     <form onsubmit="submitPaymentProof(event)" class="space-y-3 text-xs">
                         <div>
-                            <label class="block font-semibold uppercase mb-1">WorldRemit / PayMaya Reference / Transaction Number</label>
+                            <label class="block font-semibold uppercase mb-1">WorldRemit / PayMaya Reference Number</label>
                             <input type="text" id="payRefNumber" required placeholder="e.g., WR-987654321" class="w-full p-2 border rounded text-xs">
                         </div>
                         <div>
                             <label class="block font-semibold uppercase mb-1">Amount Sent & Remarks</label>
                             <input type="text" id="payAmount" required placeholder="e.g., $50 / PHP 2,800 for Math & Reading" class="w-full p-2 border rounded text-xs">
                         </div>
+                        <div>
+                            <label class="block font-semibold uppercase mb-1">Receipt Image URL (Optional Screenshot Link)</label>
+                            <input type="url" id="payReceiptUrl" placeholder="https://imgur.com/... or image link" class="w-full p-2 border rounded text-xs">
+                        </div>
                         <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium">Send Payment Proof to Tutor</button>
                     </form>
                     <div id="studentPaymentHistoryList" class="mt-4 pt-4 border-t space-y-2"></div>
+                </div>
+            </div>
+
+            <!-- Student Tab 4: Live Support Chat -->
+            <div id="studentChatView" class="hidden space-y-4">
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col h-[500px]">
+                    <h2 class="text-md font-bold text-slate-800 mb-3 flex items-center">
+                        <i class="fa-solid fa-comments text-emerald-600 mr-2"></i> Direct Chat with Tutor
+                    </h2>
+                    <div id="chatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50 text-xs"></div>
+                    <form onsubmit="sendChatMessage(event)" class="mt-3 flex gap-2">
+                        <input type="text" id="chatInputMessage" required placeholder="Type your message to the teacher..." class="flex-grow p-2 border rounded text-xs">
+                        <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium text-xs">Send</button>
+                    </form>
                 </div>
             </div>
         </main>
@@ -273,6 +292,19 @@
             <div class="flex space-x-2 pt-2">
                 <button onclick="sendAbsentNotice()" class="flex-1 bg-rose-600 text-white py-2 rounded font-medium">Send Absence Notice</button>
                 <button onclick="closeAbsentModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded font-medium">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Admin Reply to Absence Notice -->
+    <div id="adminReplyModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
+            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-reply text-indigo-600 mr-2"></i> Reply to Absence Notice</h3>
+            <input type="hidden" id="replySessionId">
+            <textarea id="adminReplyText" rows="3" placeholder="Type your response/acknowledgment to the student..." class="w-full p-2 border rounded text-xs"></textarea>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="sendAdminReply()" class="flex-1 bg-indigo-600 text-white py-2 rounded font-medium">Send Reply</button>
+                <button onclick="closeAdminReplyModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded font-medium">Cancel</button>
             </div>
         </div>
     </div>
@@ -390,6 +422,7 @@
             document.getElementById('studentAppContainer').classList.remove('hidden');
             document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${currentStudentName}!`;
             loadStudentPortal(currentStudentName);
+            loadChatMessages(currentStudentName);
         }
 
         async function adminLogout() { await _supabase.auth.signOut(); location.reload(); }
@@ -422,9 +455,11 @@
             document.getElementById('studentScheduleView').classList.add('hidden');
             document.getElementById('studentHistoryView').classList.add('hidden');
             document.getElementById('studentPaymentView').classList.add('hidden');
+            document.getElementById('studentChatView').classList.add('hidden');
             document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all";
             document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all";
             document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all";
+            document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all";
 
             if (tab === 'schedule') {
                 document.getElementById('studentScheduleView').classList.remove('hidden');
@@ -435,6 +470,10 @@
             } else if (tab === 'payment') {
                 document.getElementById('studentPaymentView').classList.remove('hidden');
                 document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all";
+            } else if (tab === 'chat') {
+                document.getElementById('studentChatView').classList.remove('hidden');
+                document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all";
+                loadChatMessages(currentStudentName);
             }
         }
 
@@ -540,16 +579,21 @@
             allSessions.forEach(s => {
                 let statusBadge = '';
                 if (s.absent_status) {
-                    statusBadge = `<span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-bold text-[10px] ml-2"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Absent Notice: ${s.absent_reason}</span>`;
+                    statusBadge = `
+                        <div class="mt-2 p-2 bg-rose-50 border border-rose-200 rounded text-rose-800">
+                            <strong><i class="fa-solid fa-triangle-exclamation mr-1"></i> Absent Notice:</strong> ${s.absent_reason}
+                            ${s.admin_reply ? `<div class="mt-1 text-indigo-700"><strong>Your Reply:</strong> ${s.admin_reply}</div>` : `<button onclick="openAdminReplyModal(${s.id})" class="mt-1 block bg-indigo-600 text-white px-2 py-1 rounded text-[10px]">Reply to Notice</button>`}
+                        </div>`;
                 }
 
                 container.innerHTML += `
-                    <div class="p-3 border rounded-lg text-xs flex justify-between items-center bg-slate-50 gap-2">
-                        <div class="space-y-1">
-                            <div><strong>${s.student_name}</strong> - <span class="text-indigo-600 font-semibold">${s.subject}</span> ${statusBadge}</div>
+                    <div class="p-3 border rounded-lg text-xs flex justify-between items-start bg-slate-50 gap-2">
+                        <div class="space-y-1 flex-grow">
+                            <div><strong>${s.student_name}</strong> - <span class="text-indigo-600 font-semibold">${s.subject}</span></div>
                             <div class="text-slate-500">${s.date} [${s.slot}]</div>
                             ${s.notes ? `<div class="text-slate-600"><strong>Notes:</strong> ${s.notes}</div>` : ''}
                             ${s.link ? `<div><a href="${s.link}" target="_blank" class="text-emerald-600 underline font-medium"><i class="fa-solid fa-video mr-1"></i> Meeting Link</a></div>` : ''}
+                            ${statusBadge}
                         </div>
                         <div class="flex items-center space-x-1">
                             <button onclick="editSession(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
@@ -594,6 +638,14 @@
 
             if (sessions) {
                 sessions.forEach(s => {
+                    let replyBox = '';
+                    if (s.absent_status) {
+                        replyBox = `<p class="text-rose-600 font-bold mt-1">Status: Absent Notice Sent (${s.absent_reason})</p>`;
+                        if (s.admin_reply) {
+                            replyBox += `<p class="text-indigo-700 font-semibold mt-1 bg-indigo-50 p-1.5 rounded">Teacher Reply: ${s.admin_reply}</p>`;
+                        }
+                    }
+
                     if (s.date >= today) {
                         upcomingCount++;
                         scheduleContainer.innerHTML += `
@@ -605,7 +657,7 @@
                                         <span class="text-slate-500">${s.date}</span>
                                     </div>
                                     ${s.notes ? `<p class="text-slate-600"><strong>Notes:</strong> ${s.notes}</p>` : ''}
-                                    ${s.absent_status ? `<p class="text-rose-600 font-bold">Status: Absent Notice Sent (${s.absent_reason})</p>` : ''}
+                                    ${replyBox}
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center"><i class="fa-solid fa-video mr-1"></i> Join</a>` : ''}
@@ -655,9 +707,7 @@
             document.getElementById('absentModal').classList.remove('hidden');
         }
 
-        function closeAbsentModal() {
-            document.getElementById('absentModal').classList.add('hidden');
-        }
+        function closeAbsentModal() { document.getElementById('absentModal').classList.add('hidden'); }
 
         async function sendAbsentNotice() {
             const sessionId = document.getElementById('absentSessionId').value;
@@ -668,28 +718,54 @@
                 absent_reason: reason
             }).eq('id', sessionId);
 
-            if (error) {
-                alert("Error sending notice: " + error.message);
-            } else {
+            if (error) alert("Error sending notice: " + error.message);
+            else {
                 alert("Absence/Cancellation notice sent successfully to teacher!");
                 closeAbsentModal();
                 loadStudentPortal(currentStudentName);
             }
         }
 
-        // Student Payment History Submission
+        // Admin Reply to Absence Modal
+        function openAdminReplyModal(sessionId) {
+            document.getElementById('replySessionId').value = sessionId;
+            document.getElementById('adminReplyText').value = '';
+            document.getElementById('adminReplyModal').classList.remove('hidden');
+        }
+
+        function closeAdminReplyModal() { document.getElementById('adminReplyModal').classList.add('hidden'); }
+
+        async function sendAdminReply() {
+            const sessionId = document.getElementById('replySessionId').value;
+            const reply = document.getElementById('adminReplyText').value.trim();
+
+            const { error } = await _supabase.from('sessions').update({
+                admin_reply: reply
+            }).eq('id', sessionId);
+
+            if (error) alert("Error sending reply: " + error.message);
+            else {
+                alert("Reply sent to student successfully!");
+                closeAdminReplyModal();
+                loadAdminData();
+            }
+        }
+
+        // Student Payment History & Receipt Submission
         function submitPaymentProof(e) {
             e.preventDefault();
             const ref = document.getElementById('payRefNumber').value.trim();
             const amount = document.getElementById('payAmount').value.trim();
+            const receiptUrl = document.getElementById('payReceiptUrl').value.trim();
 
             let history = JSON.parse(localStorage.getItem(`pay_hist_${currentStudentName}`)) || [];
-            history.unshift({ ref, amount, date: new Date().toLocaleDateString() });
+            history.unshift({ ref, amount, receiptUrl, date: new Date().toLocaleDateString() });
             localStorage.setItem(`pay_hist_${currentStudentName}`, JSON.stringify(history));
 
             alert("Payment reference submitted to tutor!");
             document.getElementById('payRefNumber').value = '';
             document.getElementById('payAmount').value = '';
+            document.getElementById('payReceiptUrl').value = '';
             loadStudentPaymentHistory(currentStudentName);
         }
 
@@ -703,11 +779,48 @@
             }
             history.forEach(h => {
                 historyList.innerHTML += `
-                    <div class="p-2 bg-slate-50 border rounded flex justify-between items-center text-xs">
-                        <div><strong>Ref:</strong> ${h.ref} | <strong>Amount:</strong> ${h.amount}</div>
-                        <span class="text-slate-400">${h.date}</span>
+                    <div class="p-3 bg-slate-50 border rounded flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
+                        <div><strong>Ref:</strong> ${h.ref} | <strong>Amount:</strong> ${h.amount} <span class="text-slate-400">(${h.date})</span></div>
+                        ${h.receiptUrl ? `<a href="${h.receiptUrl}" target="_blank" class="text-indigo-600 underline font-medium"><i class="fa-solid fa-image mr-1"></i> View Receipt</a>` : ''}
                     </div>`;
             });
+        }
+
+        // Live Support Chat System
+        async function loadChatMessages(studentName) {
+            const container = document.getElementById('chatMessagesContainer');
+            container.innerHTML = '';
+            let chats = JSON.parse(localStorage.getItem(`chat_${studentName}`)) || [];
+            if (chats.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-center py-4">No messages yet. Send a message to your tutor below!</p>`;
+                return;
+            }
+            chats.forEach(c => {
+                const align = c.sender === 'student' ? 'text-right' : 'text-left';
+                const bg = c.sender === 'student' ? 'bg-emerald-100 text-emerald-900 ml-auto' : 'bg-indigo-100 text-indigo-900 mr-auto';
+                container.innerHTML += `
+                    <div class="${align}">
+                        <div class="inline-block p-2 rounded-lg max-w-[80%] text-xs ${bg}">
+                            <strong>${c.sender === 'student' ? 'You' : 'Teacher'}:</strong> ${c.message}
+                            <div class="text-[9px] text-slate-500 text-right mt-0.5">${c.time}</div>
+                        </div>
+                    </div>`;
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendChatMessage(e) {
+            e.preventDefault();
+            const msgInput = document.getElementById('chatInputMessage');
+            const message = msgInput.value.trim();
+            if (!message) return;
+
+            let chats = JSON.parse(localStorage.getItem(`chat_${currentStudentName}`)) || [];
+            chats.push({ sender: 'student', message, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+            localStorage.setItem(`chat_${currentStudentName}`, JSON.stringify(chats));
+
+            msgInput.value = '';
+            loadChatMessages(currentStudentName);
         }
 
         async function deleteSession(id) {
