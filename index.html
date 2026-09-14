@@ -319,7 +319,7 @@
                     <h3 id="activeChatStudentTitle" class="font-bold text-sm text-slate-800 mb-3 pb-2 border-b">Select a student</h3>
                     <div id="adminChatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50 text-xs mb-3"></div>
                     <form onsubmit="sendAdminChatMessage(event)" class="flex gap-2">
-                        <input type="text" id="adminChatInputMessage" required placeholder="Type reply..." class="flex-grow p-2 border rounded text-xs">
+                        <input type="text" id="adminChatInputMessage" required placeholder="Type reply to student..." class="flex-grow p-2 border rounded text-xs">
                         <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded font-medium text-xs">Send</button>
                     </form>
                 </div>
@@ -539,6 +539,12 @@
             else if (tab === 'chat') { document.getElementById('studentChatView').classList.remove('hidden'); document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadChatMessages(currentStudentName); }
         }
 
+        // Direct Chat from Registered Accounts
+        function openChatWithStudent(studentName) {
+            switchTab('adminChat');
+            selectAdminChatStudent(studentName);
+        }
+
         // Admin: Save or Update Student Account
         async function saveStudentDirect(e) {
             e.preventDefault();
@@ -598,13 +604,14 @@
             }
             students.forEach(s => {
                 container.innerHTML += `
-                    <div class="p-3 border rounded text-xs flex justify-between items-center bg-slate-50 gap-2">
+                    <div class="p-3 border rounded text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-50 gap-2">
                         <div class="space-y-0.5">
                             <strong>${s.name}</strong> ${s.parent ? `(Guardian: ${s.parent})` : ''}<br>
                             <span class="text-slate-500"><i class="fa-solid fa-envelope mr-1"></i> Contact: ${s.email_or_mobile || 'N/A'} | <i class="fa-solid fa-key mr-1"></i> Password: <strong>${s.password || 'None'}</strong></span>
                             ${s.notes ? `<br><span class="text-indigo-600">Notes: ${s.notes}</span>` : ''}
                         </div>
                         <div class="flex items-center space-x-1">
+                            <button onclick="openChatWithStudent('${s.name}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded font-medium flex items-center gap-1" title="Chat Directly"><i class="fa-solid fa-comments"></i> Chat Student</button>
                             <button onclick="editStudent(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button onclick="deleteStudent(${s.id})" class="text-rose-500 hover:text-rose-700 p-2" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
@@ -788,7 +795,7 @@
             const container = document.getElementById('adminChatMessagesContainer');
             const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', name).order('id', { ascending: true });
             container.innerHTML = '';
-            if (!chats || chats.length === 0) { container.innerHTML = `<p class="text-slate-400 text-center py-10">No messages yet.</p>`; return; }
+            if (!chats || chats.length === 0) { container.innerHTML = `<p class="text-slate-400 text-center py-10">No messages yet with ${name}. Type below to start the conversation!</p>`; return; }
             chats.forEach(c => {
                 const align = c.sender === 'admin' ? 'text-right' : 'text-left';
                 const bg = c.sender === 'admin' ? 'bg-indigo-100 text-indigo-900 ml-auto' : 'bg-emerald-100 text-emerald-900 mr-auto';
