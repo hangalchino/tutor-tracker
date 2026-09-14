@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TutorSchedule Pro - Secure Cloud Portal</title>
+    <title>TutorSchedule Pro - Complete Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase JS Client CDN -->
@@ -80,7 +80,7 @@
                     <p class="text-[10px] text-slate-400 mt-1">Use the exact name registered by your tutor.</p>
                 </div>
                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-sm transition-colors shadow-sm">
-                    View My Schedule & Links
+                    View My Portal
                 </button>
             </form>
         </div>
@@ -100,7 +100,8 @@
                 <div class="flex items-center space-x-3">
                     <div class="flex bg-indigo-700/60 p-1 rounded-lg">
                         <button onclick="switchTab('schedule')" id="navScheduleBtn" class="px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all">Schedule</button>
-                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all">Students Directory</button>
+                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all">Students</button>
+                        <button onclick="switchTab('payment')" id="navPaymentBtn" class="px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all">Payment Info</button>
                     </div>
                     <button onclick="adminLogout()" class="bg-indigo-700 hover:bg-indigo-800 text-indigo-200 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-colors"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
                 </div>
@@ -134,6 +135,7 @@
                             <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Time Slot</label><input type="text" id="sessionSlot" required placeholder="3:00 - 4:00 PM" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
                         </div>
                         <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Meeting Link</label><input type="url" id="sessionLink" placeholder="https://meet.google.com/..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
+                        <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Class Recording URL (Optional)</label><input type="url" id="sessionRecording" placeholder="https://drive.google.com/..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
                         <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Session Notes / Homework</label><textarea id="sessionNotes" rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></textarea></div>
                         <div class="flex space-x-2 pt-2">
                             <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">Save Session</button>
@@ -142,7 +144,7 @@
                     </form>
                 </section>
                 <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> All Cloud Sessions</h2>
+                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> All Cloud Sessions & Absent Notices</h2>
                     <div id="sessionsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow"></div>
                 </section>
             </div>
@@ -165,32 +167,114 @@
                     <div id="studentsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow"></div>
                 </section>
             </div>
+
+            <!-- TAB 3: PAYMENT INFO SETUP -->
+            <div id="paymentTab" class="hidden max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-wallet text-indigo-600 mr-2"></i> Configure WorldRemit & PayMaya Payment Info</h2>
+                <form id="paymentConfigForm" onsubmit="savePaymentInfo(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">PayMaya Account Name / Number</label>
+                        <input type="text" id="paymayaDetails" placeholder="e.g., Christcino Dasok / 09123456789" required class="w-full px-3 py-2 border rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">WorldRemit Instructions / Notes</label>
+                        <textarea id="worldremitInstructions" rows="3" placeholder="Select Philippines > Mobile Money > PayMaya. Use mobile number above." class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">PayMaya QR Code Image URL</label>
+                        <input type="url" id="paymayaQrUrl" placeholder="Paste image link of your QR code" class="w-full px-3 py-2 border rounded-lg text-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-medium">Save Payment Information</button>
+                </form>
+            </div>
         </main>
     </div>
 
     <!-- ================= STUDENT VIEW CONTAINER ================= -->
     <div id="studentAppContainer" class="hidden flex-grow flex flex-col min-h-screen">
         <header class="bg-emerald-600 text-white shadow-md">
-            <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div class="flex items-center space-x-3">
                     <div class="bg-white text-emerald-600 p-2 rounded-lg font-bold text-xl"><i class="fa-solid fa-book-open"></i></div>
                     <div>
                         <h1 class="text-lg font-bold" id="studentWelcomeTitle">Student Portal</h1>
-                        <p class="text-xs text-emerald-200">Your personalized schedule & meeting links</p>
+                        <p class="text-xs text-emerald-200">Your schedule, history & payment info</p>
                     </div>
                 </div>
-                <button onclick="studentLogout()" class="bg-emerald-700 hover:bg-emerald-800 text-emerald-100 px-3 py-1.5 rounded-lg text-xs transition-colors"><i class="fa-solid fa-right-from-bracket"></i> Exit Portal</button>
+                <!-- Student Portal Nav Tabs -->
+                <div class="flex bg-emerald-700/60 p-1 rounded-lg text-xs">
+                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all">Upcoming Schedule</button>
+                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Lessons & Recordings</button>
+                    <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Tuition Payment</button>
+                </div>
+                <button onclick="studentLogout()" class="bg-emerald-700 hover:bg-emerald-800 text-emerald-100 px-3 py-1.5 rounded-lg text-xs transition-colors"><i class="fa-solid fa-right-from-bracket"></i> Exit</button>
             </div>
         </header>
 
-        <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 space-y-4">
-            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-                <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
-                    <i class="fa-solid fa-calendar-days text-emerald-600 mr-2"></i> Your Upcoming Tutorial Sessions
-                </h2>
-                <div id="studentPortalSessions" class="space-y-3"></div>
+        <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
+            <!-- Student Tab 1: Upcoming Schedule & Absent Notice -->
+            <div id="studentScheduleView" class="space-y-4">
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
+                        <i class="fa-solid fa-calendar-days text-emerald-600 mr-2"></i> Upcoming Sessions & Attendance Notice
+                    </h2>
+                    <div id="studentPortalSessions" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- Student Tab 2: Past Lessons & Recordings History -->
+            <div id="studentHistoryView" class="hidden space-y-4">
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
+                        <i class="fa-solid fa-clock-rotate-left text-emerald-600 mr-2"></i> Lesson History & Class Recordings
+                    </h2>
+                    <div id="studentPortalHistory" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- Student Tab 3: Payment & Tuition Info -->
+            <div id="studentPaymentView" class="hidden space-y-6">
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
+                        <i class="fa-solid fa-money-bill-transfer text-emerald-600 mr-2"></i> Tuition Payment (WorldRemit to PayMaya)
+                    </h2>
+                    <div id="studentPaymentInfo" class="text-xs text-slate-600 space-y-3"></div>
+                </div>
+
+                <!-- Submit Payment Reference Form -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
+                        <i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference / Receipt
+                    </h2>
+                    <form onsubmit="submitPaymentProof(event)" class="space-y-3 text-xs">
+                        <div>
+                            <label class="block font-semibold uppercase mb-1">WorldRemit / PayMaya Reference / Transaction Number</label>
+                            <input type="text" id="payRefNumber" required placeholder="e.g., WR-987654321" class="w-full p-2 border rounded text-xs">
+                        </div>
+                        <div>
+                            <label class="block font-semibold uppercase mb-1">Amount Sent & Remarks</label>
+                            <input type="text" id="payAmount" required placeholder="e.g., $50 / PHP 2,800 for Math & Reading" class="w-full p-2 border rounded text-xs">
+                        </div>
+                        <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium">Send Payment Proof to Tutor</button>
+                    </form>
+                    <div id="studentPaymentHistoryList" class="mt-4 pt-4 border-t space-y-2"></div>
+                </div>
             </div>
         </main>
+    </div>
+
+    <!-- Modal for Absent/Cancel Reason -->
+    <div id="absentModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
+            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i> Notify Teacher of Absence / Cancellation</h3>
+            <p class="text-slate-500">Provide a brief reason or message for your teacher:</p>
+            <input type="hidden" id="absentSessionId">
+            <textarea id="absentReason" rows="3" placeholder="e.g., Feeling unwell, family emergency..." class="w-full p-2 border rounded text-xs"></textarea>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="sendAbsentNotice()" class="flex-1 bg-rose-600 text-white py-2 rounded font-medium">Send Absence Notice</button>
+                <button onclick="closeAbsentModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded font-medium">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
@@ -198,6 +282,7 @@
         let loginRole = 'admin';
         let isRegisterMode = false;
         let allSessions = [];
+        let currentStudentName = '';
 
         window.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await _supabase.auth.getSession();
@@ -262,16 +347,9 @@
         async function handleForgotPassword(e) {
             e.preventDefault();
             const email = document.getElementById('resetEmail').value.trim();
-            const { error } = await _supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.href,
-            });
-
-            if (error) {
-                alert("Error: " + error.message);
-            } else {
-                alert("Password reset instructions sent! Check your email inbox.");
-                backToLogin();
-            }
+            const { error } = await _supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.href });
+            if (error) alert("Error: " + error.message);
+            else { alert("Password reset instructions sent!"); backToLogin(); }
         }
 
         async function handleAdminAuth(e) {
@@ -280,20 +358,13 @@
             const password = document.getElementById('adminPassword').value.trim();
 
             if (isRegisterMode) {
-                const { data, error } = await _supabase.auth.signUp({ email, password });
-                if (error) {
-                    alert("Registration failed: " + error.message);
-                } else {
-                    alert("Registration successful! Check your email if verification is required, or sign in now.");
-                    toggleAdminMode();
-                }
+                const { error } = await _supabase.auth.signUp({ email, password });
+                if (error) alert("Registration failed: " + error.message);
+                else { alert("Registration successful! Sign in now."); toggleAdminMode(); }
             } else {
-                const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-                if (error) {
-                    alert("Login failed: " + error.message);
-                } else {
-                    showAdminDashboard();
-                }
+                const { error } = await _supabase.auth.signInWithPassword({ email, password });
+                if (error) alert("Login failed: " + error.message);
+                else showAdminDashboard();
             }
         }
 
@@ -301,6 +372,7 @@
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('adminAppContainer').classList.remove('hidden');
             loadAdminData();
+            loadPaymentConfig();
         }
 
         async function handleStudentLogin(e) {
@@ -309,38 +381,60 @@
             const { data, error } = await _supabase.from('students').select('*').ilike('name', name);
             
             if (error || !data || data.length === 0) {
-                alert("Student name not found in cloud database. Please check with your tutor.");
+                alert("Student name not found in cloud database.");
                 return;
             }
 
+            currentStudentName = data[0].name;
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('studentAppContainer').classList.remove('hidden');
-            document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${data[0].name}!`;
-            loadStudentPortal(data[0].name);
+            document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${currentStudentName}!`;
+            loadStudentPortal(currentStudentName);
         }
 
-        async function adminLogout() {
-            await _supabase.auth.signOut();
-            location.reload();
-        }
-
-        function studentLogout() {
-            location.reload();
-        }
+        async function adminLogout() { await _supabase.auth.signOut(); location.reload(); }
+        function studentLogout() { location.reload(); }
 
         function switchTab(tab) {
+            document.getElementById('scheduleTab').classList.add('hidden');
+            document.getElementById('studentsTab').classList.add('hidden');
+            document.getElementById('paymentTab').classList.add('hidden');
+            document.getElementById('navScheduleBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all";
+            document.getElementById('navStudentsBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all";
+            document.getElementById('navPaymentBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all";
+
             if (tab === 'schedule') {
                 document.getElementById('scheduleTab').classList.remove('hidden');
-                document.getElementById('studentsTab').classList.add('hidden');
                 document.getElementById('navScheduleBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all";
-                document.getElementById('navStudentsBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all";
                 loadAdminData();
-            } else {
-                document.getElementById('scheduleTab').classList.add('hidden');
+            } else if (tab === 'students') {
                 document.getElementById('studentsTab').classList.remove('hidden');
                 document.getElementById('navStudentsBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all";
-                document.getElementById('navScheduleBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold text-indigo-200 hover:text-white transition-all";
                 loadStudentsList();
+            } else if (tab === 'payment') {
+                document.getElementById('paymentTab').classList.remove('hidden');
+                document.getElementById('navPaymentBtn').className = "px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-indigo-600 shadow-sm transition-all";
+                loadPaymentConfig();
+            }
+        }
+
+        function switchStudentTab(tab) {
+            document.getElementById('studentScheduleView').classList.add('hidden');
+            document.getElementById('studentHistoryView').classList.add('hidden');
+            document.getElementById('studentPaymentView').classList.add('hidden');
+            document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all";
+            document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all";
+            document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all";
+
+            if (tab === 'schedule') {
+                document.getElementById('studentScheduleView').classList.remove('hidden');
+                document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all";
+            } else if (tab === 'history') {
+                document.getElementById('studentHistoryView').classList.remove('hidden');
+                document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all";
+            } else if (tab === 'payment') {
+                document.getElementById('studentPaymentView').classList.remove('hidden');
+                document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all";
             }
         }
 
@@ -359,7 +453,26 @@
             loadAdminData();
         }
 
-        // Database Actions: Sessions (Create & Update)
+        // Database Actions: Payment Info Settings
+        async function savePaymentInfo(e) {
+            e.preventDefault();
+            const paymaya = document.getElementById('paymayaDetails').value.trim();
+            const instructions = document.getElementById('worldremitInstructions').value.trim();
+            const qrUrl = document.getElementById('paymayaQrUrl').value.trim();
+            localStorage.setItem('tutor_payment_info', JSON.stringify({ paymaya, instructions, qrUrl }));
+            alert("Payment information updated successfully!");
+        }
+
+        function loadPaymentConfig() {
+            const saved = JSON.parse(localStorage.getItem('tutor_payment_info'));
+            if (saved) {
+                document.getElementById('paymayaDetails').value = saved.paymaya || '';
+                document.getElementById('worldremitInstructions').value = saved.instructions || '';
+                document.getElementById('paymayaQrUrl').value = saved.qrUrl || '';
+            }
+        }
+
+        // Database Actions: Sessions
         async function saveSession(e) {
             e.preventDefault();
             const id = document.getElementById('sessionId').value;
@@ -369,17 +482,14 @@
                 date: document.getElementById('sessionDate').value,
                 slot: document.getElementById('sessionSlot').value.trim(),
                 link: document.getElementById('sessionLink').value.trim(),
+                recording_url: document.getElementById('sessionRecording').value.trim(),
                 notes: document.getElementById('sessionNotes').value.trim()
             };
 
             if (id) {
-                // Update existing session
-                const { error } = await _supabase.from('sessions').update(sessionData).eq('id', id);
-                if (error) { alert("Error updating session: " + error.message); return; }
+                await _supabase.from('sessions').update(sessionData).eq('id', id);
             } else {
-                // Insert new session
-                const { error } = await _supabase.from('sessions').insert([sessionData]);
-                if (error) { alert("Error saving session: " + error.message); return; }
+                await _supabase.from('sessions').insert([sessionData]);
             }
 
             resetSessionForm();
@@ -396,6 +506,7 @@
             document.getElementById('sessionDate').value = session.date;
             document.getElementById('sessionSlot').value = session.slot;
             document.getElementById('sessionLink').value = session.link || '';
+            document.getElementById('sessionRecording').value = session.recording_url || '';
             document.getElementById('sessionNotes').value = session.notes || '';
 
             document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> Edit Session`;
@@ -427,17 +538,22 @@
             }
 
             allSessions.forEach(s => {
+                let statusBadge = '';
+                if (s.absent_status) {
+                    statusBadge = `<span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-bold text-[10px] ml-2"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Absent Notice: ${s.absent_reason}</span>`;
+                }
+
                 container.innerHTML += `
                     <div class="p-3 border rounded-lg text-xs flex justify-between items-center bg-slate-50 gap-2">
                         <div class="space-y-1">
-                            <div><strong>${s.student_name}</strong> - <span class="text-indigo-600 font-semibold">${s.subject}</span></div>
+                            <div><strong>${s.student_name}</strong> - <span class="text-indigo-600 font-semibold">${s.subject}</span> ${statusBadge}</div>
                             <div class="text-slate-500">${s.date} [${s.slot}]</div>
                             ${s.notes ? `<div class="text-slate-600"><strong>Notes:</strong> ${s.notes}</div>` : ''}
                             ${s.link ? `<div><a href="${s.link}" target="_blank" class="text-emerald-600 underline font-medium"><i class="fa-solid fa-video mr-1"></i> Meeting Link</a></div>` : ''}
                         </div>
                         <div class="flex items-center space-x-1">
-                            <button onclick="editSession(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit Session"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteSession(${s.id})" class="text-rose-500 hover:text-rose-700 p-2" title="Delete Session"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="editSession(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteSession(${s.id})" class="text-rose-500 hover:text-rose-700 p-2" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>`;
             });
@@ -463,39 +579,146 @@
             });
         }
 
+        // Student Portal View Loaders
         async function loadStudentPortal(name) {
-            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name);
-            const container = document.getElementById('studentPortalSessions');
-            container.innerHTML = '';
-            if (!sessions || sessions.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No scheduled sessions found for you right now.</p>`;
+            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
+            
+            const scheduleContainer = document.getElementById('studentPortalSessions');
+            const historyContainer = document.getElementById('studentPortalHistory');
+            scheduleContainer.innerHTML = '';
+            historyContainer.innerHTML = '';
+
+            const today = new Date().toISOString().split('T')[0];
+            let upcomingCount = 0;
+            let historyCount = 0;
+
+            if (sessions) {
+                sessions.forEach(s => {
+                    if (s.date >= today) {
+                        upcomingCount++;
+                        scheduleContainer.innerHTML += `
+                            <div class="p-4 bg-slate-50 border rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                                <div class="space-y-1 text-xs">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-bold text-slate-800 text-sm">${s.subject}</span>
+                                        <span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">${s.slot}</span>
+                                        <span class="text-slate-500">${s.date}</span>
+                                    </div>
+                                    ${s.notes ? `<p class="text-slate-600"><strong>Notes:</strong> ${s.notes}</p>` : ''}
+                                    ${s.absent_status ? `<p class="text-rose-600 font-bold">Status: Absent Notice Sent (${s.absent_reason})</p>` : ''}
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center"><i class="fa-solid fa-video mr-1"></i> Join</a>` : ''}
+                                    <button onclick="openAbsentModal(${s.id})" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs px-3 py-2 rounded-lg font-medium">Mark Absent / Cancel</button>
+                                </div>
+                            </div>`;
+                    } else {
+                        historyCount++;
+                        historyContainer.innerHTML += `
+                            <div class="p-4 bg-slate-50 border rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                                <div class="space-y-1 text-xs">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-bold text-slate-800 text-sm">${s.subject}</span>
+                                        <span class="text-slate-500">${s.date} (${s.slot})</span>
+                                    </div>
+                                    ${s.notes ? `<p class="text-slate-600"><strong>Completed Notes:</strong> ${s.notes}</p>` : ''}
+                                </div>
+                                ${s.recording_url ? `<a href="${s.recording_url}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center"><i class="fa-solid fa-play mr-1"></i> Watch Recording</a>` : '<span class="text-slate-400 text-xs">No recording</span>'}
+                            </div>`;
+                    }
+                });
+            }
+
+            if (upcomingCount === 0) scheduleContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No upcoming sessions scheduled.</p>`;
+            if (historyCount === 0) historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No past lesson history found.</p>`;
+
+            // Load Payment Info
+            const paymentConfig = JSON.parse(localStorage.getItem('tutor_payment_info'));
+            const paymentContainer = document.getElementById('studentPaymentInfo');
+            if (!paymentConfig || (!paymentConfig.paymaya && !paymentConfig.instructions)) {
+                paymentContainer.innerHTML = `<p class="text-slate-400">Payment details have not been set up by the tutor yet.</p>`;
+            } else {
+                paymentContainer.innerHTML = `
+                    <p><strong>PayMaya Account:</strong> ${paymentConfig.paymaya || 'N/A'}</p>
+                    <p><strong>WorldRemit Instructions:</strong> ${paymentConfig.instructions || 'Send remittance via WorldRemit to PayMaya account.'}</p>
+                    ${paymentConfig.qrUrl ? `<div class="mt-2"><p class="font-semibold mb-1">PayMaya QR Code:</p><img src="${paymentConfig.qrUrl}" alt="PayMaya QR Code" class="w-32 h-32 object-contain border rounded p-1 bg-white"></div>` : ''}
+                `;
+            }
+
+            loadStudentPaymentHistory(name);
+        }
+
+        // Absent Modal Actions
+        function openAbsentModal(sessionId) {
+            document.getElementById('absentSessionId').value = sessionId;
+            document.getElementById('absentReason').value = '';
+            document.getElementById('absentModal').classList.remove('hidden');
+        }
+
+        function closeAbsentModal() {
+            document.getElementById('absentModal').classList.add('hidden');
+        }
+
+        async function sendAbsentNotice() {
+            const sessionId = document.getElementById('absentSessionId').value;
+            const reason = document.getElementById('absentReason').value.trim() || 'No reason provided';
+
+            const { error } = await _supabase.from('sessions').update({
+                absent_status: true,
+                absent_reason: reason
+            }).eq('id', sessionId);
+
+            if (error) {
+                alert("Error sending notice: " + error.message);
+            } else {
+                alert("Absence/Cancellation notice sent successfully to teacher!");
+                closeAbsentModal();
+                loadStudentPortal(currentStudentName);
+            }
+        }
+
+        // Student Payment History Submission
+        function submitPaymentProof(e) {
+            e.preventDefault();
+            const ref = document.getElementById('payRefNumber').value.trim();
+            const amount = document.getElementById('payAmount').value.trim();
+
+            let history = JSON.parse(localStorage.getItem(`pay_hist_${currentStudentName}`)) || [];
+            history.unshift({ ref, amount, date: new Date().toLocaleDateString() });
+            localStorage.setItem(`pay_hist_${currentStudentName}`, JSON.stringify(history));
+
+            alert("Payment reference submitted to tutor!");
+            document.getElementById('payRefNumber').value = '';
+            document.getElementById('payAmount').value = '';
+            loadStudentPaymentHistory(currentStudentName);
+        }
+
+        function loadStudentPaymentHistory(name) {
+            const historyList = document.getElementById('studentPaymentHistoryList');
+            historyList.innerHTML = '<p class="font-semibold text-slate-700">Your Submitted Payment History:</p>';
+            let history = JSON.parse(localStorage.getItem(`pay_hist_${name}`)) || [];
+            if (history.length === 0) {
+                historyList.innerHTML += `<p class="text-slate-400">No payment history recorded yet.</p>`;
                 return;
             }
-            sessions.forEach(s => {
-                container.innerHTML += `
-                    <div class="p-4 bg-slate-50 border rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                        <div class="space-y-1 text-xs">
-                            <div class="flex items-center gap-2">
-                                <span class="font-bold text-slate-800 text-sm">${s.subject}</span>
-                                <span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">${s.slot}</span>
-                                <span class="text-slate-500">${s.date}</span>
-                            </div>
-                            ${s.notes ? `<p class="text-slate-600"><strong>Notes:</strong> ${s.notes}</p>` : ''}
-                        </div>
-                        ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-2 rounded-lg font-medium shadow-sm transition-colors flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join Class</a>` : ''}
+            history.forEach(h => {
+                historyList.innerHTML += `
+                    <div class="p-2 bg-slate-50 border rounded flex justify-between items-center text-xs">
+                        <div><strong>Ref:</strong> ${h.ref} | <strong>Amount:</strong> ${h.amount}</div>
+                        <span class="text-slate-400">${h.date}</span>
                     </div>`;
             });
         }
 
         async function deleteSession(id) {
-            if (confirm("Are you sure you want to delete this session?")) {
+            if (confirm("Delete session?")) {
                 await _supabase.from('sessions').delete().eq('id', id);
                 loadAdminData();
             }
         }
 
         async function deleteStudent(id) {
-            if (confirm("Are you sure you want to delete this student?")) {
+            if (confirm("Delete student?")) {
                 await _supabase.from('students').delete().eq('id', id);
                 loadStudentsList();
                 loadAdminData();
