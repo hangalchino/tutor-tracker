@@ -245,7 +245,7 @@
             <!-- TAB 1: SCHEDULE -->
             <div id="scheduleTab" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit">
-                    <h2 id="sessionFormTitle" class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Session</h2>
+                    <h2 id="sessionFormTitle" class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Class / Time Slots</h2>
                     <form id="sessionForm" class="space-y-4" onsubmit="saveSession(event)">
                         <input type="hidden" id="sessionId">
                         <div><label class="block text-xs font-semibold uppercase mb-1">Student Name</label><select id="studentName" required class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="" disabled selected>Select student...</option></select></div>
@@ -258,10 +258,21 @@
                                 <option value="Filipino">🇵🇭 Filipino</option>
                             </select>
                         </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div><label class="block text-xs font-semibold uppercase mb-1">Date</label><input type="date" id="sessionDate" required class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                            <div><label class="block text-xs font-semibold uppercase mb-1">Time Slot</label><input type="text" id="sessionSlot" required placeholder="3:00 - 4:00 PM" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
+                        
+                        <!-- Multiple Date & Time Slots Container -->
+                        <div class="space-y-2 border-t border-b py-3">
+                            <div class="flex justify-between items-center">
+                                <label class="block text-xs font-semibold uppercase text-indigo-600">Class Date & Time Slots (Multiple)</label>
+                                <button type="button" onclick="addScheduleSlotField()" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold"><i class="fa-solid fa-plus"></i> Add Slot</button>
+                            </div>
+                            <div id="scheduleSlotsFieldsContainer" class="space-y-2">
+                                <div class="flex gap-2 items-center">
+                                    <input type="date" required class="sched-date w-1/2 px-2 py-1.5 border rounded-lg text-xs">
+                                    <input type="text" required placeholder="Time (e.g. 3:00 - 4:00 PM)" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg text-xs">
+                                </div>
+                            </div>
                         </div>
+
                         <div><label class="block text-xs font-semibold uppercase mb-1">Meeting Link</label><input type="url" id="sessionLink" placeholder="https://meet.google.com/..." class="w-full px-3 py-2 border rounded-lg text-sm"></div>
                         
                         <!-- Multiple Recordings Container -->
@@ -280,7 +291,7 @@
 
                         <div><label class="block text-xs font-semibold uppercase mb-1">Notes / Homework</label><textarea id="sessionNotes" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea></div>
                         <div class="flex space-x-2 pt-2">
-                            <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm">Save Session</button>
+                            <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm">Save Sessions</button>
                             <button type="button" id="cancelSessionBtn" onclick="resetSessionForm()" class="hidden bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm">Cancel</button>
                         </div>
                     </form>
@@ -747,6 +758,20 @@
             openChatWithStudent(studentName);
         }
 
+        // Multiple Schedule Slots Handler
+        function addScheduleSlotField(dateVal = '', slotVal = '') {
+            const container = document.getElementById('scheduleSlotsFieldsContainer');
+            const div = document.createElement('div');
+            div.className = 'flex gap-2 items-center';
+            div.innerHTML = `
+                <input type="date" required value="${dateVal}" class="sched-date w-1/2 px-2 py-1.5 border rounded-lg text-xs">
+                <input type="text" required placeholder="Time (e.g. 3:00 - 4:00 PM)" value="${slotVal}" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg text-xs">
+                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700 px-2"><i class="fa-solid fa-trash"></i></button>
+            `;
+            container.appendChild(div);
+        }
+
+        // Multiple Recording Inputs Handler
         function addRecordingField(title = '', url = '') {
             const container = document.getElementById('recordingFieldsContainer');
             const div = document.createElement('div');
@@ -938,32 +963,60 @@
         async function saveSession(e) {
             e.preventDefault();
             const id = document.getElementById('sessionId').value;
+            const student_name = document.getElementById('studentName').value;
+            const subject = document.getElementById('sessionSubject').value;
+            const link = document.getElementById('sessionLink').value.trim();
+            const notes = document.getElementById('sessionNotes').value.trim();
 
+            // Collect multiple recordings
             const recordings = [];
             document.querySelectorAll('#recordingFieldsContainer > div').forEach(div => {
                 const title = div.querySelector('.rec-title').value.trim();
                 const url = div.querySelector('.rec-url').value.trim();
                 if (url) recordings.push({ title: title || 'Recording', url });
             });
+            const recording_url = recordings.length > 0 ? JSON.stringify(recordings) : '';
 
-            const sessionData = {
-                student_name: document.getElementById('studentName').value,
-                subject: document.getElementById('sessionSubject').value,
-                date: document.getElementById('sessionDate').value,
-                slot: document.getElementById('sessionSlot').value.trim(),
-                link: document.getElementById('sessionLink').value.trim(),
-                recording_url: recordings.length > 0 ? JSON.stringify(recordings) : document.getElementById('sessionRecording')?.value || '',
-                notes: document.getElementById('sessionNotes').value.trim()
-            };
+            // Collect multiple schedule slots
+            const slotsData = [];
+            document.querySelectorAll('#scheduleSlotsFieldsContainer > div').forEach(div => {
+                const date = div.querySelector('.sched-date').value;
+                const slot = div.querySelector('.sched-slot').value.trim();
+                if (date && slot) slotsData.push({ date, slot });
+            });
+
+            if (slotsData.length === 0) {
+                alert("Please add at least one date and time slot.");
+                return;
+            }
 
             if (id) {
+                // If editing, update the first slot and delete/add others if needed, or simply update this row with the first slot
+                const firstSlot = slotsData[0];
+                const sessionData = { student_name, subject, date: firstSlot.date, slot: firstSlot.slot, link, recording_url, notes };
                 const { error } = await _supabase.from('sessions').update(sessionData).eq('id', id);
                 if (error) { alert("Error updating session: " + error.message); return; }
-                alert("Session updated successfully!");
+
+                // If user added multiple slots during edit, insert the remaining ones as new rows
+                for (let i = 1; i < slotsData.length; i++) {
+                    await _supabase.from('sessions').insert([{ student_name, subject, date: slotsData[i].date, slot: slotsData[i].slot, link, recording_url, notes }]);
+                }
+                alert("Session(s) updated successfully!");
             } else {
-                const { error } = await _supabase.from('sessions').insert([sessionData]);
-                if (error) { alert("Error scheduling session: " + error.message); return; }
-                alert("Session scheduled successfully!");
+                // Insert all slots as separate session rows in Supabase
+                const rowsToInsert = slotsData.map(s => ({
+                    student_name,
+                    subject,
+                    date: s.date,
+                    slot: s.slot,
+                    link,
+                    recording_url,
+                    notes
+                }));
+
+                const { error } = await _supabase.from('sessions').insert(rowsToInsert);
+                if (error) { alert("Error scheduling sessions: " + error.message); return; }
+                alert("Multiple class sessions scheduled successfully!");
             }
 
             resetSessionForm();
@@ -977,11 +1030,15 @@
             document.getElementById('sessionId').value = session.id;
             document.getElementById('studentName').value = session.student_name;
             document.getElementById('sessionSubject').value = session.subject;
-            document.getElementById('sessionDate').value = session.date;
-            document.getElementById('sessionSlot').value = session.slot || '';
             document.getElementById('sessionLink').value = session.link || '';
             document.getElementById('sessionNotes').value = session.notes || '';
 
+            // Set schedule slot
+            const schedContainer = document.getElementById('scheduleSlotsFieldsContainer');
+            schedContainer.innerHTML = '';
+            addScheduleSlotField(session.date, session.slot);
+
+            // Set recordings
             const container = document.getElementById('recordingFieldsContainer');
             container.innerHTML = '';
             try {
@@ -1003,10 +1060,16 @@
         function resetSessionForm() {
             document.getElementById('sessionForm').reset();
             document.getElementById('sessionId').value = '';
-            document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Session`;
+            document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Class / Time Slots`;
             document.getElementById('cancelSessionBtn').classList.add('hidden');
-            const container = document.getElementById('recordingFieldsContainer');
-            container.innerHTML = `
+            
+            document.getElementById('scheduleSlotsFieldsContainer').innerHTML = `
+                <div class="flex gap-2 items-center">
+                    <input type="date" required class="sched-date w-1/2 px-2 py-1.5 border rounded-lg text-xs">
+                    <input type="text" required placeholder="Time (e.g. 3:00 - 4:00 PM)" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg text-xs">
+                </div>`;
+
+            document.getElementById('recordingFieldsContainer').innerHTML = `
                 <div class="flex gap-2">
                     <input type="text" placeholder="Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
                     <input type="url" placeholder="https://drive.google.com/..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
