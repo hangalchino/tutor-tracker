@@ -111,7 +111,7 @@
             <!-- TAB 1: SCHEDULE -->
             <div id="scheduleTab" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Session</h2>
+                    <h2 id="sessionFormTitle" class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Session</h2>
                     <form id="sessionForm" class="space-y-4" onsubmit="saveSession(event)">
                         <input type="hidden" id="sessionId">
                         <div>
@@ -135,7 +135,10 @@
                         </div>
                         <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Meeting Link</label><input type="url" id="sessionLink" placeholder="https://meet.google.com/..." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></div>
                         <div><label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Session Notes / Homework</label><textarea id="sessionNotes" rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"></textarea></div>
-                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">Save Session</button>
+                        <div class="flex space-x-2 pt-2">
+                            <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">Save Session</button>
+                            <button type="button" id="cancelSessionBtn" onclick="resetSessionForm()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-4 py-2 rounded-lg text-sm">Cancel</button>
+                        </div>
                     </form>
                 </section>
                 <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
@@ -194,9 +197,9 @@
     <script>
         let loginRole = 'admin';
         let isRegisterMode = false;
+        let allSessions = [];
 
         window.addEventListener('DOMContentLoaded', async () => {
-            // Check if admin is already logged into Supabase session
             const { data: { session } } = await _supabase.auth.getSession();
             if (session) {
                 showAdminDashboard();
@@ -341,7 +344,7 @@
             }
         }
 
-        // Database Actions
+        // Database Actions: Students
         async function saveStudent(e) {
             e.preventDefault();
             const { error } = await _supabase.from('students').insert([{
@@ -356,19 +359,55 @@
             loadAdminData();
         }
 
+        // Database Actions: Sessions (Create & Update)
         async function saveSession(e) {
             e.preventDefault();
-            const { error } = await _supabase.from('sessions').insert([{
+            const id = document.getElementById('sessionId').value;
+            const sessionData = {
                 student_name: document.getElementById('studentName').value,
                 subject: document.getElementById('sessionSubject').value,
                 date: document.getElementById('sessionDate').value,
                 slot: document.getElementById('sessionSlot').value.trim(),
                 link: document.getElementById('sessionLink').value.trim(),
                 notes: document.getElementById('sessionNotes').value.trim()
-            }]);
-            if (error) { alert("Error saving session: " + error.message); return; }
-            document.getElementById('sessionForm').reset();
+            };
+
+            if (id) {
+                // Update existing session
+                const { error } = await _supabase.from('sessions').update(sessionData).eq('id', id);
+                if (error) { alert("Error updating session: " + error.message); return; }
+            } else {
+                // Insert new session
+                const { error } = await _supabase.from('sessions').insert([sessionData]);
+                if (error) { alert("Error saving session: " + error.message); return; }
+            }
+
+            resetSessionForm();
             loadAdminData();
+        }
+
+        function editSession(id) {
+            const session = allSessions.find(s => s.id === id);
+            if (!session) return;
+
+            document.getElementById('sessionId').value = session.id;
+            document.getElementById('studentName').value = session.student_name;
+            document.getElementById('sessionSubject').value = session.subject;
+            document.getElementById('sessionDate').value = session.date;
+            document.getElementById('sessionSlot').value = session.slot;
+            document.getElementById('sessionLink').value = session.link || '';
+            document.getElementById('sessionNotes').value = session.notes || '';
+
+            document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> Edit Session`;
+            document.getElementById('cancelSessionBtn').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetSessionForm() {
+            document.getElementById('sessionForm').reset();
+            document.getElementById('sessionId').value = '';
+            document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Session`;
+            document.getElementById('cancelSessionBtn').classList.add('hidden');
         }
 
         async function loadAdminData() {
@@ -378,20 +417,28 @@
             if (students) students.forEach(s => dropdown.innerHTML += `<option value="${s.name}">${s.name}</option>`);
 
             const { data: sessions } = await _supabase.from('sessions').select('*').order('date', { ascending: true });
+            allSessions = sessions || [];
             const container = document.getElementById('sessionsContainer');
             container.innerHTML = '';
-            if (!sessions || sessions.length === 0) {
+            
+            if (allSessions.length === 0) {
                 container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No sessions scheduled yet.</p>`;
                 return;
             }
-            sessions.forEach(s => {
+
+            allSessions.forEach(s => {
                 container.innerHTML += `
-                    <div class="p-3 border rounded-lg text-xs flex justify-between items-center bg-slate-50">
-                        <div>
-                            <strong>${s.student_name}</strong> - <span class="text-indigo-600 font-semibold">${s.subject}</span><br>
-                            ${s.date} [${s.slot}] ${s.link ? `| <a href="${s.link}" target="_blank" class="text-emerald-600 underline">Link</a>` : ''}
+                    <div class="p-3 border rounded-lg text-xs flex justify-between items-center bg-slate-50 gap-2">
+                        <div class="space-y-1">
+                            <div><strong>${s.student_name}</strong> - <span class="text-indigo-600 font-semibold">${s.subject}</span></div>
+                            <div class="text-slate-500">${s.date} [${s.slot}]</div>
+                            ${s.notes ? `<div class="text-slate-600"><strong>Notes:</strong> ${s.notes}</div>` : ''}
+                            ${s.link ? `<div><a href="${s.link}" target="_blank" class="text-emerald-600 underline font-medium"><i class="fa-solid fa-video mr-1"></i> Meeting Link</a></div>` : ''}
                         </div>
-                        <button onclick="deleteSession(${s.id})" class="text-rose-500 hover:text-rose-700 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                        <div class="flex items-center space-x-1">
+                            <button onclick="editSession(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit Session"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteSession(${s.id})" class="text-rose-500 hover:text-rose-700 p-2" title="Delete Session"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     </div>`;
             });
         }
