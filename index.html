@@ -137,10 +137,10 @@
                 <div class="text-center space-y-2">
                     <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Community Wall</h3>
                     <h4 class="text-2xl font-bold text-slate-900">Leave a Comment or Inquiry</h4>
-                    <p class="text-xs text-slate-500">Anyone can join the conversation! You can also delete your own comment anytime.</p>
+                    <p class="text-xs text-slate-500">Anyone can join! To delete your comment, enter your registered account password when prompted.</p>
                 </div>
                 <form onsubmit="submitPublicComment(event)" class="bg-white p-6 rounded-xl shadow-sm border space-y-3 text-xs">
-                    <div><label class="block font-semibold uppercase mb-1">Your Name</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold uppercase mb-1">Your Name (Must match account name)</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
                     <div><label class="block font-semibold uppercase mb-1">Your Message / Question</label><textarea id="visitorMessage" rows="3" required placeholder="Inquire about slots..." class="w-full p-2 border rounded"></textarea></div>
                     <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded">Post Comment</button>
                 </form>
@@ -229,11 +229,12 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <div class="flex bg-indigo-700/60 p-1 rounded-lg text-xs">
+                    <div class="flex bg-indigo-700/60 p-1 rounded-lg text-xs flex-wrap gap-1">
                         <button onclick="switchTab('schedule')" id="navScheduleBtn" class="px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all">Schedule</button>
-                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Registered Accounts & Payments</button>
+                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Registered Accounts</button>
                         <button onclick="switchTab('payment')" id="navPaymentBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Payment Setup</button>
                         <button onclick="switchTab('adminChat')" id="navAdminChatBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Support Chat</button>
+                        <button onclick="switchTab('adminComments')" id="navAdminCommentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Community Wall</button>
                     </div>
                     <button onclick="adminLogout()" class="bg-indigo-700 hover:bg-indigo-800 text-indigo-200 px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-right-from-bracket"></i> Exit to Website</button>
                 </div>
@@ -271,7 +272,7 @@
                             </div>
                             <div id="recordingFieldsContainer" class="space-y-2">
                                 <div class="flex gap-2">
-                                    <input type="text" placeholder="Recording Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
+                                    <input type="text" placeholder="Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
                                     <input type="url" placeholder="https://drive.google.com/..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
                                 </div>
                             </div>
@@ -340,6 +341,12 @@
                         <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded font-medium text-xs">Send</button>
                     </form>
                 </div>
+            </div>
+
+            <!-- TAB 5: ADMIN COMMUNITY WALL MANAGEMENT -->
+            <div id="adminCommentsTab" class="hidden max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
+                <h2 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-comments text-indigo-600 mr-2"></i> Community Wall Moderation & Management</h2>
+                <div id="adminCommentsContainer" class="space-y-4"></div>
             </div>
         </main>
     </div>
@@ -481,12 +488,19 @@
             document.getElementById('enrollPassword').value = '';
         }
 
-        // ================= PUBLIC COMMENTS & INTERACTION =================
+        // ================= PUBLIC COMMENTS & PASSWORD DELETION =================
         async function submitPublicComment(e) {
             e.preventDefault();
             const name = document.getElementById('visitorName').value.trim();
             const message = document.getElementById('visitorMessage').value.trim();
             const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Check if student exists in database so they have a registered password
+            const { data: studentCheck } = await _supabase.from('students').select('*').ilike('name', name);
+            if (!studentCheck || studentCheck.length === 0) {
+                alert("Please use the exact registered student name so you can verify with your account password when deleting comments.");
+                return;
+            }
 
             const { error } = await _supabase.from('community_comments').insert([{ name, message, date, replies: [] }]);
             if (error) { alert("Error posting comment: " + error.message); return; }
@@ -531,37 +545,100 @@
                             </div>
                         </div>
                         <p class="text-slate-700 leading-relaxed">${c.message}</p>
+                        ${repliesHtml}
+                    </div>`;
+            });
+        }
+
+        async function promptDeleteComment(id, authorName) {
+            // If Admin is logged in, delete instantly
+            if (isAdminLoggedIn) {
+                if (confirm(`Admin action: Delete comment by "${authorName}"?`)) {
+                    const { error } = await _supabase.from('community_comments').delete().eq('id', id);
+                    if (error) { alert("Error: " + error.message); return; }
+                    loadPublicComments();
+                    if (!document.getElementById('adminCommentsTab').classList.contains('hidden')) loadAdminCommunityComments();
+                    alert("Comment deleted by Admin.");
+                }
+                return;
+            }
+
+            // Regular user deletion prompt requiring account password
+            const enteredPassword = prompt(`To delete this comment by ${authorName}, please enter your account password:`);
+            if (enteredPassword === null) return;
+
+            // Verify password against database student record
+            const { data: studentData, error } = await _supabase.from('students').select('*').ilike('name', authorName);
+            if (error || !studentData || studentData.length === 0) {
+                alert("Account verification failed.");
+                return;
+            }
+
+            const student = studentData[0];
+            if (student.password !== enteredPassword) {
+                alert("Incorrect password! You can only delete your own comments by providing your correct account password.");
+                return;
+            }
+
+            // Password matches, proceed with deletion
+            const { error: deleteError } = await _supabase.from('community_comments').delete().eq('id', id);
+            if (deleteError) { alert("Error deleting comment: " + deleteError.message); return; }
+            loadPublicComments();
+            alert("Comment deleted successfully.");
+        }
+
+        // Admin Management of Community Comments
+        async function loadAdminCommunityComments() {
+            const container = document.getElementById('adminCommentsContainer');
+            if (!container) return;
+
+            const { data: comments, error } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
+            container.innerHTML = '';
+
+            if (error || !comments || comments.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No comments on the Community Wall yet.</p>`;
+                return;
+            }
+
+            comments.forEach(c => {
+                let repliesHtml = '';
+                if (c.replies && Array.isArray(c.replies)) {
+                    c.replies.forEach(r => {
+                        repliesHtml += `
+                            <div class="mt-2 ml-4 p-2 bg-indigo-50 border-l-2 border-indigo-600 rounded text-xs space-y-1">
+                                <div class="flex justify-between font-bold text-indigo-900">
+                                    <span>${r.name} <span class="bg-indigo-600 text-white text-[9px] px-1.5 py-0.5 rounded ml-1 uppercase">ADMIN</span></span>
+                                    <span class="text-[10px] text-indigo-400">${r.date}</span>
+                                </div>
+                                <p class="text-slate-700">${r.message}</p>
+                            </div>`;
+                    });
+                }
+
+                container.innerHTML += `
+                    <div class="p-4 bg-slate-50 border rounded-xl text-xs space-y-3">
+                        <div class="flex justify-between items-start font-bold text-slate-900">
+                            <div><i class="fa-solid fa-user-circle text-indigo-600 mr-1.5"></i>${c.name} <span class="text-[10px] font-normal text-slate-400 ml-1">${c.date}</span></div>
+                            <button onclick="promptDeleteComment(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="text-rose-600 hover:text-rose-800 font-semibold"><i class="fa-solid fa-trash mr-1"></i> Delete Comment</button>
+                        </div>
+                        <p class="text-slate-700 leading-relaxed">${c.message}</p>
                         
                         ${repliesHtml}
 
-                        <!-- Admin Reply Box -->
-                        <div id="adminReplyBox-${c.id}" class="${isAdminLoggedIn ? 'block' : 'hidden'} mt-3 pt-2 border-t">
+                        <!-- Admin Reply Input -->
+                        <div class="mt-3 pt-3 border-t">
                             <form onsubmit="submitAdminCommentReply(event, ${c.id})" class="flex gap-2">
-                                <input type="text" id="adminReplyInput-${c.id}" required placeholder="Reply as ADMIN..." class="flex-grow p-1.5 border rounded text-xs bg-slate-50">
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded font-medium text-xs">Reply [ADMIN]</button>
+                                <input type="text" id="adminWallReplyInput-${c.id}" required placeholder="Reply as ADMIN..." class="flex-grow p-2 border rounded text-xs bg-white">
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded font-medium text-xs">Reply [ADMIN]</button>
                             </form>
                         </div>
                     </div>`;
             });
         }
 
-        async function promptDeleteComment(id, authorName) {
-            const enteredName = prompt(`To delete this comment, please enter the exact name ("${authorName}") used when posting:`);
-            if (enteredName === null) return;
-            if (enteredName.trim().toLowerCase() !== authorName.toLowerCase()) {
-                alert("Name did not match. You can only delete your own comments.");
-                return;
-            }
-
-            const { error } = await _supabase.from('community_comments').delete().eq('id', id);
-            if (error) { alert("Error deleting comment: " + error.message); return; }
-            loadPublicComments();
-            alert("Comment deleted successfully.");
-        }
-
         async function submitAdminCommentReply(e, commentId) {
             e.preventDefault();
-            const inputEl = document.getElementById(`adminReplyInput-${commentId}`);
+            const inputEl = document.getElementById(`adminWallReplyInput-${commentId}`);
             const replyMsg = inputEl.value.trim();
             if (!replyMsg) return;
 
@@ -578,7 +655,9 @@
             if (error) { alert("Error sending reply: " + error.message); return; }
 
             inputEl.value = '';
+            loadAdminCommunityComments();
             loadPublicComments();
+            alert("Admin reply posted successfully!");
         }
 
         // Student Login
@@ -629,13 +708,16 @@
 
         // Tabs Switching
         function switchTab(tab) {
-            ['scheduleTab', 'studentsTab', 'paymentTab', 'adminChatTab'].forEach(t => document.getElementById(t).classList.add('hidden'));
-            ['navScheduleBtn', 'navStudentsBtn', 'navPaymentBtn', 'navAdminChatBtn'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all");
+            ['scheduleTab', 'studentsTab', 'paymentTab', 'adminChatTab', 'adminCommentsTab'].forEach(t => document.getElementById(t).classList.add('hidden'));
+            ['navScheduleBtn', 'navStudentsBtn', 'navPaymentBtn', 'navAdminChatBtn', 'navAdminCommentsBtn'].forEach(b => {
+                if(document.getElementById(b)) document.getElementById(b).className = "px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all";
+            });
 
             if (tab === 'schedule') { document.getElementById('scheduleTab').classList.remove('hidden'); document.getElementById('navScheduleBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadAdminData(); }
             else if (tab === 'students') { document.getElementById('studentsTab').classList.remove('hidden'); document.getElementById('navStudentsBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadStudentsList(); }
             else if (tab === 'payment') { document.getElementById('paymentTab').classList.remove('hidden'); document.getElementById('navPaymentBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadPaymentConfig(); }
             else if (tab === 'adminChat') { document.getElementById('adminChatTab').classList.remove('hidden'); document.getElementById('navAdminChatBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadAdminChatStudentsList(); }
+            else if (tab === 'adminComments') { document.getElementById('adminCommentsTab').classList.remove('hidden'); document.getElementById('navAdminCommentsBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadAdminCommunityComments(); }
         }
 
         function switchStudentTab(tab) {
@@ -657,11 +739,10 @@
             selectAdminChatStudent(studentName);
         }
 
-        // Quick Ping / Reminder Action from Admin to Student Chat
         async function pingStudentPayment(studentName) {
             const reminderMsg = "Hello! This is a gentle reminder regarding your tuition payment. Please let me know if you are having any trouble or if you need assistance with the bank QR code.";
             await _supabase.from('chat_messages').insert([{ student_name: studentName, sender: 'admin', message: reminderMsg, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
-            alert(`Payment reminder ping sent to ${studentName}! You can view it in the Support Chat.`);
+            alert(`Payment reminder ping sent to ${studentName}!`);
             openChatWithStudent(studentName);
         }
 
@@ -709,7 +790,6 @@
             document.getElementById('imageModal').classList.add('hidden');
         }
 
-        // Admin: Save or Update Student Account
         async function saveStudentDirect(e) {
             e.preventDefault();
             const id = document.getElementById('dirStudentId').value;
@@ -757,7 +837,6 @@
             document.getElementById('cancelStudentBtn').classList.add('hidden');
         }
 
-        // Load Registered Students WITH Payment Tracking Status
         async function loadStudentsList() {
             const { data: students } = await _supabase.from('students').select('*').order('name', { ascending: true });
             const { data: payments } = await _supabase.from('payment_history').select('*');
@@ -771,7 +850,6 @@
             }
 
             students.forEach(s => {
-                // Find payment history for this student
                 const studentPayments = payments ? payments.filter(p => p.student_name && p.student_name.toLowerCase() === s.name.toLowerCase()) : [];
                 const hasPaid = studentPayments.length > 0;
 
@@ -856,7 +934,6 @@
             }
         }
 
-        // Save or Update Session
         async function saveSession(e) {
             e.preventDefault();
             const id = document.getElementById('sessionId').value;
@@ -930,7 +1007,7 @@
             const container = document.getElementById('recordingFieldsContainer');
             container.innerHTML = `
                 <div class="flex gap-2">
-                    <input type="text" placeholder="Recording Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
+                    <input type="text" placeholder="Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
                     <input type="url" placeholder="https://drive.google.com/..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
                 </div>`;
         }
