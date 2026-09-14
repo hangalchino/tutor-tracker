@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TutorSchedule Pro - Complete Portal</title>
+    <title>TutorSchedule Pro - Cloud Synced Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase JS Client CDN -->
@@ -191,12 +191,10 @@
 
             <!-- TAB 4: ADMIN SUPPORT CHAT -->
             <div id="adminChatTab" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-[600px]">
-                <!-- Student List Sidebar -->
                 <div class="border-r pr-4 overflow-y-auto space-y-2">
                     <h3 class="font-bold text-sm text-slate-800 mb-3"><i class="fa-solid fa-comments text-indigo-600 mr-2"></i> Student Chats</h3>
                     <div id="adminChatStudentList" class="space-y-1"></div>
                 </div>
-                <!-- Chat Window -->
                 <div class="md:col-span-2 flex flex-col h-full">
                     <h3 id="activeChatStudentTitle" class="font-bold text-sm text-slate-800 mb-3 pb-2 border-b">Select a student to view chat</h3>
                     <div id="adminChatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50 text-xs mb-3">
@@ -234,7 +232,7 @@
         </header>
 
         <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
-            <!-- Student Tab 1: Upcoming Schedule & Absent Notice -->
+            <!-- Student Tab 1 -->
             <div id="studentScheduleView" class="space-y-4">
                 <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                     <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
@@ -244,7 +242,7 @@
                 </div>
             </div>
 
-            <!-- Student Tab 2: Past Lessons & Recordings History -->
+            <!-- Student Tab 2 -->
             <div id="studentHistoryView" class="hidden space-y-4">
                 <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                     <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
@@ -254,7 +252,7 @@
                 </div>
             </div>
 
-            <!-- Student Tab 3: Payment & Tuition Info -->
+            <!-- Student Tab 3 -->
             <div id="studentPaymentView" class="hidden space-y-6">
                 <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                     <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
@@ -263,7 +261,6 @@
                     <div id="studentPaymentInfo" class="text-xs text-slate-600 space-y-3"></div>
                 </div>
 
-                <!-- Submit Payment Reference Form -->
                 <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
                     <h2 class="text-md font-bold text-slate-800 mb-4 flex items-center">
                         <i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference & Receipt Screenshot
@@ -287,7 +284,7 @@
                 </div>
             </div>
 
-            <!-- Student Tab 4: Live Support Chat -->
+            <!-- Student Tab 4 -->
             <div id="studentChatView" class="hidden space-y-4">
                 <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col h-[500px]">
                     <h2 class="text-md font-bold text-slate-800 mb-3 flex items-center">
@@ -303,26 +300,24 @@
         </main>
     </div>
 
-    <!-- Modal for Absent/Cancel Reason -->
+    <!-- Modals -->
     <div id="absentModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i> Notify Teacher of Absence / Cancellation</h3>
-            <p class="text-slate-500">Provide a brief reason or message for your teacher:</p>
+            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i> Notify Teacher of Absence</h3>
             <input type="hidden" id="absentSessionId">
-            <textarea id="absentReason" rows="3" placeholder="e.g., Feeling unwell, family emergency..." class="w-full p-2 border rounded text-xs"></textarea>
+            <textarea id="absentReason" rows="3" placeholder="Reason..." class="w-full p-2 border rounded text-xs"></textarea>
             <div class="flex space-x-2 pt-2">
-                <button onclick="sendAbsentNotice()" class="flex-1 bg-rose-600 text-white py-2 rounded font-medium">Send Absence Notice</button>
+                <button onclick="sendAbsentNotice()" class="flex-1 bg-rose-600 text-white py-2 rounded font-medium">Send Notice</button>
                 <button onclick="closeAbsentModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded font-medium">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Admin Reply to Absence Notice -->
     <div id="adminReplyModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
             <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-reply text-indigo-600 mr-2"></i> Reply to Absence Notice</h3>
             <input type="hidden" id="replySessionId">
-            <textarea id="adminReplyText" rows="3" placeholder="Type your response/acknowledgment to the student..." class="w-full p-2 border rounded text-xs"></textarea>
+            <textarea id="adminReplyText" rows="3" placeholder="Reply..." class="w-full p-2 border rounded text-xs"></textarea>
             <div class="flex space-x-2 pt-2">
                 <button onclick="sendAdminReply()" class="flex-1 bg-indigo-600 text-white py-2 rounded font-medium">Send Reply</button>
                 <button onclick="closeAdminReplyModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded font-medium">Cancel</button>
@@ -340,9 +335,7 @@
 
         window.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
-                showAdminDashboard();
-            }
+            if (session) showAdminDashboard();
         });
 
         function setLoginRole(role) {
@@ -364,38 +357,21 @@
 
         function toggleAdminMode() {
             isRegisterMode = !isRegisterMode;
-            const title = document.getElementById('authMainTitle');
-            const sub = document.getElementById('authMainSubtitle');
-            const btn = document.getElementById('adminSubmitBtn');
-            const toggleBtn = document.getElementById('adminModeToggle');
-
-            if (isRegisterMode) {
-                title.textContent = "Register Admin Account";
-                sub.textContent = "Create your secure credentials";
-                btn.textContent = "Sign Up";
-                toggleBtn.textContent = "Already have an account? Sign in";
-            } else {
-                title.textContent = "Tutor Portal";
-                sub.textContent = "Reading • English • Math • Filipino";
-                btn.textContent = "Sign In";
-                toggleBtn.textContent = "Need an account? Register";
-            }
+            document.getElementById('authMainTitle').textContent = isRegisterMode ? "Register Admin Account" : "Tutor Portal";
+            document.getElementById('adminSubmitBtn').textContent = isRegisterMode ? "Sign Up" : "Sign In";
+            document.getElementById('adminModeToggle').textContent = isRegisterMode ? "Already have an account? Sign in" : "Need an account? Register";
         }
 
         function showForgotPassword() {
             document.getElementById('adminAuthForm').classList.add('hidden');
             document.getElementById('roleSelectorContainer').classList.add('hidden');
             document.getElementById('forgotPasswordForm').classList.remove('hidden');
-            document.getElementById('authMainTitle').textContent = "Reset Password";
-            document.getElementById('authMainSubtitle').textContent = "We'll email you a recovery link";
         }
 
         function backToLogin() {
             document.getElementById('forgotPasswordForm').classList.add('hidden');
             document.getElementById('roleSelectorContainer').classList.remove('hidden');
             document.getElementById('adminAuthForm').classList.remove('hidden');
-            document.getElementById('authMainTitle').textContent = "Tutor Portal";
-            document.getElementById('authMainSubtitle').textContent = "Reading • English • Math • Filipino";
         }
 
         async function handleForgotPassword(e) {
@@ -505,22 +481,19 @@
             }
         }
 
-        // Database Actions: Students
         async function saveStudent(e) {
             e.preventDefault();
-            const { error } = await _supabase.from('students').insert([{
+            await _supabase.from('students').insert([{
                 name: document.getElementById('dirStudentName').value.trim(),
                 parent: document.getElementById('dirParentName').value.trim(),
                 contact: document.getElementById('dirContact').value.trim(),
                 notes: document.getElementById('dirNotes').value.trim()
             }]);
-            if (error) { alert("Error saving student: " + error.message); return; }
             document.getElementById('studentForm').reset();
             loadStudentsList();
             loadAdminData();
         }
 
-        // Database Actions: Payment Info Settings
         async function savePaymentInfo(e) {
             e.preventDefault();
             const paymaya = document.getElementById('paymayaDetails').value.trim();
@@ -539,7 +512,6 @@
             }
         }
 
-        // Database Actions: Sessions
         async function saveSession(e) {
             e.preventDefault();
             const id = document.getElementById('sessionId').value;
@@ -553,11 +525,8 @@
                 notes: document.getElementById('sessionNotes').value.trim()
             };
 
-            if (id) {
-                await _supabase.from('sessions').update(sessionData).eq('id', id);
-            } else {
-                await _supabase.from('sessions').insert([sessionData]);
-            }
+            if (id) await _supabase.from('sessions').update(sessionData).eq('id', id);
+            else await _supabase.from('sessions').insert([sessionData]);
 
             resetSessionForm();
             loadAdminData();
@@ -566,7 +535,6 @@
         function editSession(id) {
             const session = allSessions.find(s => s.id === id);
             if (!session) return;
-
             document.getElementById('sessionId').value = session.id;
             document.getElementById('studentName').value = session.student_name;
             document.getElementById('sessionSubject').value = session.subject;
@@ -575,10 +543,8 @@
             document.getElementById('sessionLink').value = session.link || '';
             document.getElementById('sessionRecording').value = session.recording_url || '';
             document.getElementById('sessionNotes').value = session.notes || '';
-
             document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> Edit Session`;
             document.getElementById('cancelSessionBtn').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function resetSessionForm() {
@@ -624,8 +590,8 @@
                             ${statusBadge}
                         </div>
                         <div class="flex items-center space-x-1">
-                            <button onclick="editSession(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteSession(${s.id})" class="text-rose-500 hover:text-rose-700 p-2" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="editSession(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteSession(${s.id})" class="text-rose-500 hover:text-rose-700 p-2"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>`;
             });
@@ -635,100 +601,71 @@
             const { data: students } = await _supabase.from('students').select('*').order('name', { ascending: true });
             const container = document.querySelector('#studentsTab #studentsContainer');
             container.innerHTML = '';
-            if (!students || students.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No students registered yet.</p>`;
-                return;
-            }
+            if (!students) return;
             students.forEach(s => {
                 container.innerHTML += `
                     <div class="p-3 border rounded-lg text-xs flex justify-between items-center bg-slate-50">
-                        <div>
-                            <strong>${s.name}</strong> ${s.parent ? `(Guardian: ${s.parent})` : ''}<br>
-                            <span class="text-slate-500">${s.contact || 'No contact provided'}</span>
-                        </div>
-                        <button onclick="deleteStudent(${s.id})" class="text-rose-500 hover:text-rose-700 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                        <div><strong>${s.name}</strong> ${s.parent ? `(Guardian: ${s.parent})` : ''}<br><span class="text-slate-500">${s.contact || ''}</span></div>
+                        <button onclick="deleteStudent(${s.id})" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
                     </div>`;
             });
         }
 
-        // Student Portal View Loaders
         async function loadStudentPortal(name) {
             const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
-            
             const scheduleContainer = document.getElementById('studentPortalSessions');
             const historyContainer = document.getElementById('studentPortalHistory');
             scheduleContainer.innerHTML = '';
             historyContainer.innerHTML = '';
 
             const today = new Date().toISOString().split('T')[0];
-            let upcomingCount = 0;
-            let historyCount = 0;
-
             if (sessions) {
                 sessions.forEach(s => {
                     let replyBox = '';
                     if (s.absent_status) {
                         replyBox = `<p class="text-rose-600 font-bold mt-1">Status: Absent Notice Sent (${s.absent_reason})</p>`;
-                        if (s.admin_reply) {
-                            replyBox += `<p class="text-indigo-700 font-semibold mt-1 bg-indigo-50 p-1.5 rounded">Teacher Reply: ${s.admin_reply}</p>`;
-                        }
+                        if (s.admin_reply) replyBox += `<p class="text-indigo-700 font-semibold mt-1 bg-indigo-50 p-1.5 rounded">Teacher Reply: ${s.admin_reply}</p>`;
                     }
 
                     if (s.date >= today) {
-                        upcomingCount++;
                         scheduleContainer.innerHTML += `
                             <div class="p-4 bg-slate-50 border rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                                 <div class="space-y-1 text-xs">
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-bold text-slate-800 text-sm">${s.subject}</span>
-                                        <span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">${s.slot}</span>
-                                        <span class="text-slate-500">${s.date}</span>
-                                    </div>
+                                    <div class="flex items-center gap-2"><span class="font-bold text-slate-800 text-sm">${s.subject}</span><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-medium">${s.slot}</span><span class="text-slate-500">${s.date}</span></div>
                                     ${s.notes ? `<p class="text-slate-600"><strong>Notes:</strong> ${s.notes}</p>` : ''}
                                     ${replyBox}
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center"><i class="fa-solid fa-video mr-1"></i> Join</a>` : ''}
-                                    <button onclick="openAbsentModal(${s.id})" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs px-3 py-2 rounded-lg font-medium">Mark Absent / Cancel</button>
+                                    ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg font-medium"><i class="fa-solid fa-video mr-1"></i> Join</a>` : ''}
+                                    <button onclick="openAbsentModal(${s.id})" class="bg-rose-50 text-rose-700 text-xs px-3 py-2 rounded-lg font-medium">Mark Absent / Cancel</button>
                                 </div>
                             </div>`;
                     } else {
-                        historyCount++;
                         historyContainer.innerHTML += `
                             <div class="p-4 bg-slate-50 border rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                                 <div class="space-y-1 text-xs">
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-bold text-slate-800 text-sm">${s.subject}</span>
-                                        <span class="text-slate-500">${s.date} (${s.slot})</span>
-                                    </div>
+                                    <div class="flex items-center gap-2"><span class="font-bold text-slate-800 text-sm">${s.subject}</span><span class="text-slate-500">${s.date} (${s.slot})</span></div>
                                     ${s.notes ? `<p class="text-slate-600"><strong>Completed Notes:</strong> ${s.notes}</p>` : ''}
                                 </div>
-                                ${s.recording_url ? `<a href="${s.recording_url}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center"><i class="fa-solid fa-play mr-1"></i> Watch Recording</a>` : '<span class="text-slate-400 text-xs">No recording</span>'}
+                                ${s.recording_url ? `<a href="${s.recording_url}" target="_blank" class="bg-indigo-600 text-white text-xs px-3 py-2 rounded-lg font-medium"><i class="fa-solid fa-play mr-1"></i> Watch Recording</a>` : '<span class="text-slate-400 text-xs">No recording</span>'}
                             </div>`;
                     }
                 });
             }
 
-            if (upcomingCount === 0) scheduleContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No upcoming sessions scheduled.</p>`;
-            if (historyCount === 0) historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No past lesson history found.</p>`;
-
-            // Load Payment Info
             const paymentConfig = JSON.parse(localStorage.getItem('tutor_payment_info'));
             const paymentContainer = document.getElementById('studentPaymentInfo');
-            if (!paymentConfig || (!paymentConfig.paymaya && !paymentConfig.instructions)) {
-                paymentContainer.innerHTML = `<p class="text-slate-400">Payment details have not been set up by the tutor yet.</p>`;
-            } else {
+            if (paymentConfig) {
                 paymentContainer.innerHTML = `
                     <p><strong>PayMaya Account:</strong> ${paymentConfig.paymaya || 'N/A'}</p>
-                    <p><strong>WorldRemit Instructions:</strong> ${paymentConfig.instructions || 'Send remittance via WorldRemit to PayMaya account.'}</p>
-                    ${paymentConfig.qrUrl ? `<div class="mt-2"><p class="font-semibold mb-1">PayMaya QR Code:</p><img src="${paymentConfig.qrUrl}" alt="PayMaya QR Code" class="w-32 h-32 object-contain border rounded p-1 bg-white"></div>` : ''}
+                    <p><strong>WorldRemit Instructions:</strong> ${paymentConfig.instructions || ''}</p>
+                    ${paymentConfig.qrUrl ? `<div class="mt-2"><p class="font-semibold mb-1">PayMaya QR Code:</p><img src="${paymentConfig.qrUrl}" class="w-32 h-32 object-contain border rounded p-1 bg-white"></div>` : ''}
                 `;
             }
 
             loadStudentPaymentHistory(name);
         }
 
-        // Absent Modal Actions
         function openAbsentModal(sessionId) {
             document.getElementById('absentSessionId').value = sessionId;
             document.getElementById('absentReason').value = '';
@@ -740,21 +677,12 @@
         async function sendAbsentNotice() {
             const sessionId = document.getElementById('absentSessionId').value;
             const reason = document.getElementById('absentReason').value.trim() || 'No reason provided';
-
-            const { error } = await _supabase.from('sessions').update({
-                absent_status: true,
-                absent_reason: reason
-            }).eq('id', sessionId);
-
-            if (error) alert("Error sending notice: " + error.message);
-            else {
-                alert("Absence/Cancellation notice sent successfully to teacher!");
-                closeAbsentModal();
-                loadStudentPortal(currentStudentName);
-            }
+            await _supabase.from('sessions').update({ absent_status: true, absent_reason: reason }).eq('id', sessionId);
+            alert("Absence notice sent!");
+            closeAbsentModal();
+            loadStudentPortal(currentStudentName);
         }
 
-        // Admin Reply to Absence Modal
         function openAdminReplyModal(sessionId) {
             document.getElementById('replySessionId').value = sessionId;
             document.getElementById('adminReplyText').value = '';
@@ -766,62 +694,52 @@
         async function sendAdminReply() {
             const sessionId = document.getElementById('replySessionId').value;
             const reply = document.getElementById('adminReplyText').value.trim();
-
-            const { error } = await _supabase.from('sessions').update({
-                admin_reply: reply
-            }).eq('id', sessionId);
-
-            if (error) alert("Error sending reply: " + error.message);
-            else {
-                alert("Reply sent to student successfully!");
-                closeAdminReplyModal();
-                loadAdminData();
-            }
+            await _supabase.from('sessions').update({ admin_reply: reply }).eq('id', sessionId);
+            alert("Reply sent!");
+            closeAdminReplyModal();
+            loadAdminData();
         }
 
-        // Student Payment History & Receipt Submission
-        function submitPaymentProof(e) {
+        async function submitPaymentProof(e) {
             e.preventDefault();
             const ref = document.getElementById('payRefNumber').value.trim();
             const amount = document.getElementById('payAmount').value.trim();
-            const receiptUrl = document.getElementById('payReceiptUrl').value.trim();
+            const receipt_url = document.getElementById('payReceiptUrl').value.trim();
 
-            let history = JSON.parse(localStorage.getItem(`pay_hist_${currentStudentName}`)) || [];
-            history.unshift({ ref, amount, receiptUrl, date: new Date().toLocaleDateString() });
-            localStorage.setItem(`pay_hist_${currentStudentName}`, JSON.stringify(history));
-
-            alert("Payment reference submitted to tutor!");
+            await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, receipt_url, date: new Date().toLocaleDateString() }]);
+            alert("Payment reference submitted!");
             document.getElementById('payRefNumber').value = '';
             document.getElementById('payAmount').value = '';
             document.getElementById('payReceiptUrl').value = '';
             loadStudentPaymentHistory(currentStudentName);
         }
 
-        function loadStudentPaymentHistory(name) {
+        async function loadStudentPaymentHistory(name) {
+            const { data: history } = await _supabase.from('payment_history').select('*').ilike('student_name', name).order('id', { ascending: false });
             const historyList = document.getElementById('studentPaymentHistoryList');
             historyList.innerHTML = '<p class="font-semibold text-slate-700">Your Submitted Payment History:</p>';
-            let history = JSON.parse(localStorage.getItem(`pay_hist_${name}`)) || [];
-            if (history.length === 0) {
+            if (!history || history.length === 0) {
                 historyList.innerHTML += `<p class="text-slate-400">No payment history recorded yet.</p>`;
                 return;
             }
             history.forEach(h => {
                 historyList.innerHTML += `
-                    <div class="p-3 bg-slate-50 border rounded flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs">
-                        <div><strong>Ref:</strong> ${h.ref} | <strong>Amount:</strong> ${h.amount} <span class="text-slate-400">(${h.date})</span></div>
-                        ${h.receiptUrl ? `<a href="${h.receiptUrl}" target="_blank" class="text-indigo-600 underline font-medium"><i class="fa-solid fa-image mr-1"></i> View Receipt</a>` : ''}
+                    <div class="p-3 bg-slate-50 border rounded flex justify-between items-center text-xs">
+                        <div><strong>Ref:</strong> ${h.ref} | <strong>Amount:</strong> ${h.amount} (${h.date})</div>
+                        ${h.receipt_url ? `<a href="${h.receipt_url}" target="_blank" class="text-indigo-600 underline font-medium"><i class="fa-solid fa-image mr-1"></i> View Receipt</a>` : ''}
                     </div>`;
             });
         }
 
-        // Live Support Chat System (Student Side)
+        // CLOUD SYNCED CHAT SYSTEM
         async function loadChatMessages(studentName) {
             const container = document.getElementById('chatMessagesContainer');
             if (!container) return;
+            const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', studentName).order('id', { ascending: true });
+            
             container.innerHTML = '';
-            let chats = JSON.parse(localStorage.getItem(`chat_${studentName}`)) || [];
-            if (chats.length === 0) {
-                container.innerHTML = `<p class="text-slate-400 text-center py-4">No messages yet. Send a message to your tutor below!</p>`;
+            if (!chats || chats.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-center py-4">No messages yet. Send a message to your tutor!</p>`;
                 return;
             }
             chats.forEach(c => {
@@ -838,33 +756,32 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        function sendChatMessage(e) {
+        async function sendChatMessage(e) {
             e.preventDefault();
             const msgInput = document.getElementById('chatInputMessage');
             const message = msgInput.value.trim();
             if (!message) return;
 
-            let chats = JSON.parse(localStorage.getItem(`chat_${currentStudentName}`)) || [];
-            chats.push({ sender: 'student', message, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-            localStorage.setItem(`chat_${currentStudentName}`, JSON.stringify(chats));
+            await _supabase.from('chat_messages').insert([{
+                student_name: currentStudentName,
+                sender: 'student',
+                message,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }]);
 
             msgInput.value = '';
             loadChatMessages(currentStudentName);
         }
 
-        // Live Support Chat System (Admin Side)
         async function loadAdminChatStudentsList() {
             const { data: students } = await _supabase.from('students').select('*').order('name', { ascending: true });
             const listContainer = document.getElementById('adminChatStudentList');
             listContainer.innerHTML = '';
-            if (!students || students.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-slate-400">No students registered.</p>`;
-                return;
-            }
+            if (!students) return;
             students.forEach(s => {
                 listContainer.innerHTML += `
-                    <button onclick="selectAdminChatStudent('${s.name}')" class="w-full text-left p-2 rounded hover:bg-slate-100 text-xs font-medium text-slate-700 transition-colors flex items-center justify-between">
-                        <span><i class="fa-solid fa-user mr-2 text-indigo-600"></i>${s.name}</span>
+                    <button onclick="selectAdminChatStudent('${s.name}')" class="w-full text-left p-2 rounded hover:bg-slate-100 text-xs font-medium text-slate-700">
+                        <i class="fa-solid fa-user mr-2 text-indigo-600"></i>${s.name}
                     </button>`;
             });
         }
@@ -875,11 +792,12 @@
             loadAdminChatMessages(name);
         }
 
-        function loadAdminChatMessages(name) {
+        async function loadAdminChatMessages(name) {
             const container = document.getElementById('adminChatMessagesContainer');
+            const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', name).order('id', { ascending: true });
+            
             container.innerHTML = '';
-            let chats = JSON.parse(localStorage.getItem(`chat_${name}`)) || [];
-            if (chats.length === 0) {
+            if (!chats || chats.length === 0) {
                 container.innerHTML = `<p class="text-slate-400 text-center py-10">No messages with ${name} yet.</p>`;
                 return;
             }
@@ -897,37 +815,29 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        function sendAdminChatMessage(e) {
+        async function sendAdminChatMessage(e) {
             e.preventDefault();
-            if (!activeAdminChatStudent) {
-                alert("Please select a student from the left list first!");
-                return;
-            }
+            if (!activeAdminChatStudent) { alert("Select a student first!"); return; }
             const msgInput = document.getElementById('adminChatInputMessage');
             const message = msgInput.value.trim();
             if (!message) return;
 
-            let chats = JSON.parse(localStorage.getItem(`chat_${activeAdminChatStudent}`)) || [];
-            chats.push({ sender: 'admin', message, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-            localStorage.setItem(`chat_${activeAdminChatStudent}`, JSON.stringify(chats));
+            await _supabase.from('chat_messages').insert([{
+                student_name: activeAdminChatStudent,
+                sender: 'admin',
+                message,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }]);
 
             msgInput.value = '';
             loadAdminChatMessages(activeAdminChatStudent);
         }
 
         async function deleteSession(id) {
-            if (confirm("Delete session?")) {
-                await _supabase.from('sessions').delete().eq('id', id);
-                loadAdminData();
-            }
+            if (confirm("Delete session?")) { await _supabase.from('sessions').delete().eq('id', id); loadAdminData(); }
         }
-
         async function deleteStudent(id) {
-            if (confirm("Delete student?")) {
-                await _supabase.from('students').delete().eq('id', id);
-                loadStudentsList();
-                loadAdminData();
-            }
+            if (confirm("Delete student?")) { await _supabase.from('students').delete().eq('id', id); loadStudentsList(); loadAdminData(); }
         }
     </script>
 </body>
