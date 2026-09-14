@@ -137,7 +137,7 @@
                 <div class="text-center space-y-2">
                     <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Community Wall</h3>
                     <h4 class="text-2xl font-bold text-slate-900">Leave a Comment or Inquiry</h4>
-                    <p class="text-xs text-slate-500">Anyone can comment! Only registered users can delete comments by providing their account password.</p>
+                    <p class="text-xs text-slate-500">Anyone can comment! Only registered users can delete their comments using their account password.</p>
                 </div>
                 <form onsubmit="submitPublicComment(event)" class="bg-white p-6 rounded-xl shadow-sm border space-y-3 text-xs">
                     <div><label class="block font-semibold uppercase mb-1">Your Name</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
@@ -494,7 +494,7 @@
             document.getElementById('enrollPassword').value = '';
         }
 
-        // ================= PUBLIC COMMENTS & PASSWORD DELETION =================
+        // ================= PUBLIC COMMENTS & CONDITIONAL DELETION =================
         async function submitPublicComment(e) {
             e.preventDefault();
             const name = document.getElementById('visitorName').value.trim();
@@ -514,6 +514,10 @@
             if (!container) return;
 
             const { data: comments, error } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
+            // Fetch registered students list to verify who is allowed a delete button
+            const { data: students } = await _supabase.from('students').select('name');
+            const registeredNames = students ? students.map(s => s.name.toLowerCase()) : [];
+
             container.innerHTML = '';
 
             if (error || !comments || comments.length === 0) {
@@ -536,12 +540,20 @@
                     });
                 }
 
+                // Check if author matches a registered student or if admin is logged in
+                const isRegistered = registeredNames.includes(c.name.trim().toLowerCase());
+                const showDeleteBtn = (isRegistered || isAdminLoggedIn);
+
+                const deleteButtonHtml = showDeleteBtn 
+                    ? `<button onclick="promptDeleteComment(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="text-rose-500 hover:text-rose-700 text-[11px]" title="Delete Comment"><i class="fa-solid fa-trash"></i> Delete</button>`
+                    : '';
+
                 container.innerHTML += `
                     <div class="p-4 bg-white border rounded-xl shadow-sm text-xs space-y-2">
                         <div class="flex justify-between items-start font-bold text-slate-900">
                             <div><i class="fa-solid fa-user-circle text-emerald-600 mr-1.5"></i>${c.name} <span class="text-[10px] font-normal text-slate-400 ml-1">${c.date}</span></div>
                             <div class="flex items-center gap-2">
-                                <button onclick="promptDeleteComment(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="text-rose-500 hover:text-rose-700 text-[11px]" title="Delete Comment"><i class="fa-solid fa-trash"></i> Delete</button>
+                                ${deleteButtonHtml}
                             </div>
                         </div>
                         <p class="text-slate-700 leading-relaxed">${c.message}</p>
@@ -806,6 +818,7 @@
             resetStudentForm();
             loadStudentsList();
             loadAdminData();
+            loadPublicComments(); // Refresh wall to update delete buttons
         }
 
         function editStudent(id) {
