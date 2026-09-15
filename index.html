@@ -185,7 +185,7 @@
                     <button onclick="switchTab('dashboard')" id="navDashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all"><i class="fa-solid fa-house w-4"></i><span>Dashboard</span></button>
                     <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students</span></button>
                     <button onclick="switchTab('schedule')" id="navSchedule" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-calendar-days w-4"></i><span>Schedule</span></button>
-                    <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payments</span></button>
+                    <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payment Settings</span></button>
                     <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Notes</span></button>
                 </nav>
             </div>
@@ -229,9 +229,29 @@
             </div>
 
             <div id="tabPayments" class="hidden space-y-6">
-                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Student Payments & Receipt Submissions</h3>
-                    <div id="adminPaymentsContainer" class="space-y-3 text-xs"></div>
+                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4 max-w-xl">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-wallet text-pink-600 mr-2"></i> Configure Payment Accounts & QR Code</h3>
+                    <form onsubmit="saveAdminPaymentConfig(event)" class="space-y-3 text-xs">
+                        <div>
+                            <label class="block font-semibold mb-1">Bank Name / E-Wallet (e.g. BPI, GCash, PayMaya)</label>
+                            <input type="text" id="adminBankName" required placeholder="e.g. GCash / PayMaya" class="w-full p-2.5 border rounded">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Account Name</label>
+                            <input type="text" id="adminAccountName" required placeholder="e.g. Teacher Ann" class="w-full p-2.5 border rounded">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Account / Mobile Number</label>
+                            <input type="text" id="adminAccountNumber" required placeholder="e.g. 0917-123-4567" class="w-full p-2.5 border rounded">
+                        </div>
+                        <div>
+                            <label class="block font-semibold mb-1">Payment QR Code Image</label>
+                            <input type="file" id="adminQrFile" accept="image/*" class="w-full p-2 border rounded bg-slate-50" onchange="previewAdminQr(event)">
+                        </div>
+                        <input type="hidden" id="adminQrBase64">
+                        <div id="adminQrPreviewContainer" class="mt-2"></div>
+                        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Save Payment Details</button>
+                    </form>
                 </div>
             </div>
 
@@ -267,9 +287,7 @@
         </header>
 
         <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 space-y-6">
-            <!-- TAB 1: SCHEDULE & CALENDAR & REMAINING SESSIONS -->
             <div id="studentScheduleView" class="space-y-6 text-xs">
-                <!-- Remaining Credits Banner -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm flex justify-between items-center">
                     <div>
                         <span class="text-slate-500 uppercase font-semibold text-[10px] block">Remaining Sessions Left</span>
@@ -278,7 +296,6 @@
                     <button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-bold shadow">Buy Session Package</button>
                 </div>
 
-                <!-- Calendar & Booking Widget -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
                     <div class="flex justify-between items-center border-b pb-3">
                         <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-calendar-days text-pink-600 mr-2"></i> Pick & Book Lesson (Your Local Timezone)</h3>
@@ -311,14 +328,12 @@
                     </form>
                 </div>
 
-                <!-- Upcoming Sessions & Cancellation with Reason -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
                     <h3 class="font-bold text-slate-800 text-sm">Your Upcoming Class Schedule</h3>
                     <div id="studentPortalSessions" class="space-y-3"></div>
                 </div>
             </div>
 
-            <!-- TAB 2: NOTES & HOMEWORKS -->
             <div id="studentHistoryView" class="hidden space-y-4 text-xs">
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
                     <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-folder-open text-pink-600 mr-2"></i> Lesson Notes & Homework Assignments</h3>
@@ -326,7 +341,6 @@
                 </div>
             </div>
 
-            <!-- TAB 3: PAYMENTS & PACKAGES -->
             <div id="studentPaymentView" class="hidden space-y-6 text-xs">
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
                     <h3 class="font-bold text-slate-800 text-sm">Select Session Package to Purchase</h3>
@@ -356,7 +370,7 @@
         </main>
     </div>
 
-    <!-- CANCELLATION MODAL WITH REASON -->
+    <!-- CANCELLATION MODAL -->
     <div id="cancelModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
@@ -374,9 +388,9 @@
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL -->
+    <!-- CHECKOUT MODAL WITH DYNAMIC BANK / QR DETAILS -->
     <div id="checkoutModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 text-xs">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-2">
                 <h3 class="font-bold text-slate-800 text-sm">Checkout & Payment</h3>
                 <button onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -385,7 +399,12 @@
                 <p class="font-bold text-pink-900 text-sm" id="checkoutPackageTitle"></p>
                 <p class="text-pink-700 font-extrabold text-base" id="checkoutPackagePrice"></p>
             </div>
-            <p><strong>GCash / PayMaya:</strong> 0917-XXX-XXXX (Teacher Ann)</p>
+            
+            <div id="checkoutPaymentDetailsBox" class="bg-slate-50 p-3 rounded-lg border space-y-1.5 text-slate-700">
+                <p class="font-bold text-slate-900">Payment Accounts & Details:</p>
+                <p id="chkViewBank">Loading payment details...</p>
+            </div>
+
             <form onsubmit="submitCheckoutPayment(event)" class="space-y-3 border-t pt-3">
                 <input type="hidden" id="chkPackageName">
                 <input type="hidden" id="chkPackageAmount">
@@ -393,7 +412,7 @@
                 <div><label class="block font-semibold mb-1">Upload Receipt Screenshot</label><input type="file" id="chkReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewCheckoutReceipt(event)"></div>
                 <input type="hidden" id="chkReceiptBase64">
                 <div id="chkPreviewBox"></div>
-                <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2.5 rounded-lg">Submit Payment Proof</button>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg">Submit Payment Proof</button>
             </form>
         </div>
     </div>
@@ -409,6 +428,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             startLiveClocks();
             loadSidebarPhoto();
+            loadPaymentConfigDisplay();
             document.getElementById('adminTimezoneLabel').textContent = userTimezone;
             document.getElementById('studentTimezoneDisplay').textContent = userTimezone;
         });
@@ -444,7 +464,7 @@
 
             if (tabId === 'students') loadStudentsTab();
             if (tabId === 'schedule') loadScheduleTab();
-            if (tabId === 'payments') loadAdminPaymentsTab();
+            if (tabId === 'payments') loadAdminPaymentConfigForm();
             if (tabId === 'records') loadAdminRecordsTab();
         }
 
@@ -457,7 +477,7 @@
             else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
         }
 
-        function openCheckoutModal(packageName, amount) {
+        async function openCheckoutModal(packageName, amount) {
             document.getElementById('checkoutPackageTitle').textContent = packageName;
             document.getElementById('checkoutPackagePrice').textContent = `₱${amount.toLocaleString()}`;
             document.getElementById('chkPackageName').value = packageName;
@@ -466,10 +486,70 @@
             document.getElementById('chkReceiptFile').value = '';
             document.getElementById('chkReceiptBase64').value = '';
             document.getElementById('chkPreviewBox').innerHTML = '';
+
+            // Load dynamic payment details into checkout modal
+            const { data } = await _supabase.from('payment_config').select('*').limit(1);
+            const box = document.getElementById('chkViewBank');
+            if (data && data.length > 0) {
+                const cfg = data[0];
+                box.innerHTML = `
+                    <p><strong>Bank / E-Wallet:</strong> ${cfg.bank_name || 'N/A'}</p>
+                    <p><strong>Account Name:</strong> ${cfg.account_name || 'N/A'}</p>
+                    <p><strong>Account / Number:</strong> ${cfg.account_number || 'N/A'}</p>
+                    ${cfg.qr_base64 ? `<div class="mt-2 text-center"><img src="${cfg.qr_base64}" class="w-32 h-32 object-contain mx-auto border rounded bg-white p-1"></div>` : ''}
+                `;
+            } else {
+                box.innerHTML = `<p>No payment details configured yet by admin. Please contact Teacher Ann.</p>`;
+            }
+
             document.getElementById('checkoutModal').classList.remove('hidden');
         }
 
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
+
+        function previewAdminQr(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('adminQrBase64').value = e.target.result;
+                document.getElementById('adminQrPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover border rounded mt-1">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function saveAdminPaymentConfig(e) {
+            e.preventDefault();
+            const bank_name = document.getElementById('adminBankName').value.trim();
+            const account_name = document.getElementById('adminAccountName').value.trim();
+            const account_number = document.getElementById('adminAccountNumber').value.trim();
+            const qr_base64 = document.getElementById('adminQrBase64').value;
+
+            // Upsert payment config
+            await _supabase.from('payment_config').delete().neq('id', 0); // clear old
+            const { error } = await _supabase.from('payment_config').insert([{ bank_name, account_name, account_number, qr_base64 }]);
+            if (error) { alert("Error saving payment config: " + error.message); return; }
+
+            alert("Payment details & QR code saved successfully!");
+        }
+
+        async function loadAdminPaymentConfigForm() {
+            const { data } = await _supabase.from('payment_config').select('*').limit(1);
+            if (data && data.length > 0) {
+                const cfg = data[0];
+                document.getElementById('adminBankName').value = cfg.bank_name || '';
+                document.getElementById('adminAccountName').value = cfg.account_name || '';
+                document.getElementById('adminAccountNumber').value = cfg.account_number || '';
+                if (cfg.qr_base64) {
+                    document.getElementById('adminQrBase64').value = cfg.qr_base64;
+                    document.getElementById('adminQrPreviewContainer').innerHTML = `<img src="${cfg.qr_base64}" class="w-24 h-24 object-cover border rounded mt-1">`;
+                }
+            }
+        }
+
+        async function loadPaymentConfigDisplay() {
+            // Helper for initial load
+        }
 
         function previewCheckoutReceipt(event) {
             const file = event.target.files[0];
@@ -626,14 +706,6 @@
             container.innerHTML = '';
             allSessions.forEach(s => {
                 container.innerHTML += `<div class="p-2 border rounded bg-slate-50 flex justify-between"><span><strong>${s.student_name}</strong> - ${s.subject} (${s.date} @ ${s.slot}) [Status: ${s.status || 'Active'}]</span></div>`;
-            });
-        }
-
-        function loadAdminPaymentsTab() {
-            const container = document.getElementById('adminPaymentsContainer');
-            container.innerHTML = '';
-            allPayments.forEach(p => {
-                container.innerHTML += `<div class="p-2 border rounded bg-slate-50">Student: <strong>${p.student_name}</strong> | Amount: ${p.amount} | Ref: ${p.ref}</div>`;
             });
         }
 
