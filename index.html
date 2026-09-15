@@ -1330,7 +1330,6 @@
             });
             document.getElementById('statMonthlyDue').textContent = '₱' + totalVerifiedRevenue.toLocaleString();
 
-            // Load Admin Chat Notification Badge in background
             const { data: msgs } = await _supabase.from('chat_messages').select('*');
             let totalAdminUnread = 0;
             if (msgs) {
@@ -1365,7 +1364,6 @@
                 });
                 container.scrollTop = container.scrollHeight;
 
-                // Mark teacher messages as read when student views chat
                 await _supabase.from('chat_messages').update({ is_read: true }).ilike('student_name', name).eq('sender', 'teacher');
             } else {
                 container.innerHTML = `<p class="text-slate-400 italic text-center py-6">No chat messages yet. Send a message to Teacher Ann below!</p>`;
@@ -1559,6 +1557,12 @@
             loadStudentPortal(currentStudentName);
         }
 
+        async function joinAssessmentSession(studentName) {
+            await _supabase.from('assessment_requests').update({ status: 'On Going' }).ilike('student_name', studentName);
+            await _supabase.from('sessions').update({ status: 'On Going' }).ilike('student_name', studentName).ilike('subject', '%Assessment%');
+            setTimeout(() => { loadStudentPortal(studentName); }, 800);
+        }
+
         async function loadAdminAssessmentTab() {
             const { data: requests } = await _supabase.from('assessment_requests').select('*').order('id', { ascending: false });
             const container = document.getElementById('adminAssessmentContainer');
@@ -1567,6 +1571,7 @@
             if (requests && requests.length > 0) {
                 requests.forEach(req => {
                     const isScheduled = req.status === 'Scheduled';
+                    const isOnGoing = req.status === 'On Going';
                     const isCancelled = req.status === 'Cancelled';
                     container.innerHTML += `
                         <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
@@ -1575,16 +1580,16 @@
                                     <strong class="text-sm text-pink-700">${req.student_name}</strong> — <span class="font-bold text-slate-700">Free Assessment Request</span><br>
                                     <span class="text-slate-500">Requested on: ${req.date || 'N/A'}</span>
                                 </div>
-                                <span class="px-3 py-1 rounded-full font-bold text-[11px] ${isScheduled ? 'bg-emerald-100 text-emerald-800' : isCancelled ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}">
+                                <span class="px-3 py-1 rounded-full font-bold text-[11px] ${isOnGoing ? 'bg-purple-100 text-purple-800' : isScheduled ? 'bg-emerald-100 text-emerald-800' : isCancelled ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}">
                                     Status: ${req.status || 'Requested'}
                                 </span>
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
                                 <div>
-                                    ${isScheduled ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><strong>Teacher Message:</strong> ${req.notes || 'None'} <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : isCancelled ? `<p class="text-rose-600 italic">Assessment cancelled by student. Link removed.</p>` : `<p class="text-slate-500 italic">Not scheduled yet. Click plot schedule below.</p>`}
+                                    ${isScheduled || isOnGoing ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><strong>Teacher Message:</strong> ${req.notes || 'None'} <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : isCancelled ? `<p class="text-rose-600 italic">Assessment cancelled by student. Link removed.</p>` : `<p class="text-slate-500 italic">Not scheduled yet. Click plot schedule below.</p>`}
                                 </div>
                                 <div class="flex gap-2">
-                                    <button onclick="openPlotAssessmentModal(${req.id}, '${req.student_name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm"><i class="fa-solid fa-calendar-days mr-1"></i> ${isScheduled ? 'Reschedule' : 'Plot Schedule & Link'}</button>
+                                    <button onclick="openPlotAssessmentModal(${req.id}, '${req.student_name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm"><i class="fa-solid fa-calendar-days mr-1"></i> ${isScheduled || isOnGoing ? 'Reschedule' : 'Plot Schedule & Link'}</button>
                                     <button onclick="deleteAssessmentRequest(${req.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold shadow-sm" title="Delete Request"><i class="fa-solid fa-trash mr-1"></i> Delete</button>
                                 </div>
                             </div>
@@ -1958,16 +1963,28 @@
                 document.getElementById('studentCreditCount').textContent = studentData[0].credits || 0;
             }
 
+            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
+            
             const { data: assessData } = await _supabase.from('assessment_requests').select('*').ilike('student_name', name);
             const assessBox = document.getElementById('freeAssessmentActionContainer');
             if (assessData && assessData.length > 0) {
                 const req = assessData[0];
-                if (req.status === 'Scheduled') {
+                const matchingSess = sessions ? sessions.find(s => s.subject && s.subject.toLowerCase().includes('assessment')) : null;
+                const isAssessmentDone = matchingSess && matchingSess.status === 'Done';
+
+                if (isAssessmentDone) {
                     assessBox.innerHTML = `
                         <div class="bg-emerald-800/80 p-2.5 rounded-lg space-y-2">
-                            <p class="font-bold text-emerald-100"><i class="fa-solid fa-check mr-1"></i> Assessment Scheduled on ${req.scheduled_date} (${req.slot})!<br><strong>Teacher Message:</strong> ${req.notes || 'None'}</p>
+                            <p class="font-bold text-emerald-100"><i class="fa-solid fa-check-circle mr-1"></i> Assessment Completed & Done!</p>
+                            <p class="text-[11px] text-pink-100">Ready to continue your learning journey with Teacher Ann? Pick a package below.</p>
+                            <button onclick="switchStudentTab('payment')" class="w-full bg-white text-pink-700 font-bold py-2 rounded shadow hover:bg-pink-50"><i class="fa-solid fa-tags mr-1"></i> Enroll Now & Buy Packages</button>
+                        </div>`;
+                } else if (req.status === 'Scheduled' || req.status === 'On Going') {
+                    assessBox.innerHTML = `
+                        <div class="bg-emerald-800/80 p-2.5 rounded-lg space-y-2">
+                            <p class="font-bold text-emerald-100"><i class="fa-solid fa-check mr-1"></i> Assessment ${req.status} on ${req.scheduled_date} (${req.slot})!<br><strong>Teacher Message:</strong> ${req.notes || 'None'}</p>
                             <div class="flex flex-col gap-1.5 pt-1">
-                                <a href="${req.meeting_link}" target="_blank" class="bg-white text-emerald-800 font-bold py-1.5 px-3 rounded text-center shadow hover:bg-emerald-50"><i class="fa-solid fa-video mr-1"></i> Join Classroom Link</a>
+                                <a href="${req.meeting_link}" target="_blank" onclick="joinAssessmentSession('${name}')" class="bg-white text-emerald-800 font-bold py-1.5 px-3 rounded text-center shadow hover:bg-emerald-50"><i class="fa-solid fa-video mr-1"></i> Join Classroom Link</a>
                                 <button onclick="cancelStudentAssessment()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-1.5 px-3 rounded text-center shadow"><i class="fa-solid fa-ban mr-1"></i> Cancel Assessment</button>
                             </div>
                         </div>`;
@@ -1985,7 +2002,6 @@
                 assessBox.innerHTML = `<button onclick="requestFreeAssessment()" class="w-full bg-white hover:bg-pink-50 text-pink-700 font-bold py-2 rounded-lg shadow"><i class="fa-solid fa-paper-plane mr-1"></i> Request Free Assessment Now</button>`;
             }
 
-            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
             const container = document.getElementById('studentPortalSessions');
             container.innerHTML = '';
             if (sessions && sessions.length > 0) {
@@ -2009,6 +2025,7 @@
                             </div>
                             <div class="flex items-center space-x-2">
                                 ${s.meeting_link && !isCancelled && !isDone && !isAbsent ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join</a>` : ''}
+                                ${isDone ? `<button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-3.5 py-2 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-tags mr-1.5"></i> Enroll Now (Buy Package)</button>` : ''}
                                 ${!isCancelled && !isDone ? `<button onclick="${isAssessment ? 'cancelStudentAssessment()' : `openStudentCancelModal(${s.id})`}" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded-lg font-bold shadow-sm"><i class="fa-solid fa-ban mr-1"></i> Cancel Class</button>` : ''}
                             </div>
                         </div>`;
