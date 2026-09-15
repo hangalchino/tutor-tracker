@@ -192,13 +192,13 @@
 
                 <nav class="space-y-1.5 text-xs font-semibold">
                     <button onclick="switchTab('dashboard')" id="navDashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all"><i class="fa-solid fa-house w-4"></i><span>Dashboard</span></button>
-                    <button onclick="switchTab('assessment')" id="navAssessment" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-clipboard-question w-4"></i><span>Assessment Requests</span></button>
-                    <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students & Schedule Plot</span></button>
-                    <button onclick="switchTab('chat')" id="navChat" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span></button>
-                    <button onclick="switchTab('verify')" id="navVerify" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-check-to-slot w-4"></i><span>Verify Payments</span></button>
-                    <button onclick="switchTab('pricing')" id="navPricing" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-tags w-4"></i><span>Package Manager</span></button>
-                    <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payment Settings</span></button>
-                    <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Recordings</span></button>
+                    <button onclick="switchTab('assessment')" id="navAssessment" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/25 transition-all"><i class="fa-solid fa-clipboard-question w-4"></i><span>Assessment Requests</span></button>
+                    <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/25 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students & Schedule Plot</span></button>
+                    <button onclick="switchTab('chat')" id="navChat" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/25 transition-all"><i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span></button>
+                    <button onclick="switchTab('verify')" id="navVerify" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/25 transition-all"><i class="fa-solid fa-check-to-slot w-4"></i><span>Verify Payments</span></button>
+                    <button onclick="switchTab('pricing')" id="navPricing" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/25 transition-all"><i class="fa-solid fa-tags w-4"></i><span>Package Manager</span></button>
+                    <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/25 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payment Settings</span></button>
+                    <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/25 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Recordings</span></button>
                 </nav>
             </div>
             <button onclick="adminLogout()" class="w-full bg-pink-700/80 hover:bg-pink-800 text-white py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-right-from-bracket mr-1"></i> Sign Out</button>
@@ -811,7 +811,7 @@
                     if (name.toLowerCase() === tabId) {
                         btn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all font-bold";
                     } else {
-                        btn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all";
+                        btn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/25 transition-all";
                     }
                 }
             });
@@ -1318,6 +1318,8 @@
             const { data: students } = await _supabase.from('students').select('*');
             const { data: sessions } = await _supabase.from('sessions').select('*');
             const { data: payments } = await _supabase.from('payment_history').select('*');
+            const { data: msgs } = await _supabase.from('chat_messages').select('*');
+            const { data: assessReqs } = await _supabase.from('assessment_requests').select('*');
 
             allStudents = students || [];
             allSessions = sessions || [];
@@ -1340,14 +1342,67 @@
             });
             document.getElementById('statMonthlyDue').textContent = '₱' + totalVerifiedRevenue.toLocaleString();
 
-            const { data: msgs } = await _supabase.from('chat_messages').select('*');
-            let totalAdminUnread = 0;
+            // Calculate Notification Counts
+            let unreadChatCount = 0;
             if (msgs) {
                 msgs.forEach(m => {
-                    if (m.sender === 'student' && !m.is_read) totalAdminUnread++;
+                    if (m.sender === 'student' && !m.is_read) unreadChatCount++;
                 });
             }
-            updateAdminChatBadge(totalAdminUnread);
+
+            let pendingAssessCount = 0;
+            if (assessReqs) {
+                pendingAssessCount = assessReqs.filter(r => r.status === 'Requested').length;
+            }
+
+            let pendingPaymentCount = 0;
+            if (allPayments) {
+                pendingPaymentCount = allPayments.filter(p => p.status === 'Pending').length;
+            }
+
+            updateAdminNotificationBadges({
+                assessment: pendingAssessCount,
+                chat: unreadChatCount,
+                verify: pendingPaymentCount
+            });
+        }
+
+        function updateAdminNotificationBadges(counts) {
+            // Assessment Requests Badge
+            const assessBtn = document.getElementById('navAssessment');
+            if (assessBtn) {
+                const existing = assessBtn.querySelector('.badge-assessment');
+                if (existing) existing.remove();
+                if (counts.assessment > 0) {
+                    assessBtn.innerHTML = `<i class="fa-solid fa-clipboard-question w-4"></i><span>Assessment Requests</span> <span class="badge-assessment bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold ml-auto">${counts.assessment}</span>`;
+                } else {
+                    assessBtn.innerHTML = `<i class="fa-solid fa-clipboard-question w-4"></i><span>Assessment Requests</span>`;
+                }
+            }
+
+            // Chat Support Badge
+            const chatBtn = document.getElementById('navChat');
+            if (chatBtn) {
+                const existing = chatBtn.querySelector('.badge-chat');
+                if (existing) existing.remove();
+                if (counts.chat > 0) {
+                    chatBtn.innerHTML = `<i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span> <span class="badge-chat bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold ml-auto">${counts.chat}</span>`;
+                } else {
+                    chatBtn.innerHTML = `<i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span>`;
+                }
+            }
+
+            // Verify Payments Badge
+            const verifyBtn = document.getElementById('navVerify');
+            if (verifyBtn) {
+                const existing = verifyBtn.querySelector('.badge-verify');
+                if (existing) existing.remove();
+                if (counts.verify > 0) {
+                    verifyBtn.innerHTML = `<i class="fa-solid fa-check-to-slot w-4"></i><span>Verify Payments</span> <span class="badge-verify bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold ml-auto">${counts.verify}</span>`;
+                } else {
+                    verifyBtn.innerHTML = `<i class="fa-solid fa-check-to-slot w-4"></i><span>Verify Payments</span>`;
+                }
+            }
         }
 
         // ================= CHAT SUPPORT FUNCTIONS WITH NOTIFICATIONS =================
@@ -1420,17 +1475,15 @@
             container.innerHTML = '';
 
             let studentGroups = {};
-            let totalAdminUnread = 0;
 
             if (msgs) {
                 msgs.forEach(m => {
                     if (!studentGroups[m.student_name]) studentGroups[m.student_name] = [];
                     studentGroups[m.student_name].push(m);
-                    if (m.sender === 'student' && !m.is_read) totalAdminUnread++;
                 });
             }
 
-            updateAdminChatBadge(totalAdminUnread);
+            loadAdminData(); // Refresh badge counts
 
             if (Object.keys(studentGroups).length > 0) {
                 for (let studentName in studentGroups) {
@@ -1503,19 +1556,6 @@
             loadAdminChatTab();
         }
 
-        function updateAdminChatBadge(count) {
-            const navBtn = document.getElementById('navChat');
-            if (!navBtn) return;
-            const existingBadge = navBtn.querySelector('.admin-chat-badge');
-            if (existingBadge) existingBadge.remove();
-
-            if (count > 0) {
-                navBtn.innerHTML = `<i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span> <span class="admin-chat-badge bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold ml-auto">${count}</span>`;
-            } else {
-                navBtn.innerHTML = `<i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span>`;
-            }
-        }
-
         // ================= FREE ASSESSMENT FUNCTIONS =================
         async function requestFreeAssessment() {
             const { data: existing } = await _supabase.from('assessment_requests').select('*').ilike('student_name', currentStudentName);
@@ -1577,6 +1617,8 @@
             const { data: requests } = await _supabase.from('assessment_requests').select('*').order('id', { ascending: false });
             const container = document.getElementById('adminAssessmentContainer');
             container.innerHTML = '';
+
+            loadAdminData(); // Refresh badge counts
 
             if (requests && requests.length > 0) {
                 requests.forEach(req => {
@@ -1727,24 +1769,54 @@
                                 <div class="space-y-2 max-h-48 overflow-y-auto">${sessionsHtml || '<p class="text-slate-400 italic text-[11px]">No sessions plotted yet.</p>'}</div>
                             </div>
                             
-                            <form onsubmit="plotBulkSchedule(event, '${s.name}')" class="space-y-2 pt-2 border-t">
-                                <p class="font-bold text-slate-800"><i class="fa-solid fa-calendar-days text-pink-600 mr-1"></i> Plot Bulk Schedule & Classroom Link</p>
-                                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                            <form onsubmit="plotSchedule(event, '${s.name}', ${s.id})" class="space-y-2 pt-2 border-t">
+                                <p class="font-bold text-slate-800"><i class="fa-solid fa-calendar-days text-pink-600 mr-1"></i> Plot Schedule & Classroom Link</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                                     <div><label class="block font-semibold mb-1">Subject</label><input type="text" id="plot_subj_${s.id}" required value="Reading Program" class="w-full p-2 border rounded"></div>
+                                    <div>
+                                        <label class="block font-semibold mb-1">Scheduling Type</label>
+                                        <select id="plot_type_${s.id}" onchange="togglePlotFields(${s.id})" class="w-full p-2 border rounded bg-white">
+                                            <option value="bulk">Custom Bulk (e.g. 20 Sessions)</option>
+                                            <option value="week">1-Week Schedule (Mon-Fri / 5 Days)</option>
+                                            <option value="individual">Individual Session (1 Day)</option>
+                                        </select>
+                                    </div>
                                     <div><label class="block font-semibold mb-1">Start Date</label><input type="date" id="plot_start_${s.id}" required class="w-full p-2 border rounded"></div>
-                                    <div><label class="block font-semibold mb-1">Number of Sessions (e.g. 20)</label><input type="number" id="plot_count_${s.id}" required value="20" min="1" max="50" class="w-full p-2 border rounded"></div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" id="plot_extra_fields_${s.id}">
+                                    <div><label class="block font-semibold mb-1">Number of Sessions</label><input type="number" id="plot_count_${s.id}" value="20" min="1" max="50" class="w-full p-2 border rounded"></div>
                                     <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="plot_slot_${s.id}" required placeholder="3:00 PM - 4:00 PM" class="w-full p-2 border rounded"></div>
+                                    <div><label class="block font-semibold mb-1">Teacher Notes</label><input type="text" id="plot_notes_${s.id}" placeholder="e.g. Chapter 1 review" class="w-full p-2 border rounded"></div>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    <div><label class="block font-semibold mb-1">Teacher Notes / Instructions</label><input type="text" id="plot_notes_${s.id}" placeholder="e.g. Chapter 1 review" class="w-full p-2 border rounded"></div>
-                                    <div><label class="block font-semibold mb-1">Online Classroom Meeting Link</label><input type="url" id="plot_link_${s.id}" placeholder="https://zoom.us/j/..." class="w-full p-2 border rounded"></div>
-                                </div>
-                                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-lg">Plot Bulk Sessions</button>
+                                <div><label class="block font-semibold mb-1">Online Classroom Meeting Link</label><input type="url" id="plot_link_${s.id}" placeholder="https://zoom.us/j/..." class="w-full p-2 border rounded"></div>
+                                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-lg">Plot Schedule</button>
                             </form>
                         </div>`;
                 });
             } else {
                 container.innerHTML = `<p class="text-slate-500">No students registered yet.</p>`;
+            }
+        }
+
+        function togglePlotFields(sId) {
+            const type = document.getElementById(`plot_type_${sId}`).value;
+            const extraContainer = document.getElementById(`plot_extra_fields_${sId}`);
+            if (type === 'individual') {
+                extraContainer.innerHTML = `
+                    <div class="sm:col-span-2"><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="plot_slot_${sId}" required placeholder="3:00 PM - 4:00 PM" class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Teacher Notes</label><input type="text" id="plot_notes_${sId}" placeholder="e.g. Chapter 1" class="w-full p-2 border rounded"></div>
+                `;
+            } else if (type === 'week') {
+                extraContainer.innerHTML = `
+                    <div class="sm:col-span-2"><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="plot_slot_${sId}" required placeholder="3:00 PM - 4:00 PM" class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Teacher Notes</label><input type="text" id="plot_notes_${sId}" placeholder="e.g. Week 1 lessons" class="w-full p-2 border rounded"></div>
+                `;
+            } else {
+                extraContainer.innerHTML = `
+                    <div><label class="block font-semibold mb-1">Number of Sessions</label><input type="number" id="plot_count_${sId}" value="20" min="1" max="50" class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="plot_slot_${sId}" required placeholder="3:00 PM - 4:00 PM" class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Teacher Notes</label><input type="text" id="plot_notes_${sId}" placeholder="e.g. Chapter 1" class="w-full p-2 border rounded"></div>
+                `;
             }
         }
 
@@ -1817,15 +1889,11 @@
             loadStudentsTab();
         }
 
-        async function plotBulkSchedule(e, studentName) {
+        async function plotSchedule(e, studentName, sId) {
             e.preventDefault();
-            const { data: stud } = await _supabase.from('students').select('*').ilike('name', studentName);
-            if (!stud || stud.length === 0) return;
-            const sId = stud[0].id;
-
             const subject = document.getElementById(`plot_subj_${sId}`).value.trim();
+            const type = document.getElementById(`plot_type_${sId}`).value;
             const startDateStr = document.getElementById(`plot_start_${sId}`).value;
-            const count = parseInt(document.getElementById(`plot_count_${sId}`).value) || 1;
             const slot = document.getElementById(`plot_slot_${sId}`).value.trim();
             const notes = document.getElementById(`plot_notes_${sId}`).value.trim();
             const meeting_link = document.getElementById(`plot_link_${sId}`).value.trim();
@@ -1833,24 +1901,56 @@
             let currentDate = new Date(startDateStr);
             let insertions = [];
 
-            for (let i = 0; i < count; i++) {
-                let dateFormatted = currentDate.toISOString().split('T')[0];
+            if (type === 'individual') {
                 insertions.push({
                     student_name: studentName,
                     subject,
-                    date: dateFormatted,
+                    date: startDateStr,
                     slot,
                     notes,
                     meeting_link,
                     status: 'Active'
                 });
-                currentDate.setDate(currentDate.getDate() + 1);
+            } else if (type === 'week') {
+                let count = 0;
+                while (count < 5) {
+                    let dayOfWeek = currentDate.getDay();
+                    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclude weekends
+                        let dateFormatted = currentDate.toISOString().split('T')[0];
+                        insertions.push({
+                            student_name: studentName,
+                            subject,
+                            date: dateFormatted,
+                            slot,
+                            notes,
+                            meeting_link,
+                            status: 'Active'
+                        });
+                        count++;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+            } else {
+                const count = parseInt(document.getElementById(`plot_count_${sId}`).value) || 1;
+                for (let i = 0; i < count; i++) {
+                    let dateFormatted = currentDate.toISOString().split('T')[0];
+                    insertions.push({
+                        student_name: studentName,
+                        subject,
+                        date: dateFormatted,
+                        slot,
+                        notes,
+                        meeting_link,
+                        status: 'Active'
+                    });
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
             }
 
             const { error } = await _supabase.from('sessions').insert(insertions);
-            if (error) { alert("Error plotting sessions: " + error.message); return; }
+            if (error) { alert("Error plotting schedule: " + error.message); return; }
 
-            alert(`Successfully plotted ${count} sessions for ${studentName}!`);
+            alert(`Successfully scheduled sessions for ${studentName}!`);
             loadStudentsTab();
         }
 
@@ -1858,6 +1958,9 @@
             const { data: payments } = await _supabase.from('payment_history').select('*').order('id', { ascending: false });
             const container = document.getElementById('adminVerifyPaymentsContainer');
             container.innerHTML = '';
+
+            loadAdminData(); // Refresh badge counts
+
             if (payments && payments.length > 0) {
                 payments.forEach(p => {
                     const isVerified = p.status === 'Verified';
