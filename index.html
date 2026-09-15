@@ -186,7 +186,7 @@
                     <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students</span></button>
                     <button onclick="switchTab('schedule')" id="navSchedule" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-calendar-days w-4"></i><span>Schedule</span></button>
                     <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payment Settings</span></button>
-                    <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Notes</span></button>
+                    <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Recordings</span></button>
                 </nav>
             </div>
             <button onclick="adminLogout()" class="w-full bg-pink-700/80 hover:bg-pink-800 text-white py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-right-from-bracket mr-1"></i> Sign Out</button>
@@ -249,7 +249,7 @@
 
             <div id="tabRecords" class="hidden space-y-6">
                 <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Lesson Notes & Homework Assignments</h3>
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-video text-pink-600 mr-2"></i> Add / Update Lesson Notes, Homework & Recordings</h3>
                     <div id="adminRecordsContainer" class="space-y-3 text-xs"></div>
                 </div>
             </div>
@@ -271,7 +271,7 @@
                 </div>
                 <div class="flex bg-pink-700/60 p-1 rounded-lg text-xs gap-1">
                     <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all">Schedule & Calendar</button>
-                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Notes & Homeworks</button>
+                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Previous Lessons & Recordings</button>
                     <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Buy Packages</button>
                 </div>
                 <button onclick="studentLogout()" class="bg-pink-700 hover:bg-pink-800 text-pink-100 px-3 py-1.5 rounded-lg text-xs font-bold">Exit</button>
@@ -294,10 +294,11 @@
                 </div>
             </div>
 
+            <!-- PREVIOUS LESSONS & RECORDINGS -->
             <div id="studentHistoryView" class="hidden space-y-4 text-xs">
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-folder-open text-pink-600 mr-2"></i> Lesson Notes & Homework Assignments</h3>
-                    <div id="studentPortalHomeworks" class="space-y-3"></div>
+                    <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-video text-pink-600 mr-2"></i> Previous Lessons, Notes & Recordings</h3>
+                    <div id="studentPortalRecordings" class="space-y-3"></div>
                 </div>
             </div>
 
@@ -441,7 +442,7 @@
             ['stdNavSchedule', 'stdNavHistory', 'stdNavPayment'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all");
 
             if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentPortal(currentStudentName); }
-            else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentHomeworks(currentStudentName); }
+            else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentRecordings(currentStudentName); }
             else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
         }
 
@@ -683,9 +684,45 @@
             });
         }
 
-        function loadAdminRecordsTab() {
+        async function loadAdminRecordsTab() {
+            const { data: sessions } = await _supabase.from('sessions').select('*').order('date', { ascending: false });
             const container = document.getElementById('adminRecordsContainer');
-            container.innerHTML = `<p class="text-slate-600">Notes & homeworks are synced with student sessions.</p>`;
+            container.innerHTML = '';
+            if (sessions && sessions.length > 0) {
+                sessions.forEach(s => {
+                    container.innerHTML += `
+                        <div class="p-4 bg-slate-50 border rounded-xl space-y-3">
+                            <div class="flex justify-between items-center">
+                                <strong>${s.student_name}</strong> — <span class="text-pink-600">${s.subject}</span> (${s.date})
+                            </div>
+                            <form onsubmit="updateSessionRecord(event, ${s.id})" class="space-y-2">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <div><label class="block font-semibold mb-1">Teacher Notes</label><input type="text" id="note_${s.id}" value="${s.notes || ''}" class="w-full p-2 border rounded"></div>
+                                    <div><label class="block font-semibold mb-1">Homework Assigned</label><input type="text" id="hw_${s.id}" value="${s.homework || ''}" class="w-full p-2 border rounded"></div>
+                                </div>
+                                <div>
+                                    <label class="block font-semibold mb-1">Lesson Recording URL (Zoom, YouTube, Google Drive, etc.)</label>
+                                    <input type="url" id="rec_${s.id}" value="${s.recording_url || ''}" placeholder="https://..." class="w-full p-2 border rounded">
+                                </div>
+                                <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded font-bold shadow-sm">Save Notes & Recording</button>
+                            </form>
+                        </div>`;
+                });
+            } else {
+                container.innerHTML = `<p class="text-slate-500">No student sessions found to record notes for.</p>`;
+            }
+        }
+
+        async function updateSessionRecord(e, sessionId) {
+            e.preventDefault();
+            const notes = document.getElementById(`note_${sessionId}`).value.trim();
+            const homework = document.getElementById(`hw_${sessionId}`).value.trim();
+            const recording_url = document.getElementById(`rec_${sessionId}`).value.trim();
+
+            const { error } = await _supabase.from('sessions').update({ notes, homework, recording_url }).eq('id', sessionId);
+            if (error) { alert("Error saving record: " + error.message); return; }
+            alert("Lesson record & recording updated successfully!");
+            loadAdminRecordsTab();
         }
 
         async function loadStudentPortal(name) {
@@ -720,21 +757,27 @@
             }
         }
 
-        async function loadStudentHomeworks(name) {
-            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name);
-            const container = document.getElementById('studentPortalHomeworks');
+        async function loadStudentRecordings(name) {
+            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: false });
+            const container = document.getElementById('studentPortalRecordings');
             container.innerHTML = '';
             if (sessions && sessions.length > 0) {
                 sessions.forEach(s => {
                     container.innerHTML += `
-                        <div class="p-3 bg-slate-50 border rounded space-y-1">
-                            <strong>${s.subject}</strong> (${s.date})
-                            <p class="text-slate-600"><strong>Notes:</strong> ${s.notes || 'No teacher notes recorded yet.'}</p>
-                            <p class="text-slate-600"><strong>Homework:</strong> ${s.homework || 'No homework assigned yet.'}</p>
+                        <div class="p-4 bg-slate-50 border rounded-xl space-y-2">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <strong>${s.subject}</strong>
+                                <span class="text-slate-500 font-medium">${s.date}</span>
+                            </div>
+                            <p class="text-slate-700"><strong>Teacher Notes:</strong> ${s.notes || 'No notes added yet.'}</p>
+                            <p class="text-slate-700"><strong>Homework:</strong> ${s.homework || 'No homework assigned yet.'}</p>
+                            <div class="pt-1">
+                                ${s.recording_url ? `<a href="${s.recording_url}" target="_blank" class="inline-flex items-center bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-play mr-2"></i> Watch Lesson Recording</a>` : '<span class="text-slate-400 italic">Recording not uploaded yet</span>'}
+                            </div>
                         </div>`;
                 });
             } else {
-                container.innerHTML = `<p class="text-slate-400">No lesson history found.</p>`;
+                container.innerHTML = `<p class="text-slate-400">No previous lesson history found.</p>`;
             }
         }
     </script>
