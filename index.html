@@ -1089,6 +1089,7 @@
             const { data: stud } = await _supabase.from('students').select('*').ilike('name', studentName);
             if (!stud || stud.length === 0) return;
             const sId = stud[0].id;
+            const currentCredits = stud[0].credits || 0;
 
             const subject = document.getElementById(`plot_subj_${sId}`).value.trim();
             const startDateStr = document.getElementById(`plot_start_${sId}`).value;
@@ -1117,7 +1118,11 @@
             const { error } = await _supabase.from('sessions').insert(insertions);
             if (error) { alert("Error plotting sessions: " + error.message); return; }
 
-            alert(`Successfully plotted ${count} sessions for ${studentName}!`);
+            // Automatically deduct plotted count from remaining student credits
+            const updatedCredits = Math.max(0, currentCredits - count);
+            await _supabase.from('students').update({ credits: updatedCredits }).eq('id', sId);
+
+            alert(`Successfully plotted ${count} sessions for ${studentName}! Remaining credits updated to ${updatedCredits}.`);
             loadStudentsTab();
         }
 
