@@ -53,7 +53,6 @@
                 <span class="bg-pink-100 text-pink-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Online Tutoring Excellence</span>
                 <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">Empowering Young Minds in Reading, English, Math & Filipino</h2>
                 <p class="text-sm text-slate-600 max-w-xl mx-auto">Welcome to my official learning hub! Providing engaging, personalized online lessons designed to help your child excel academically with confidence.</p>
-                <!-- Motivational Banner -->
                 <div class="bg-pink-600 text-white p-3 rounded-xl text-xs font-medium italic shadow-inner max-w-lg mx-auto">
                     <i class="fa-solid fa-quote-left mr-1"></i> <span id="publicMotivationText">"Education is the passport to the future, for tomorrow belongs to those who prepare for it today."</span>
                 </div>
@@ -73,7 +72,6 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-                <!-- Per Session Breakdown -->
                 <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
                     <div class="flex items-center space-x-3 text-pink-600 font-bold text-sm">
                         <i class="fa-solid fa-book-open-reader text-lg"></i>
@@ -85,7 +83,6 @@
                     </ul>
                 </div>
 
-                <!-- 20-Session Advance Packages -->
                 <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
                     <div class="flex items-center space-x-3 text-pink-600 font-bold text-sm">
                         <i class="fa-solid fa-box-archive text-lg"></i>
@@ -105,10 +102,6 @@
                             <strong class="text-pink-700 text-sm">₱14,000 <span class="text-[10px] font-normal text-slate-500">/ 20 sessions</span></strong>
                         </li>
                     </ul>
-                    <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-[11px] text-amber-800 space-y-1">
-                        <p class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Single Session Notice:</p>
-                        <p>Single-session bookings are <strong>only good for today / that specific slot</strong>. We cannot guarantee slot availability for future sessions.</p>
-                    </div>
                 </div>
             </div>
         </section>
@@ -215,11 +208,10 @@
             <button onclick="adminLogout()" class="w-full bg-pink-700/80 hover:bg-pink-800 text-white py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-right-from-bracket mr-1"></i> Sign Out</button>
         </aside>
 
-        <!-- ADMIN MAIN AREA WITH LEFT CALENDAR & ADS -->
+        <!-- ADMIN MAIN AREA -->
         <div class="flex-grow flex flex-col md:flex-row p-6 overflow-y-auto max-h-screen gap-6">
-            <!-- LEFT SIDEBAR: CALENDAR & TUTORING ADS -->
+            <!-- LEFT SIDEBAR: CALENDAR -->
             <div class="w-full md:w-80 shrink-0 space-y-6">
-                <!-- CALENDAR WIDGET -->
                 <div class="bg-white border border-pink-200 rounded-2xl p-4 shadow-sm space-y-3">
                     <div class="flex justify-between items-center font-bold text-sm text-pink-700">
                         <button onclick="changeAdminMonth(-1)" class="hover:bg-pink-50 p-1 rounded"><i class="fa-solid fa-chevron-left"></i></button>
@@ -232,16 +224,6 @@
                     <div id="adminCalendarDaysGrid" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
                 </div>
 
-                <!-- TUTORING PROMO AD -->
-                <div class="bg-gradient-to-br from-pink-600 to-rose-500 text-white p-5 rounded-2xl shadow-md space-y-3 text-xs">
-                    <div class="flex items-center space-x-2 font-bold text-sm">
-                        <i class="fa-solid fa-bullhorn"></i>
-                        <h4>Teacher Ann Tutoring</h4>
-                    </div>
-                    <p class="text-pink-100">Manage packages, promos, and sales easily in the Package Pricing tab!</p>
-                </div>
-
-                <!-- MOTIVATIONAL SENTENCE BANNER -->
                 <div class="bg-white border border-pink-200 p-4 rounded-2xl shadow-sm space-y-2 text-xs">
                     <p class="font-bold text-pink-700"><i class="fa-solid fa-lightbulb mr-1"></i> Teacher Daily Inspiration</p>
                     <p id="adminMotivationText" class="italic text-slate-600">"Teaching is a work of heart. Inspire greatness every single day."</p>
@@ -349,8 +331,44 @@
                 <div><label class="block font-semibold mb-1">Parent Name</label><input type="text" id="newStudParent" required class="w-full p-2.5 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Contact / Email</label><input type="text" id="newStudContact" required class="w-full p-2.5 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Portal Password</label><input type="text" id="newStudPass" required class="w-full p-2.5 border rounded"></div>
-                <div><label class="block font-semibold mb-1">Initial Remaining Slots (Credits)</label><input type="number" id="newStudCredits" value="0" min="0" required class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Initial Remaining Class</label><input type="number" id="newStudCredits" value="0" min="0" required class="w-full p-2.5 border rounded"></div>
                 <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Add Student</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TEACHER ABSENT COMMENT MODAL -->
+    <div id="teacherAbsentModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-user-slash text-amber-600 mr-2"></i> Tag Teacher Absent & Comment</h3>
+                <button onclick="closeTeacherAbsentModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="submitTeacherAbsent(event)" class="space-y-3">
+                <input type="hidden" id="absentSessionId">
+                <div>
+                    <label class="block font-semibold mb-1">Reason / Notice for Student</label>
+                    <textarea id="absentComment" required rows="3" placeholder="e.g. Teacher is unwell today. Class will be rescheduled." class="w-full p-2.5 border rounded"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-lg shadow">Save & Notify Student</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- STUDENT CANCEL CLASS MODAL -->
+    <div id="studentCancelModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-ban text-rose-600 mr-2"></i> Cancel Class & Send Reason</h3>
+                <button onclick="closeStudentCancelModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="submitStudentCancel(event)" class="space-y-3">
+                <input type="hidden" id="cancelSessionId">
+                <div>
+                    <label class="block font-semibold mb-1">Reason for Cancellation</label>
+                    <textarea id="cancelReason" required rows="3" placeholder="e.g. Student has a school conflict / fever." class="w-full p-2.5 border rounded"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-lg shadow">Submit Cancellation & Reason</button>
             </form>
         </div>
     </div>
@@ -379,9 +397,8 @@
 
         <!-- STUDENT PORTAL MAIN AREA -->
         <div class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
-            <!-- LEFT SIDEBAR: CALENDAR & ADS -->
+            <!-- LEFT SIDEBAR: CALENDAR -->
             <div class="w-full md:w-80 shrink-0 space-y-6">
-                <!-- STUDENT CALENDAR WIDGET -->
                 <div class="bg-white border border-pink-200 rounded-2xl p-4 shadow-sm space-y-3">
                     <div class="flex justify-between items-center font-bold text-sm text-pink-700">
                         <button onclick="changeStudentMonth(-1)" class="hover:bg-pink-50 p-1 rounded"><i class="fa-solid fa-chevron-left"></i></button>
@@ -394,7 +411,6 @@
                     <div id="studentCalendarDaysGrid" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
                 </div>
 
-                <!-- STUDENT MOTIVATIONAL BANNER -->
                 <div class="bg-white border border-pink-200 p-4 rounded-2xl shadow-sm space-y-2 text-xs">
                     <p class="font-bold text-pink-700"><i class="fa-solid fa-star mr-1"></i> Daily Student Motivation</p>
                     <p id="studentMotivationText" class="italic text-slate-600">"Believe in yourself! Every expert was once a beginner."</p>
@@ -407,7 +423,7 @@
                 <div id="studentScheduleView" class="space-y-6 text-xs">
                     <div class="bg-white border rounded-xl p-6 shadow-sm flex justify-between items-center">
                         <div>
-                            <span class="text-slate-500 uppercase font-semibold text-[10px] block">Remaining Session Credits Left</span>
+                            <span class="text-slate-500 uppercase font-semibold text-[10px] block">Remaining Class</span>
                             <span id="studentCreditCount" class="text-2xl font-extrabold text-pink-600">0</span>
                         </div>
                         <button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-bold shadow">Buy Session Package</button>
@@ -419,7 +435,6 @@
                     </div>
                 </div>
 
-                <!-- PREVIOUS LESSONS & RECORDINGS -->
                 <div id="studentHistoryView" class="hidden space-y-4 text-xs">
                     <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-video text-pink-600 mr-2"></i> Previous Lessons, Notes & Recordings</h3>
@@ -427,7 +442,6 @@
                     </div>
                 </div>
 
-                <!-- BUY PACKAGES VIEW -->
                 <div id="studentPaymentView" class="hidden space-y-6 text-xs">
                     <div class="bg-white border rounded-xl p-6 shadow-sm space-y-6">
                         <div class="border-b pb-3">
@@ -437,7 +451,6 @@
 
                         <div id="studentDynamicPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 
-                        <!-- Single Session Option with Dropdowns -->
                         <div class="border border-amber-300 bg-amber-50 rounded-xl p-4 space-y-3">
                             <div class="flex items-center space-x-2 text-amber-900 font-bold">
                                 <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
@@ -827,11 +840,6 @@
 
             let payload = { name, parent, email_or_mobile, password, credits };
             let { error } = await _supabase.from('students').insert([payload]);
-            if (error) {
-                delete payload.credits;
-                let res = await _supabase.from('students').insert([payload]);
-                error = res.error;
-            }
             if (error) { alert("Error adding student: " + error.message); return; }
 
             alert(`Student ${name} added successfully!`);
@@ -877,7 +885,6 @@
             const qr_url = document.getElementById('adminQrBase64').value;
 
             const { data: existing } = await _supabase.from('payment_config').select('*').limit(1);
-            
             let error;
             if (existing && existing.length > 0) {
                 const res = await _supabase.from('payment_config').update({ paymaya, qr_url }).eq('id', existing[0].id);
@@ -888,7 +895,6 @@
             }
 
             if (error) { alert("Error saving payment config: " + error.message); return; }
-
             alert("Payment details & QR code saved successfully!");
         }
 
@@ -926,7 +932,7 @@
             const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, credits, status: 'Pending', receipt_url, date: new Date().toLocaleDateString() }]);
             if (error) { alert("Checkout error: " + error.message); return; }
 
-            alert(`Payment submitted for ${packageName}! Teacher Ann will verify your receipt and update your remaining slots.`);
+            alert(`Payment submitted for ${packageName}! Teacher Ann will verify your receipt and update your remaining class.`);
             closeCheckoutModal();
             switchStudentTab('schedule');
             loadStudentPortal(currentStudentName);
@@ -984,11 +990,6 @@
 
             let payload = { name, parent, email_or_mobile, password, credits: 0, notes: `Program: ${subject}` };
             let { error } = await _supabase.from('students').insert([payload]);
-            if (error) {
-                delete payload.credits;
-                let res = await _supabase.from('students').insert([payload]);
-                error = res.error;
-            }
             if (error) { alert("Enrollment error: " + error.message); return; }
 
             alert("Enrollment successful! You can now sign in.");
@@ -1035,27 +1036,54 @@
 
         async function loadStudentsTab() {
             const { data: students } = await _supabase.from('students').select('*');
+            const { data: sessions } = await _supabase.from('sessions').select('*').order('date', { ascending: false });
             const container = document.getElementById('studentsDirectoryContainer');
             container.innerHTML = '';
+            
             if (students && students.length > 0) {
                 students.forEach(s => {
+                    const studentSessions = sessions ? sessions.filter(sess => sess.student_name.toLowerCase() === s.name.toLowerCase()) : [];
+                    let sessionsHtml = '';
+
+                    studentSessions.forEach(sess => {
+                        sessionsHtml += `
+                            <div class="p-3 bg-white border rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                                <div>
+                                    <strong>${sess.subject}</strong> — Date: <strong>${sess.date}</strong> (${sess.slot})<br>
+                                    <span class="text-[11px] font-semibold text-pink-700">Status: ${sess.status || 'Active'}</span>
+                                    ${sess.notes ? `<br><span class="text-slate-600"><strong>Notes:</strong> ${sess.notes}</span>` : ''}
+                                    ${sess.absence_reason ? `<br><span class="text-amber-700 font-semibold"><strong>Teacher Absence Note:</strong> ${sess.absence_reason}</span>` : ''}
+                                    ${sess.cancel_reason ? `<br><span class="text-rose-700 font-semibold"><strong>Student Cancel Reason:</strong> ${sess.cancel_reason}</span>` : ''}
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 items-center">
+                                    ${sess.status !== 'Done' ? `<button onclick="markSessionDone(${sess.id}, '${s.name}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-check mr-1"></i> Mark Done</button>` : '<span class="text-emerald-700 font-bold text-[11px]">✓ Done</span>'}
+                                    <button onclick="openTeacherAbsentModal(${sess.id})" class="bg-amber-500 hover:bg-amber-600 text-white px-2.5 py-1 rounded text-[11px] font-bold"><i class="fa-solid fa-user-slash mr-1"></i> Tag Absent</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+
                     container.innerHTML += `
                         <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-2">
                                 <div>
                                     <strong class="text-sm text-pink-700">${s.name}</strong> <span class="text-slate-400">| Parent: ${s.parent || 'N/A'}</span><br>
-                                    <span class="text-slate-500">Password: ${s.password} | Contact: ${s.email_or_mobile || 'N/A'} | Notes: ${s.notes || 'None'}</span>
+                                    <span class="text-slate-500">Password: ${s.password} | Contact: ${s.email_or_mobile || 'N/A'}</span>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <label class="font-semibold">Remaining Slots:</label>
+                                    <label class="font-semibold">Remaining Class:</label>
                                     <input type="number" id="cred_${s.id}" value="${s.credits || 0}" class="w-16 p-1.5 border rounded text-center font-bold">
                                     <button onclick="updateStudentCredits(${s.id}, '${s.name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm">Save</button>
                                     <button onclick="removeStudent(${s.id}, '${s.name}')" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold shadow-sm" title="Remove Student"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
+
+                            <div class="space-y-2">
+                                <p class="font-bold text-slate-700 text-[11px] uppercase"><i class="fa-solid fa-list-check mr-1"></i> Student Scheduled Sessions & Actions</p>
+                                <div class="space-y-2 max-h-48 overflow-y-auto">${sessionsHtml || '<p class="text-slate-400 italic text-[11px]">No sessions plotted yet.</p>'}</div>
+                            </div>
                             
-                            <!-- Plot Bulk Schedule Form -->
-                            <form onsubmit="plotBulkSchedule(event, '${s.name}')" class="space-y-2 pt-1">
+                            <form onsubmit="plotBulkSchedule(event, '${s.name}')" class="space-y-2 pt-2 border-t">
                                 <p class="font-bold text-slate-800"><i class="fa-solid fa-calendar-days text-pink-600 mr-1"></i> Plot Bulk Schedule & Classroom Link</p>
                                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
                                     <div><label class="block font-semibold mb-1">Subject</label><input type="text" id="plot_subj_${s.id}" required value="Reading Program" class="w-full p-2 border rounded"></div>
@@ -1065,7 +1093,7 @@
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     <div><label class="block font-semibold mb-1">Teacher Notes / Instructions</label><input type="text" id="plot_notes_${s.id}" placeholder="e.g. Chapter 1 review" class="w-full p-2 border rounded"></div>
-                                    <div><label class="block font-semibold mb-1">Online Classroom Meeting Link (Zoom, Meet, etc.)</label><input type="url" id="plot_link_${s.id}" placeholder="https://zoom.us/j/..." class="w-full p-2 border rounded"></div>
+                                    <div><label class="block font-semibold mb-1">Online Classroom Meeting Link</label><input type="url" id="plot_link_${s.id}" placeholder="https://zoom.us/j/..." class="w-full p-2 border rounded"></div>
                                 </div>
                                 <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-lg">Plot Bulk Sessions</button>
                             </form>
@@ -1076,11 +1104,72 @@
             }
         }
 
+        async function markSessionDone(sessionId, studentName) {
+            const { error: sessErr } = await _supabase.from('sessions').update({ status: 'Done' }).eq('id', sessionId);
+            if (sessErr) { alert("Error marking session done: " + sessErr.message); return; }
+
+            const { data: studData } = await _supabase.from('students').select('*').ilike('name', studentName);
+            if (studData && studData.length > 0) {
+                const currentCredits = studData[0].credits || 0;
+                const newCredits = Math.max(0, currentCredits - 1);
+                await _supabase.from('students').update({ credits: newCredits }).eq('id', studData[0].id);
+            }
+
+            alert("Session marked as Done! 1 class automatically deducted from student's remaining class.");
+            loadStudentsTab();
+        }
+
+        function openTeacherAbsentModal(sessionId) {
+            document.getElementById('absentSessionId').value = sessionId;
+            document.getElementById('absentComment').value = '';
+            document.getElementById('teacherAbsentModal').classList.remove('hidden');
+        }
+
+        function closeTeacherAbsentModal() {
+            document.getElementById('teacherAbsentModal').classList.add('hidden');
+        }
+
+        async function submitTeacherAbsent(e) {
+            e.preventDefault();
+            const sessionId = document.getElementById('absentSessionId').value;
+            const comment = document.getElementById('absentComment').value.trim();
+
+            const { error } = await _supabase.from('sessions').update({ status: 'Teacher Absent', absence_reason: comment }).eq('id', sessionId);
+            if (error) { alert("Error updating session: " + error.message); return; }
+
+            alert("Teacher absence recorded and comment saved!");
+            closeTeacherAbsentModal();
+            loadStudentsTab();
+        }
+
+        function openStudentCancelModal(sessionId) {
+            document.getElementById('cancelSessionId').value = sessionId;
+            document.getElementById('cancelReason').value = '';
+            document.getElementById('studentCancelModal').classList.remove('hidden');
+        }
+
+        function closeStudentCancelModal() {
+            document.getElementById('studentCancelModal').classList.add('hidden');
+        }
+
+        async function submitStudentCancel(e) {
+            e.preventDefault();
+            const sessionId = document.getElementById('cancelSessionId').value;
+            const reason = document.getElementById('cancelReason').value.trim();
+
+            const { error } = await _supabase.from('sessions').update({ status: 'Cancelled by Student', cancel_reason: reason }).eq('id', sessionId);
+            if (error) { alert("Error cancelling session: " + error.message); return; }
+
+            alert("Class cancellation submitted successfully. Teacher Ann can now read your reason.");
+            closeStudentCancelModal();
+            loadStudentPortal(currentStudentName);
+        }
+
         async function updateStudentCredits(studentId, studentName) {
             const newCredits = parseInt(document.getElementById(`cred_${studentId}`).value) || 0;
             const { error } = await _supabase.from('students').update({ credits: newCredits }).eq('id', studentId);
-            if (error) { alert("Error updating credits: " + error.message); return; }
-            alert(`Remaining session slots updated successfully for ${studentName}!`);
+            if (error) { alert("Error updating remaining class: " + error.message); return; }
+            alert(`Remaining class updated successfully for ${studentName}!`);
             loadStudentsTab();
         }
 
@@ -1089,7 +1178,6 @@
             const { data: stud } = await _supabase.from('students').select('*').ilike('name', studentName);
             if (!stud || stud.length === 0) return;
             const sId = stud[0].id;
-            const currentCredits = stud[0].credits || 0;
 
             const subject = document.getElementById(`plot_subj_${sId}`).value.trim();
             const startDateStr = document.getElementById(`plot_start_${sId}`).value;
@@ -1118,11 +1206,7 @@
             const { error } = await _supabase.from('sessions').insert(insertions);
             if (error) { alert("Error plotting sessions: " + error.message); return; }
 
-            // Automatically deduct plotted count from remaining student credits
-            const updatedCredits = Math.max(0, currentCredits - count);
-            await _supabase.from('students').update({ credits: updatedCredits }).eq('id', sId);
-
-            alert(`Successfully plotted ${count} sessions for ${studentName}! Remaining credits updated to ${updatedCredits}.`);
+            alert(`Successfully plotted ${count} sessions for ${studentName}!`);
             loadStudentsTab();
         }
 
@@ -1157,7 +1241,7 @@
                                     ` : '<span class="text-slate-400">No receipt uploaded</span>'}
                                 </div>
                                 <div class="text-right">
-                                    ${!isVerified ? `<button onclick="verifyPaymentAndAddCredits(${p.id}, '${p.student_name}', ${p.credits || 0})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-check mr-1"></i> Verify Payment & Add ${p.credits || 0} Credits</button>` : '<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Verified & Added</span>'}
+                                    ${!isVerified ? `<button onclick="verifyPaymentAndAddCredits(${p.id}, '${p.student_name}', ${p.credits || 0})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-check mr-1"></i> Verify Payment & Add ${p.credits || 0} Classes</button>` : '<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Verified & Added</span>'}
                                 </div>
                             </div>
                         </div>`;
@@ -1177,10 +1261,10 @@
                 const updatedCredits = currentCredits + packageCredits;
 
                 const { error: studErr } = await _supabase.from('students').update({ credits: updatedCredits }).eq('id', studentData[0].id);
-                if (studErr) { alert("Error updating student credits: " + studErr.message); return; }
+                if (studErr) { alert("Error updating student remaining class: " + studErr.message); return; }
             }
 
-            alert(`Payment verified successfully! Added ${packageCredits} session slots to ${studentName}.`);
+            alert(`Payment verified successfully! Added ${packageCredits} classes to ${studentName}.`);
             loadAdminVerifyPaymentsTab();
         }
 
@@ -1249,18 +1333,24 @@
             container.innerHTML = '';
             if (sessions && sessions.length > 0) {
                 sessions.forEach(s => {
-                    const isCancelled = s.status === 'Cancelled';
+                    const isCancelled = s.status && s.status.includes('Cancelled');
+                    const isDone = s.status === 'Done';
+                    const isAbsent = s.status === 'Teacher Absent';
+
                     container.innerHTML += `
                         <div class="p-4 bg-slate-50 border rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <div>
                                 <strong class="text-sm text-pink-700">${s.subject}</strong> — Date: <strong>${s.date}</strong> (${s.slot})<br>
                                 <span class="text-slate-600"><strong>Notes:</strong> ${s.notes || 'None'}</span><br>
-                                <span class="text-[11px] ${isCancelled ? 'text-rose-600 font-bold' : 'text-emerald-700 font-semibold'}">
+                                <span class="text-[11px] font-bold ${isDone ? 'text-emerald-700' : isAbsent ? 'text-amber-700' : isCancelled ? 'text-rose-600' : 'text-slate-700'}">
                                     Status: ${s.status || 'Active'}
                                 </span>
+                                ${s.absence_reason ? `<br><span class="text-amber-800 font-semibold bg-amber-50 p-1 rounded block mt-1"><i class="fa-solid fa-comment mr-1"></i>Teacher Note: ${s.absence_reason}</span>` : ''}
+                                ${s.cancel_reason ? `<br><span class="text-rose-800 font-semibold bg-rose-50 p-1 rounded block mt-1"><i class="fa-solid fa-comment mr-1"></i>Your Cancel Reason: ${s.cancel_reason}</span>` : ''}
                             </div>
-                            <div>
-                                ${s.meeting_link && !isCancelled ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join Classroom</a>` : ''}
+                            <div class="flex items-center space-x-2">
+                                ${s.meeting_link && !isCancelled && !isDone && !isAbsent ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join</a>` : ''}
+                                ${!isCancelled && !isDone ? `<button onclick="openStudentCancelModal(${s.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded-lg font-bold shadow-sm"><i class="fa-solid fa-ban mr-1"></i> Cancel Class</button>` : ''}
                             </div>
                         </div>`;
                 });
