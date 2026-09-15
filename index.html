@@ -230,19 +230,11 @@
 
             <div id="tabPayments" class="hidden space-y-6">
                 <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4 max-w-xl">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-wallet text-pink-600 mr-2"></i> Configure Payment Accounts & QR Code</h3>
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-wallet text-pink-600 mr-2"></i> Configure Payment Details & QR Code</h3>
                     <form onsubmit="saveAdminPaymentConfig(event)" class="space-y-3 text-xs">
                         <div>
-                            <label class="block font-semibold mb-1">Bank Name / E-Wallet (e.g. BPI, GCash, PayMaya)</label>
-                            <input type="text" id="adminBankName" required placeholder="e.g. GCash / PayMaya" class="w-full p-2.5 border rounded">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">Account Name</label>
-                            <input type="text" id="adminAccountName" required placeholder="e.g. Teacher Ann" class="w-full p-2.5 border rounded">
-                        </div>
-                        <div>
-                            <label class="block font-semibold mb-1">Account / Mobile Number</label>
-                            <input type="text" id="adminAccountNumber" required placeholder="e.g. 0917-123-4567" class="w-full p-2.5 border rounded">
+                            <label class="block font-semibold mb-1">GCash / PayMaya Details & Account Number</label>
+                            <textarea id="adminPaymaya" required rows="3" placeholder="e.g. GCash / PayMaya: 0917-123-4567 (Teacher Ann)" class="w-full p-2.5 border rounded"></textarea>
                         </div>
                         <div>
                             <label class="block font-semibold mb-1">Payment QR Code Image</label>
@@ -428,7 +420,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             startLiveClocks();
             loadSidebarPhoto();
-            loadPaymentConfigDisplay();
             document.getElementById('adminTimezoneLabel').textContent = userTimezone;
             document.getElementById('studentTimezoneDisplay').textContent = userTimezone;
         });
@@ -493,10 +484,8 @@
             if (data && data.length > 0) {
                 const cfg = data[0];
                 box.innerHTML = `
-                    <p><strong>Bank / E-Wallet:</strong> ${cfg.bank_name || 'N/A'}</p>
-                    <p><strong>Account Name:</strong> ${cfg.account_name || 'N/A'}</p>
-                    <p><strong>Account / Number:</strong> ${cfg.account_number || 'N/A'}</p>
-                    ${cfg.qr_base64 ? `<div class="mt-2 text-center"><img src="${cfg.qr_base64}" class="w-32 h-32 object-contain mx-auto border rounded bg-white p-1"></div>` : ''}
+                    <p class="whitespace-pre-line"><strong>Details:</strong> ${cfg.paymaya || 'N/A'}</p>
+                    ${cfg.qr_url ? `<div class="mt-2 text-center"><img src="${cfg.qr_url}" class="w-32 h-32 object-contain mx-auto border rounded bg-white p-1"></div>` : ''}
                 `;
             } else {
                 box.innerHTML = `<p>No payment details configured yet by admin. Please contact Teacher Ann.</p>`;
@@ -520,14 +509,21 @@
 
         async function saveAdminPaymentConfig(e) {
             e.preventDefault();
-            const bank_name = document.getElementById('adminBankName').value.trim();
-            const account_name = document.getElementById('adminAccountName').value.trim();
-            const account_number = document.getElementById('adminAccountNumber').value.trim();
-            const qr_base64 = document.getElementById('adminQrBase64').value;
+            const paymaya = document.getElementById('adminPaymaya').value.trim();
+            const qr_url = document.getElementById('adminQrBase64').value;
 
-            // Upsert payment config
-            await _supabase.from('payment_config').delete().neq('id', 0); // clear old
-            const { error } = await _supabase.from('payment_config').insert([{ bank_name, account_name, account_number, qr_base64 }]);
+            // Check if record exists
+            const { data: existing } = await _supabase.from('payment_config').select('*').limit(1);
+            
+            let error;
+            if (existing && existing.length > 0) {
+                const res = await _supabase.from('payment_config').update({ paymaya, qr_url }).eq('id', existing[0].id);
+                error = res.error;
+            } else {
+                const res = await _supabase.from('payment_config').insert([{ paymaya, qr_url }]);
+                error = res.error;
+            }
+
             if (error) { alert("Error saving payment config: " + error.message); return; }
 
             alert("Payment details & QR code saved successfully!");
@@ -537,18 +533,12 @@
             const { data } = await _supabase.from('payment_config').select('*').limit(1);
             if (data && data.length > 0) {
                 const cfg = data[0];
-                document.getElementById('adminBankName').value = cfg.bank_name || '';
-                document.getElementById('adminAccountName').value = cfg.account_name || '';
-                document.getElementById('adminAccountNumber').value = cfg.account_number || '';
-                if (cfg.qr_base64) {
-                    document.getElementById('adminQrBase64').value = cfg.qr_base64;
-                    document.getElementById('adminQrPreviewContainer').innerHTML = `<img src="${cfg.qr_base64}" class="w-24 h-24 object-cover border rounded mt-1">`;
+                document.getElementById('adminPaymaya').value = cfg.paymaya || '';
+                if (cfg.qr_url) {
+                    document.getElementById('adminQrBase64').value = cfg.qr_url;
+                    document.getElementById('adminQrPreviewContainer').innerHTML = `<img src="${cfg.qr_url}" class="w-24 h-24 object-cover border rounded mt-1">`;
                 }
             }
-        }
-
-        async function loadPaymentConfigDisplay() {
-            // Helper for initial load
         }
 
         function previewCheckoutReceipt(event) {
