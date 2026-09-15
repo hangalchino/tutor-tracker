@@ -29,7 +29,7 @@
         <header class="bg-white border-b sticky top-0 z-40 shadow-sm">
             <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg">
+                    <div id="navBrandAvatar" class="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg overflow-hidden shadow">
                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
                     <div>
@@ -39,10 +39,10 @@
                 </div>
                 <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
                     <a href="#home" class="hover:text-emerald-600 transition-colors">Home</a>
+                    <a href="#rates" class="hover:text-emerald-600 transition-colors">Class Rates</a>
                     <a href="#about" class="hover:text-emerald-600 transition-colors">About</a>
                     <a href="#testimony" class="hover:text-emerald-600 transition-colors">Testimonies</a>
                     <a href="#comments" class="hover:text-emerald-600 transition-colors">Comments</a>
-                    <a href="#news" class="hover:text-emerald-600 transition-colors">News</a>
                 </nav>
                 <div class="flex items-center space-x-2">
                     <button onclick="scrollToEnroll()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm">Enroll Now</button>
@@ -64,23 +64,50 @@
             </div>
         </section>
 
+        <!-- Rates & Program Structure Section -->
+        <section id="rates" class="py-16 px-4 max-w-5xl mx-auto space-y-8">
+            <div class="text-center space-y-2">
+                <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Tuition Investment</h3>
+                <h4 class="text-2xl font-bold text-slate-900">Class Rates & Program Structure</h4>
+                <p class="text-xs text-slate-500">Structured lessons tailored by grade level and subject mastery goals.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+                    <div class="flex items-center space-x-3 text-emerald-600 font-bold text-sm">
+                        <i class="fa-solid fa-book-open-reader text-lg"></i>
+                        <h5>Reading Program (Mon–Fri, Daily)</h5>
+                    </div>
+                    <ul class="space-y-2 text-slate-700 border-t pt-3">
+                        <li class="flex justify-between"><span>Preschool to Elementary:</span> <strong class="text-emerald-700">₱250 / 25 mins</strong></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+                    <div class="flex items-center space-x-3 text-emerald-600 font-bold text-sm">
+                        <i class="fa-solid fa-calculator text-lg"></i>
+                        <h5>Math Program</h5>
+                    </div>
+                    <ul class="space-y-3 text-slate-700 border-t pt-3">
+                        <li class="flex justify-between"><span>Preschool to Grade 3:</span> <strong class="text-emerald-700">₱250 / 25 mins</strong></li>
+                        <li class="flex justify-between border-t pt-2"><span>Grade 4 to Grade 6:</span> <div class="text-right"><strong class="text-emerald-700 block">₱250 / 25 mins</strong><strong class="text-emerald-700 block">₱500 / 50 mins <span class="text-[10px] text-indigo-600 font-normal">(Recommended)</span></strong></div></li>
+                        <li class="flex justify-between border-t pt-2"><span>Grade 7 to Grade 10 (Junior High):</span> <strong class="text-emerald-700">₱700 / 50 mins</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         <!-- About Section -->
-        <section id="about" class="py-16 px-4 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <section id="about" class="py-16 px-4 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t">
             <div class="space-y-4">
                 <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">About The Teacher</h3>
-                <h4 class="text-2xl font-bold text-slate-900">Dedicated to Interactive & Effective Online Education</h4>
-                <p class="text-xs text-slate-600 leading-relaxed">Hello! I am Teacher Ann, an experienced online educator specializing in foundational reading comprehension, English language mastery, mathematics problem solving, and Filipino fluency. My classes are customized to fit each student's learning pace in a fun, safe, and supportive virtual environment.</p>
-                <div class="grid grid-cols-2 gap-3 pt-2">
-                    <div class="p-3 bg-slate-50 rounded-lg border text-xs"><strong>📖 Reading & English:</strong> Phonics, grammar & vocabulary.</div>
-                    <div class="p-3 bg-slate-50 rounded-lg border text-xs"><strong>🔢 Math & Filipino:</strong> Computation skills & cultural fluency.</div>
-                </div>
+                <h4 id="landingAboutTitle" class="text-2xl font-bold text-slate-900">Dedicated to Interactive & Effective Online Education</h4>
+                <p id="landingAboutBio" class="text-xs text-slate-600 leading-relaxed">Hello! I am Teacher Ann, an experienced online educator specializing in foundational reading comprehension, English language mastery, mathematics problem solving, and Filipino fluency. My classes are customized to fit each student's learning pace in a fun, safe, and supportive virtual environment.</p>
             </div>
             <div class="bg-emerald-600 text-white p-8 rounded-2xl shadow-lg space-y-4">
                 <h4 class="text-lg font-bold">Why Choose Learn with Teacher Ann?</h4>
                 <ul class="space-y-2 text-xs">
                     <li><i class="fa-solid fa-check mr-2"></i> One-on-one & interactive guided sessions</li>
                     <li><i class="fa-solid fa-check mr-2"></i> Multiple class recordings available for daily review</li>
-                    <li><i class="fa-solid fa-check mr-2"></i> Transparent scheduling, homework notes & parent tracking</li>
+                    <li><i class="fa-solid fa-check mr-2"></i> Transparent scheduling, homework notes & credit tracking</li>
                     <li><i class="fa-solid fa-check mr-2"></i> Convenient tuition payment via any bank to QR code</li>
                 </ul>
             </div>
@@ -104,29 +131,6 @@
                         <p class="text-xs text-slate-600 italic">"The math and English sessions are top-notch. Having access to multiple daily class recordings and the portal makes tracking homework super convenient."</p>
                         <p class="text-[11px] font-bold text-slate-900">— Parent from Canada</p>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- News Section -->
-        <section id="news" class="py-16 px-4 max-w-4xl mx-auto space-y-8">
-            <div class="text-center space-y-2">
-                <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Latest News</h3>
-                <h4 class="text-2xl font-bold text-slate-900">Announcements & Class Schedules</h4>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white p-4 rounded-xl border space-y-2">
-                    <span class="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded font-bold">September 2026</span>
-                    <h5 class="font-bold text-sm">New Weekend Reading Slots Open</h5>
-                    <p class="text-xs text-slate-500">We have added new morning slots for primary school reading comprehension classes.</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl border space-y-2">
-                    <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold">Easy Bank Transfer</span>
-                    <p class="text-xs text-slate-500">Students can now pay tuition securely via any bank transfer directly scanned to our QR code.</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl border space-y-2">
-                    <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold">Homework Hub</span>
-                    <p class="text-xs text-slate-500">All students can now view custom session notes and multiple daily recorded video links in their portal.</p>
                 </div>
             </div>
         </section>
@@ -161,12 +165,13 @@
                     <div><label class="block font-semibold text-white uppercase mb-1">Email or Mobile Number (For Verification)</label><input type="text" id="enrollContact" required placeholder="email@domain.com or +639..." class="w-full p-2.5 rounded-lg border-0"></div>
                     <div><label class="block font-semibold text-white uppercase mb-1">Create Portal Password</label><input type="password" id="enrollPassword" required placeholder="••••••••" class="w-full p-2.5 rounded-lg border-0"></div>
                     <div>
-                        <label class="block font-semibold text-white uppercase mb-1">Preferred Subject(s)</label>
+                        <label class="block font-semibold text-white uppercase mb-1">Preferred Program / Package</label>
                         <select id="enrollSubject" class="w-full p-2.5 rounded-lg border-0 bg-white">
-                            <option value="Reading & English">📖 Reading & English</option>
-                            <option value="Math">🔢 Math</option>
-                            <option value="Filipino">🇵🇭 Filipino</option>
-                            <option value="All Subjects Bundle">🌟 All Subjects Bundle</option>
+                            <option value="Reading Program (Preschool-Elem) - ₱250">📖 Reading Program (Preschool-Elem) - ₱250 / session</option>
+                            <option value="Math Program (Preschool-Grade 3) - ₱250">🔢 Math Program (Preschool-Grade 3) - ₱250 / session</option>
+                            <option value="Math Program (Grade 4-6 Standard) - ₱250">🔢 Math Program (Grade 4-6 Standard 25m) - ₱250 / session</option>
+                            <option value="Math Program (Grade 4-6 Comprehensive) - ₱500">🔢 Math Program (Grade 4-6 Comprehensive 50m) - ₱500 / session</option>
+                            <option value="Math Program (Junior High Grade 7-10) - ₱700">🔢 Math Program (Junior High Grade 7-10) - ₱700 / session</option>
                         </select>
                     </div>
                     <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg transition-colors">Submit Enrollment & Create Account</button>
@@ -222,142 +227,191 @@
         <header class="bg-indigo-600 text-white shadow-md">
             <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-white text-indigo-600 p-2 rounded-lg font-bold text-xl"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div id="adminHeaderAvatar" class="bg-white text-indigo-600 w-10 h-10 rounded-lg font-bold text-xl flex items-center justify-center overflow-hidden shadow">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
                     <div>
-                        <h1 class="text-xl font-bold">TutorSchedule Pro (Admin)</h1>
-                        <p class="text-xs text-indigo-200">Teacher Ann's Dashboard</p>
+                        <h1 class="text-xl font-bold" id="adminHeaderName">TutorSchedule Pro (Admin)</h1>
+                        <p class="text-xs text-indigo-200">Teacher Ann's Dashboard | <span id="adminLiveClock" class="font-mono"></span></p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-3">
                     <div class="flex bg-indigo-700/60 p-1 rounded-lg text-xs flex-wrap gap-1">
                         <button onclick="switchTab('schedule')" id="navScheduleBtn" class="px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all">Schedule</button>
-                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Registered Accounts</button>
+                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Accounts & Credits</button>
                         <button onclick="switchTab('payment')" id="navPaymentBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Payment Setup</button>
                         <button onclick="switchTab('adminChat')" id="navAdminChatBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Support Chat</button>
                         <button onclick="switchTab('adminComments')" id="navAdminCommentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Community Wall</button>
+                        <button onclick="switchTab('adminProfile')" id="navAdminProfileBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all"><i class="fa-solid fa-user-gear"></i> Profile</button>
                     </div>
-                    <button onclick="adminLogout()" class="bg-indigo-700 hover:bg-indigo-800 text-indigo-200 px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-right-from-bracket"></i> Exit to Website</button>
+                    <button onclick="adminLogout()" class="bg-indigo-700 hover:bg-indigo-800 text-indigo-200 px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-right-from-bracket"></i> Exit</button>
                 </div>
             </div>
         </header>
 
-        <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
-            <!-- TAB 1: SCHEDULE -->
-            <div id="scheduleTab" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit">
-                    <h2 id="sessionFormTitle" class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Class / Time Slots</h2>
-                    <form id="sessionForm" class="space-y-4" onsubmit="saveSession(event)">
-                        <input type="hidden" id="sessionId">
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Student Name</label><select id="studentName" required class="w-full px-3 py-2 border rounded-lg text-sm bg-white"><option value="" disabled selected>Select student...</option></select></div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase mb-1">Subject Area</label>
-                            <select id="sessionSubject" required class="w-full px-3 py-2 border rounded-lg text-sm bg-white">
-                                <option value="Reading">📖 Reading</option>
-                                <option value="English">📚 English</option>
-                                <option value="Math">🔢 Math</option>
-                                <option value="Filipino">🇵🇭 Filipino</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Multiple Date & Time Slots Container -->
-                        <div class="space-y-2 border-t border-b py-3">
-                            <div class="flex justify-between items-center">
-                                <label class="block text-xs font-semibold uppercase text-indigo-600">Class Date & Time Slots (Multiple)</label>
-                                <button type="button" onclick="addScheduleSlotField()" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold"><i class="fa-solid fa-plus"></i> Add Slot</button>
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- MAIN TAB CONTENT AREA (3 columns) -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- TAB 1: SCHEDULE -->
+                <div id="scheduleTab" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit md:col-span-1">
+                        <h2 id="sessionFormTitle" class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Class Slots</h2>
+                        <form id="sessionForm" class="space-y-4 text-xs" onsubmit="saveSession(event)">
+                            <input type="hidden" id="sessionId">
+                            <div><label class="block font-semibold uppercase mb-1">Student Name</label><select id="studentName" required class="w-full px-3 py-2 border rounded-lg bg-white"><option value="" disabled selected>Select student...</option></select></div>
+                            <div>
+                                <label class="block font-semibold uppercase mb-1">Subject / Program</label>
+                                <select id="sessionSubject" required class="w-full px-3 py-2 border rounded-lg bg-white">
+                                    <option value="Reading Program">📖 Reading Program (₱250)</option>
+                                    <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
+                                    <option value="Math (Grade 4-6 Standard)">🔢 Math (Grade 4-6 Standard 25m) (₱250)</option>
+                                    <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive 50m) (₱500)</option>
+                                    <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
+                                </select>
                             </div>
-                            <div id="scheduleSlotsFieldsContainer" class="space-y-2">
-                                <div class="flex gap-2 items-center">
-                                    <input type="date" required class="sched-date w-1/2 px-2 py-1.5 border rounded-lg text-xs">
-                                    <input type="text" required placeholder="Time (e.g. 3:00 - 4:00 PM)" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg text-xs">
+                            
+                            <div class="space-y-2 border-t border-b py-3">
+                                <div class="flex justify-between items-center">
+                                    <label class="font-semibold uppercase text-indigo-600">Class Date & Time Slots</label>
+                                    <button type="button" onclick="addScheduleSlotField()" class="text-indigo-600 font-bold"><i class="fa-solid fa-plus"></i> Add Slot</button>
+                                </div>
+                                <div id="scheduleSlotsFieldsContainer" class="space-y-2">
+                                    <div class="flex gap-2 items-center">
+                                        <input type="date" required class="sched-date w-1/2 px-2 py-1.5 border rounded-lg">
+                                        <input type="text" required placeholder="Time (e.g. 3:00 - 4:00 PM)" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Meeting Link</label><input type="url" id="sessionLink" placeholder="https://meet.google.com/..." class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                        
-                        <!-- Multiple Recordings Container -->
-                        <div class="space-y-2 border-t border-b py-3">
-                            <div class="flex justify-between items-center">
-                                <label class="block text-xs font-semibold uppercase text-indigo-600">Class Recording Links (Multiple)</label>
-                                <button type="button" onclick="addRecordingField()" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold"><i class="fa-solid fa-plus"></i> Add Recording</button>
-                            </div>
-                            <div id="recordingFieldsContainer" class="space-y-2">
-                                <div class="flex gap-2">
-                                    <input type="text" placeholder="Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
-                                    <input type="url" placeholder="https://drive.google.com/..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
+                            <div><label class="block font-semibold uppercase mb-1">Meeting Link</label><input type="url" id="sessionLink" placeholder="https://meet.google.com/..." class="w-full px-3 py-2 border rounded-lg"></div>
+                            
+                            <div class="space-y-2 border-t border-b py-3">
+                                <div class="flex justify-between items-center">
+                                    <label class="font-semibold uppercase text-indigo-600">Recording Links</label>
+                                    <button type="button" onclick="addRecordingField()" class="text-indigo-600 font-bold"><i class="fa-solid fa-plus"></i> Add</button>
+                                </div>
+                                <div id="recordingFieldsContainer" class="space-y-2">
+                                    <div class="flex gap-2">
+                                        <input type="text" placeholder="Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg">
+                                        <input type="url" placeholder="https://..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Notes / Homework</label><textarea id="sessionNotes" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea></div>
-                        <div class="flex space-x-2 pt-2">
-                            <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm">Save Sessions</button>
-                            <button type="button" id="cancelSessionBtn" onclick="resetSessionForm()" class="hidden bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm">Cancel</button>
-                        </div>
-                    </form>
-                </section>
-                <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> All Cloud Sessions & Notices</h2>
-                    <div id="sessionsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow"></div>
-                </section>
-            </div>
-
-            <!-- TAB 2: REGISTERED ACCOUNTS & PAYMENT TRACKING -->
-            <div id="studentsTab" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit">
-                    <h2 id="studentFormTitle" class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-user-plus text-indigo-600 mr-2"></i> Add / Edit Student Account</h2>
-                    <form id="studentForm" class="space-y-4" onsubmit="saveStudentDirect(event)">
-                        <input type="hidden" id="dirStudentId">
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Full Name</label><input type="text" id="dirStudentName" required class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Parent/Guardian</label><input type="text" id="dirParentName" class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Email or Mobile</label><input type="text" id="dirContact" required class="w-full px-3 py-2 border rounded-lg text-sm"></div>
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Password</label><input type="text" id="dirPassword" required class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Student password"></div>
-                        <div><label class="block text-xs font-semibold uppercase mb-1">Notes / Enrolled Subjects</label><textarea id="dirNotes" rows="2" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea></div>
-                        <div class="flex space-x-2">
-                            <button type="submit" class="flex-1 bg-indigo-600 text-white font-medium py-2 rounded-lg text-sm">Save Account</button>
-                            <button type="button" id="cancelStudentBtn" onclick="resetStudentForm()" class="hidden bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm">Cancel</button>
-                        </div>
-                    </form>
-                </section>
-                <section class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
-                    <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-users text-indigo-600 mr-2"></i> Registered Student Accounts & Payment Status</h2>
-                    <div id="studentsContainer" class="space-y-4 overflow-y-auto max-h-[600px] flex-grow"></div>
-                </section>
-            </div>
-
-            <!-- TAB 3: PAYMENT SETUP -->
-            <div id="paymentTab" class="hidden max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4"><i class="fa-solid fa-wallet text-indigo-600 mr-2"></i> Configure Bank Transfer & QR Code</h2>
-                <form onsubmit="savePaymentInfo(event)" class="space-y-4 text-xs">
-                    <div><label class="block font-semibold uppercase mb-1">Bank Account / Mobile Wallet Details (Name, Account No)</label><input type="text" id="paymayaDetails" required placeholder="e.g., Bank Name / Account Name / Number" class="w-full p-2.5 border rounded-lg"></div>
-                    <div><label class="block font-semibold uppercase mb-1">Payment Instructions</label><textarea id="worldremitInstructions" rows="3" placeholder="Transfer from any bank directly to our account or scan QR code below." class="w-full p-2.5 border rounded-lg"></textarea></div>
-                    <div><label class="block font-semibold uppercase mb-1">Upload QR Code Image</label><input type="file" id="paymayaQrFile" accept="image/*" class="w-full p-2 border rounded-lg bg-slate-50" onchange="previewQrUpload(event)"></div>
-                    <input type="hidden" id="paymayaQrUrl">
-                    <div id="qrPreviewContainer" class="mt-2"></div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Save Payment Configuration</button>
-                </form>
-            </div>
-
-            <!-- TAB 4: ADMIN CHAT -->
-            <div id="adminChatTab" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-[600px]">
-                <div class="border-r pr-4 overflow-y-auto space-y-2">
-                    <h3 class="font-bold text-sm text-slate-800 mb-3"><i class="fa-solid fa-comments text-indigo-600 mr-2"></i> Student Chats</h3>
-                    <div id="adminChatStudentList" class="space-y-1"></div>
+                            <div><label class="block font-semibold uppercase mb-1">Notes / Homework</label><textarea id="sessionNotes" rows="2" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
+                            <div class="flex space-x-2 pt-2">
+                                <button type="submit" class="flex-1 bg-indigo-600 text-white font-medium py-2 rounded-lg">Save Session</button>
+                                <button type="button" id="cancelSessionBtn" onclick="resetSessionForm()" class="hidden bg-slate-200 text-slate-700 px-3 py-2 rounded-lg">Cancel</button>
+                            </div>
+                        </form>
+                    </section>
+                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col md:col-span-2">
+                        <h2 class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> All Scheduled Classes & Notices</h2>
+                        <div id="sessionsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow text-xs"></div>
+                    </section>
                 </div>
-                <div class="md:col-span-2 flex flex-col h-full">
-                    <h3 id="activeChatStudentTitle" class="font-bold text-sm text-slate-800 mb-3 pb-2 border-b">Select a student</h3>
-                    <div id="adminChatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50 text-xs mb-3"></div>
-                    <form onsubmit="sendAdminChatMessage(event)" class="flex gap-2">
-                        <input type="text" id="adminChatInputMessage" required placeholder="Type reply to student..." class="flex-grow p-2 border rounded text-xs">
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded font-medium text-xs">Send</button>
+
+                <!-- TAB 2: REGISTERED ACCOUNTS & PAYMENT CREDITS -->
+                <div id="studentsTab" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit md:col-span-1">
+                        <h2 id="studentFormTitle" class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-user-plus text-indigo-600 mr-2"></i> Add / Edit Student Account</h2>
+                        <form id="studentForm" class="space-y-4 text-xs" onsubmit="saveStudentDirect(event)">
+                            <input type="hidden" id="dirStudentId">
+                            <div><label class="block font-semibold uppercase mb-1">Full Name</label><input type="text" id="dirStudentName" required class="w-full px-3 py-2 border rounded-lg"></div>
+                            <div><label class="block font-semibold uppercase mb-1">Parent/Guardian</label><input type="text" id="dirParentName" class="w-full px-3 py-2 border rounded-lg"></div>
+                            <div><label class="block font-semibold uppercase mb-1">Email or Mobile</label><input type="text" id="dirContact" required class="w-full px-3 py-2 border rounded-lg"></div>
+                            <div><label class="block font-semibold uppercase mb-1">Password</label><input type="text" id="dirPassword" required class="w-full px-3 py-2 border rounded-lg"></div>
+                            <div><label class="block font-semibold uppercase mb-1">Notes / Program</label><textarea id="dirNotes" rows="2" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
+                            <div class="flex space-x-2">
+                                <button type="submit" class="flex-1 bg-indigo-600 text-white font-medium py-2 rounded-lg">Save Account</button>
+                                <button type="button" id="cancelStudentBtn" onclick="resetStudentForm()" class="hidden bg-slate-200 text-slate-700 px-3 py-2 rounded-lg">Cancel</button>
+                            </div>
+                        </form>
+                    </section>
+                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col md:col-span-2">
+                        <h2 class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-users text-indigo-600 mr-2"></i> Accounts, Total Payments Received & Lessons Left</h2>
+                        <div id="studentsContainer" class="space-y-4 overflow-y-auto max-h-[600px] flex-grow text-xs"></div>
+                    </section>
+                </div>
+
+                <!-- TAB 3: PAYMENT SETUP -->
+                <div id="paymentTab" class="hidden max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h2 class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-wallet text-indigo-600 mr-2"></i> Configure Bank Transfer & QR Code</h2>
+                    <form onsubmit="savePaymentInfo(event)" class="space-y-4 text-xs">
+                        <div><label class="block font-semibold uppercase mb-1">Bank Account / Mobile Wallet Details (Name, Account No)</label><input type="text" id="paymayaDetails" required placeholder="e.g., Bank Name / Account Name / Number" class="w-full p-2.5 border rounded-lg"></div>
+                        <div><label class="block font-semibold uppercase mb-1">Payment Instructions</label><textarea id="worldremitInstructions" rows="3" class="w-full p-2.5 border rounded-lg"></textarea></div>
+                        <div><label class="block font-semibold uppercase mb-1">Upload QR Code Image</label><input type="file" id="paymayaQrFile" accept="image/*" class="w-full p-2 border rounded-lg bg-slate-50" onchange="previewQrUpload(event)"></div>
+                        <input type="hidden" id="paymayaQrUrl">
+                        <div id="qrPreviewContainer" class="mt-2"></div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Save Configuration</button>
                     </form>
                 </div>
+
+                <!-- TAB 4: ADMIN CHAT -->
+                <div id="adminChatTab" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-[600px]">
+                    <div class="border-r pr-4 overflow-y-auto space-y-2">
+                        <h3 class="font-bold text-sm text-slate-800 mb-3"><i class="fa-solid fa-comments text-indigo-600 mr-2"></i> Student Chats</h3>
+                        <div id="adminChatStudentList" class="space-y-1"></div>
+                    </div>
+                    <div class="md:col-span-2 flex flex-col h-full">
+                        <h3 id="activeChatStudentTitle" class="font-bold text-sm text-slate-800 mb-3 pb-2 border-b">Select a student</h3>
+                        <div id="adminChatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50 text-xs mb-3"></div>
+                        <form onsubmit="sendAdminChatMessage(event)" class="flex gap-2">
+                            <input type="text" id="adminChatInputMessage" required placeholder="Type reply..." class="flex-grow p-2 border rounded text-xs">
+                            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded font-medium text-xs">Send</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- TAB 5: COMMUNITY WALL -->
+                <div id="adminCommentsTab" class="hidden max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
+                    <h2 class="text-base font-bold text-slate-900"><i class="fa-solid fa-comments text-indigo-600 mr-2"></i> Community Wall Moderation</h2>
+                    <div id="adminCommentsContainer" class="space-y-4 text-xs"></div>
+                </div>
+
+                <!-- TAB 6: ADMIN PROFILE EDIT -->
+                <div id="adminProfileTab" class="hidden max-w-xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4 text-xs">
+                    <h2 class="text-base font-bold text-slate-900"><i class="fa-solid fa-user-gear text-indigo-600 mr-2"></i> Edit Admin Profile & Photo</h2>
+                    <form onsubmit="saveAdminProfile(event)" class="space-y-3">
+                        <div><label class="block font-semibold uppercase mb-1">Teacher Display Name</label><input type="text" id="profileNameInput" required class="w-full p-2 border rounded"></div>
+                        <div><label class="block font-semibold uppercase mb-1">Teacher Bio / About Description</label><textarea id="profileBioInput" rows="4" class="w-full p-2 border rounded"></textarea></div>
+                        <div><label class="block font-semibold uppercase mb-1">Upload Profile Picture</label><input type="file" id="profileAvatarFile" accept="image/*" class="w-full p-2 border rounded bg-slate-50" onchange="previewAvatarUpload(event)"></div>
+                        <input type="hidden" id="profileAvatarUrl">
+                        <div id="avatarPreviewContainer" class="mt-2"></div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded">Save Profile Settings</button>
+                    </form>
+                </div>
             </div>
 
-            <!-- TAB 5: ADMIN COMMUNITY WALL MANAGEMENT -->
-            <div id="adminCommentsTab" class="hidden max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
-                <h2 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-comments text-indigo-600 mr-2"></i> Community Wall Moderation & Management</h2>
-                <div id="adminCommentsContainer" class="space-y-4"></div>
+            <!-- RIGHT COLUMN: CALENDAR WIDGET & BULLETIN BOARD (ADS) -->
+            <div class="space-y-6">
+                <!-- Mini Calendar Widget -->
+                <div class="bg-white rounded-xl shadow-sm border p-4 space-y-3">
+                    <div class="flex justify-between items-center font-bold text-sm text-indigo-900 border-b pb-2">
+                        <span id="calendarMonthYear"></span>
+                        <div class="space-x-1">
+                            <button onclick="changeMonth(-1)" class="px-2 py-0.5 bg-slate-100 rounded hover:bg-slate-200">&lt;</button>
+                            <button onclick="changeMonth(1)" class="px-2 py-0.5 bg-slate-100 rounded hover:bg-slate-200">&gt;</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400">
+                        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                    </div>
+                    <div id="miniCalendarDays" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
+                </div>
+
+                <!-- Bulletin Board / Ads Widget -->
+                <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-xl shadow-sm p-5 space-y-3">
+                    <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Bulletin Board</h3>
+                    <div class="space-y-2 text-xs text-indigo-100">
+                        <div class="bg-white/10 p-2.5 rounded border border-white/10">
+                            <strong>📌 Reminders:</strong> Please check student payment credits before confirming slots.
+                        </div>
+                        <div class="bg-white/10 p-2.5 rounded border border-white/10">
+                            <strong>⭐ Promo Active:</strong> Recommend comprehensive math bundles for grade 4-6 students!
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -367,60 +421,122 @@
         <header class="bg-emerald-600 text-white shadow-md">
             <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-white text-emerald-600 p-2 rounded-lg font-bold text-xl"><i class="fa-solid fa-book-open"></i></div>
+                    <div class="bg-white text-emerald-600 w-10 h-10 rounded-lg font-bold text-xl flex items-center justify-center overflow-hidden shadow" id="studentHeaderAvatar">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
                     <div>
                         <h1 class="text-lg font-bold" id="studentWelcomeTitle">Student Portal</h1>
-                        <p class="text-xs text-emerald-200">Your schedule & support hub</p>
+                        <p class="text-xs text-emerald-200">Time (PH): <span id="studentLiveClock" class="font-mono"></span></p>
                     </div>
                 </div>
-                <div class="flex bg-emerald-700/60 p-1 rounded-lg text-xs">
-                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all">Schedule</button>
+                <div class="flex bg-emerald-700/60 p-1 rounded-lg text-xs flex-wrap gap-1">
+                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all">Schedule & Book</button>
                     <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Lessons & Recordings</button>
-                    <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Tuition Payment</button>
+                    <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Payments & Packages</button>
                     <button onclick="switchStudentTab('chat')" id="stdNavChat" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Support Chat</button>
                 </div>
-                <button onclick="studentLogout()" class="bg-emerald-700 hover:bg-emerald-800 text-emerald-100 px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-right-from-bracket"></i> Exit to Home</button>
+                <button onclick="studentLogout()" class="bg-emerald-700 hover:bg-emerald-800 text-emerald-100 px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-right-from-bracket"></i> Exit</button>
             </div>
         </header>
 
         <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
-            <div id="studentScheduleView" class="space-y-4">
-                <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-md font-bold text-slate-800 mb-4"><i class="fa-solid fa-calendar-days text-emerald-600 mr-2"></i> Upcoming Sessions</h2>
+            <!-- TAB 1: SCHEDULE & AUTO PURCHASE BOOKING -->
+            <div id="studentScheduleView" class="space-y-4 text-xs">
+                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center bg-emerald-50 p-3 rounded-lg border border-emerald-200">
+                        <div>
+                            <span class="text-emerald-900 font-bold text-sm">Available Session Credits: <span id="studentCreditCount" class="text-emerald-700 text-base">0</span></span>
+                            <p class="text-[11px] text-slate-500">You can pick and book your lessons instantly using your available session credits.</p>
+                        </div>
+                        <button onclick="switchStudentTab('payment')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded font-bold shadow"><i class="fa-solid fa-cart-plus mr-1"></i> Buy Session Package</button>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 border rounded-xl space-y-3">
+                        <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-calendar-check text-emerald-600 mr-2"></i> Pick & Book a Lesson / Session</h3>
+                        <form onsubmit="studentBookSession(event)" class="space-y-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div><label class="block font-semibold uppercase mb-1">Select Program / Subject</label>
+                                    <select id="bookSubject" required class="w-full p-2 border rounded bg-white">
+                                        <option value="Reading Program">📖 Reading Program (₱250)</option>
+                                        <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
+                                        <option value="Math (Grade 4-6 Standard)">🔢 Math (Grade 4-6 Standard 25m) (₱250)</option>
+                                        <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive 50m) (₱500)</option>
+                                        <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
+                                    </select>
+                                </div>
+                                <div><label class="block font-semibold uppercase mb-1">Preferred Date</label><input type="date" id="bookDate" required class="w-full p-2 border rounded"></div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div><label class="block font-semibold uppercase mb-1">Time Slot</label><input type="text" id="bookSlot" required placeholder="e.g. 3:00 - 4:00 PM" class="w-full p-2 border rounded"></div>
+                                <div class="flex items-end"><button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded">Book Lesson (Deduct 1 Credit)</button></div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <h2 class="text-sm font-bold text-slate-800 pt-2"><i class="fa-solid fa-calendar-days text-emerald-600 mr-2"></i> Your Booked Upcoming Sessions</h2>
                     <div id="studentPortalSessions" class="space-y-3"></div>
                 </div>
             </div>
-            <div id="studentHistoryView" class="hidden space-y-4">
+
+            <!-- TAB 2: LESSON HISTORY & RECORDINGS -->
+            <div id="studentHistoryView" class="hidden space-y-4 text-xs">
                 <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-md font-bold text-slate-800 mb-4"><i class="fa-solid fa-clock-rotate-left text-emerald-600 mr-2"></i> Lesson History & Recordings</h2>
+                    <h2 class="text-sm font-bold text-slate-800 mb-4"><i class="fa-solid fa-clock-rotate-left text-emerald-600 mr-2"></i> Lesson History & Recordings</h2>
                     <div id="studentPortalHistory" class="space-y-3"></div>
                 </div>
             </div>
-            <div id="studentPaymentView" class="hidden space-y-6">
+
+            <!-- TAB 3: PAYMENTS & AUTOMATIC BUNDLE PURCHASE -->
+            <div id="studentPaymentView" class="hidden space-y-6 text-xs">
+                <!-- Package Purchase Section -->
+                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                    <h2 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-bag-shopping text-emerald-600 mr-2"></i> Purchase Session Bundles Automatically</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="border rounded-xl p-4 bg-emerald-50/50 space-y-2 text-center">
+                            <h3 class="font-bold text-emerald-900">Starter Pack</h3>
+                            <p class="text-lg font-extrabold text-emerald-700">₱1,000</p>
+                            <p class="text-[11px] text-slate-500">4 Session Credits (₱250 rate)</p>
+                            <button onclick="autoPurchaseBundle('Starter Pack (4 Sessions)', 1000, 4)" class="w-full bg-emerald-600 text-white py-2 rounded font-bold">Buy Now</button>
+                        </div>
+                        <div class="border-2 border-emerald-600 rounded-xl p-4 bg-emerald-50 space-y-2 text-center shadow-sm">
+                            <span class="bg-emerald-600 text-white text-[9px] px-2 py-0.5 rounded-full uppercase font-bold">Popular</span>
+                            <h3 class="font-bold text-emerald-900">Monthly Bundle</h3>
+                            <p class="text-lg font-extrabold text-emerald-700">₱2,500</p>
+                            <p class="text-[11px] text-slate-500">10 Session Credits</p>
+                            <button onclick="autoPurchaseBundle('Monthly Bundle (10 Sessions)', 2500, 10)" class="w-full bg-emerald-600 text-white py-2 rounded font-bold">Buy Now</button>
+                        </div>
+                        <div class="border rounded-xl p-4 bg-emerald-50/50 space-y-2 text-center">
+                            <h3 class="font-bold text-emerald-900">Intensive Pack</h3>
+                            <p class="text-lg font-extrabold text-emerald-700">₱5,000</p>
+                            <p class="text-[11px] text-slate-500">20 Session Credits</p>
+                            <button onclick="autoPurchaseBundle('Intensive Pack (20 Sessions)', 5000, 20)" class="w-full bg-emerald-600 text-white py-2 rounded font-bold">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-md font-bold text-slate-800 mb-4"><i class="fa-solid fa-money-bill-transfer text-emerald-600 mr-2"></i> Tuition Payment Info & QR Code</h2>
-                    <div id="studentPaymentInfo" class="text-xs text-slate-600 space-y-3"></div>
+                    <h2 class="text-sm font-bold text-slate-800 mb-4"><i class="fa-solid fa-money-bill-transfer text-emerald-600 mr-2"></i> Tuition Payment Info & QR Code</h2>
+                    <div id="studentPaymentInfo" class="text-slate-600 space-y-3"></div>
                 </div>
                 <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-md font-bold text-slate-800 mb-4"><i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference & Upload Receipt Photo</h2>
-                    <form onsubmit="submitPaymentProof(event)" class="space-y-3 text-xs">
+                    <h2 class="text-sm font-bold text-slate-800 mb-4"><i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference & Upload Receipt</h2>
+                    <form onsubmit="submitPaymentProof(event)" class="space-y-3">
                         <div><label class="block font-semibold uppercase mb-1">Reference Number / Transaction ID</label><input type="text" id="payRefNumber" required placeholder="e.g., TXN-987654" class="w-full p-2 border rounded"></div>
-                        <div><label class="block font-semibold uppercase mb-1">Amount Sent & Remarks</label><input type="text" id="payAmount" required placeholder="e.g., PHP 2,800 for Math & Reading" class="w-full p-2 border rounded"></div>
-                        <div>
-                            <label class="block font-semibold uppercase mb-1">Upload Receipt Photo</label>
-                            <input type="file" id="payReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewReceiptUpload(event)">
-                        </div>
+                        <div><label class="block font-semibold uppercase mb-1">Amount Sent & Remarks</label><input type="text" id="payAmount" required placeholder="e.g., PHP 2,500 for Monthly Bundle" class="w-full p-2 border rounded"></div>
+                        <div><label class="block font-semibold uppercase mb-1">Upload Receipt Photo</label><input type="file" id="payReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewReceiptUpload(event)"></div>
                         <input type="hidden" id="payReceiptUrl">
                         <div id="receiptPreviewContainer"></div>
-                        <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium">Send Payment Proof to Teacher</button>
+                        <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium">Send Payment Proof</button>
                     </form>
                     <div id="studentPaymentHistoryList" class="mt-4 pt-4 border-t space-y-2"></div>
                 </div>
             </div>
-            <div id="studentChatView" class="hidden space-y-4">
+
+            <!-- TAB 4: SUPPORT CHAT -->
+            <div id="studentChatView" class="hidden space-y-4 text-xs">
                 <div class="bg-white border rounded-xl p-6 shadow-sm flex flex-col h-[500px]">
-                    <h2 class="text-md font-bold text-slate-800 mb-3"><i class="fa-solid fa-comments text-emerald-600 mr-2"></i> Direct Chat with Tutor</h2>
-                    <div id="chatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50 text-xs"></div>
+                    <h2 class="text-sm font-bold text-slate-800 mb-3"><i class="fa-solid fa-comments text-emerald-600 mr-2"></i> Direct Chat with Tutor</h2>
+                    <div id="chatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50"></div>
                     <form onsubmit="sendChatMessage(event)" class="mt-3 flex gap-2">
                         <input type="text" id="chatInputMessage" required placeholder="Type message..." class="flex-grow p-2 border rounded text-xs">
                         <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium text-xs">Send</button>
@@ -435,10 +551,7 @@
         <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
             <h3 class="font-bold text-slate-800 text-sm">Request Class Cancellation</h3>
             <input type="hidden" id="cancelSessionId">
-            <div>
-                <label class="block font-semibold uppercase mb-1">Reason for Cancellation</label>
-                <textarea id="cancelReason" rows="3" placeholder="State reason for canceling class..." class="w-full p-2 border rounded"></textarea>
-            </div>
+            <div><label class="block font-semibold uppercase mb-1">Reason for Cancellation</label><textarea id="cancelReason" rows="3" class="w-full p-2 border rounded"></textarea></div>
             <div class="flex space-x-2 pt-2">
                 <button onclick="sendClassCancellation()" class="flex-1 bg-rose-600 text-white py-2 rounded font-bold">Submit Cancellation</button>
                 <button onclick="closeCancelClassModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Close</button>
@@ -448,25 +561,20 @@
 
     <div id="teacherAbsentModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> Tag Teacher Absence / Emergency</h3>
+            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> Tag Teacher Absence</h3>
             <input type="hidden" id="teacherAbsentSessionId">
-            <div>
-                <label class="block font-semibold uppercase mb-1">Reason / Message to Student</label>
-                <textarea id="teacherAbsentReason" rows="4" placeholder="e.g., Sorry, Teacher Ann has an emergency and cannot attend today. We will reschedule this session." class="w-full p-2 border rounded"></textarea>
-            </div>
+            <div><label class="block font-semibold uppercase mb-1">Reason / Message</label><textarea id="teacherAbsentReason" rows="4" class="w-full p-2 border rounded"></textarea></div>
             <div class="flex space-x-2 pt-2">
-                <button onclick="saveTeacherAbsentNotice()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-2 rounded font-bold">Save & Notify Student</button>
+                <button onclick="saveTeacherAbsentNotice()" class="flex-1 bg-amber-600 text-white py-2 rounded font-bold">Save & Notify</button>
                 <button onclick="closeTeacherAbsentModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal for viewing image / receipt -->
     <div id="imageModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4" onclick="closeImageModal()">
         <div class="bg-white rounded-xl p-4 max-w-lg w-full text-center space-y-3">
             <h3 class="font-bold text-slate-800 text-sm">Image Preview</h3>
             <img id="modalImageDisplay" src="" class="max-h-[400px] mx-auto object-contain border rounded" alt="Preview">
-            <p class="text-[10px] text-slate-400">Click anywhere to close</p>
         </div>
     </div>
 
@@ -477,8 +585,58 @@
         let allSessions = [];
         let allStudentsCache = [];
         let isAdminLoggedIn = false;
+        let currentCalendarDate = new Date();
 
-        window.addEventListener('DOMContentLoaded', () => { loadPublicComments(); });
+        window.addEventListener('DOMContentLoaded', () => { 
+            loadPublicComments(); 
+            startLiveClocks();
+            renderMiniCalendar();
+            loadAdminProfileDisplay();
+        });
+
+        // Live PH Time Clocks
+        function startLiveClocks() {
+            setInterval(() => {
+                const now = new Date();
+                const options = { timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
+                if(document.getElementById('adminLiveClock')) document.getElementById('adminLiveClock').textContent = timeString + ' (PH Time)';
+                if(document.getElementById('studentLiveClock')) document.getElementById('studentLiveClock').textContent = timeString + ' (PH Time)';
+            }, 1000);
+        }
+
+        // Mini Calendar Widget
+        function renderMiniCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            if(document.getElementById('calendarMonthYear')) {
+                document.getElementById('calendarMonthYear').textContent = `${monthNames[month]} ${year}`;
+            }
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const container = document.getElementById('miniCalendarDays');
+            if(!container) return;
+
+            container.innerHTML = '';
+            for(let i=0; i<firstDayIndex; i++) {
+                container.innerHTML += `<span></span>`;
+            }
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            for(let day=1; day<=totalDays; day++) {
+                const formattedDate = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = formattedDate === todayStr ? 'bg-indigo-600 text-white font-bold rounded-full' : 'hover:bg-slate-100 rounded';
+                container.innerHTML += `<span class="py-1 text-slate-700 ${isToday}">${day}</span>`;
+            }
+        }
+
+        function changeMonth(direction) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
+            renderMiniCalendar();
+        }
 
         // Navigation Modals
         function scrollToEnroll() { document.getElementById('enroll').scrollIntoView({ behavior: 'smooth' }); }
@@ -487,7 +645,6 @@
         function openAdminLoginModal() { document.getElementById('adminLoginModal').classList.remove('hidden'); }
         function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
 
-        // Public Enrollment
         async function handlePublicEnrollment(e) {
             e.preventDefault();
             const name = document.getElementById('enrollStudentName').value.trim();
@@ -496,16 +653,16 @@
             const password = document.getElementById('enrollPassword').value.trim();
             const subject = document.getElementById('enrollSubject').value;
 
-            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile: contact, password, notes: `Enrolled in: ${subject}` }]);
+            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile: contact, password, notes: `Program: ${subject}` }]);
             if (error) { alert("Enrollment error: " + error.message); return; }
-            alert("Enrollment & account registration successful! You can now click 'Student Sign In' using your name and password.");
+            alert("Enrollment & account registration successful! You can now sign in.");
             document.getElementById('enrollStudentName').value = '';
             document.getElementById('enrollParentName').value = '';
             document.getElementById('enrollContact').value = '';
             document.getElementById('enrollPassword').value = '';
         }
 
-        // ================= PUBLIC COMMENTS & CONDITIONAL DELETION =================
+        // Public Comments & Conditional Deletion
         async function submitPublicComment(e) {
             e.preventDefault();
             const name = document.getElementById('visitorName').value.trim();
@@ -524,14 +681,13 @@
             const container = document.getElementById('publicCommentsContainer');
             if (!container) return;
 
-            const { data: comments, error } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
+            const { data: comments } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
             const { data: students } = await _supabase.from('students').select('name');
             const registeredNames = students ? students.map(s => s.name.toLowerCase()) : [];
 
             container.innerHTML = '';
-
-            if (error || !comments || comments.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No comments yet. Be the first to leave a message!</p>`;
+            if (!comments || comments.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No comments yet.</p>`;
                 return;
             }
 
@@ -539,33 +695,19 @@
                 let repliesHtml = '';
                 if (c.replies && Array.isArray(c.replies)) {
                     c.replies.forEach(r => {
-                        repliesHtml += `
-                            <div class="mt-2 ml-4 p-2.5 bg-indigo-50/70 border-l-2 border-indigo-600 rounded text-xs space-y-1">
-                                <div class="flex justify-between font-bold text-indigo-900">
-                                    <span>${r.name} <span class="bg-indigo-600 text-white text-[9px] px-1.5 py-0.5 rounded ml-1 font-semibold uppercase tracking-wider">ADMIN</span></span>
-                                    <span class="text-[10px] text-indigo-400 font-normal">${r.date}</span>
-                                </div>
-                                <p class="text-slate-700">${r.message}</p>
-                            </div>`;
+                        repliesHtml += `<div class="mt-2 ml-4 p-2 bg-indigo-50 border-l-2 border-indigo-600 rounded text-xs"><strong>${r.name} [ADMIN]:</strong> ${r.message}</div>`;
                     });
                 }
-
                 const isRegistered = registeredNames.includes(c.name.trim().toLowerCase());
-                const showDeleteBtn = (isRegistered || isAdminLoggedIn);
-
-                const deleteButtonHtml = showDeleteBtn 
-                    ? `<button onclick="promptDeleteComment(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="text-rose-500 hover:text-rose-700 text-[11px]" title="Delete Comment"><i class="fa-solid fa-trash"></i> Delete</button>`
-                    : '';
+                const deleteBtn = (isRegistered || isAdminLoggedIn) ? `<button onclick="promptDeleteComment(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="text-rose-500"><i class="fa-solid fa-trash"></i> Delete</button>` : '';
 
                 container.innerHTML += `
                     <div class="p-4 bg-white border rounded-xl shadow-sm text-xs space-y-2">
-                        <div class="flex justify-between items-start font-bold text-slate-900">
-                            <div><i class="fa-solid fa-user-circle text-emerald-600 mr-1.5"></i>${c.name} <span class="text-[10px] font-normal text-slate-400 ml-1">${c.date}</span></div>
-                            <div class="flex items-center gap-2">
-                                ${deleteButtonHtml}
-                            </div>
+                        <div class="flex justify-between font-bold text-slate-900">
+                            <div>${c.name} <span class="text-[10px] text-slate-400 font-normal">${c.date}</span></div>
+                            ${deleteBtn}
                         </div>
-                        <p class="text-slate-700 leading-relaxed">${c.message}</p>
+                        <p class="text-slate-700">${c.message}</p>
                         ${repliesHtml}
                     </div>`;
             });
@@ -573,106 +715,35 @@
 
         async function promptDeleteComment(id, authorName) {
             if (isAdminLoggedIn) {
-                if (confirm(`Admin action: Delete comment by "${authorName}"?`)) {
-                    const { error } = await _supabase.from('community_comments').delete().eq('id', id);
-                    if (error) { alert("Error: " + error.message); return; }
-                    loadPublicComments();
-                    if (!document.getElementById('adminCommentsTab').classList.contains('hidden')) loadAdminCommunityComments();
-                    alert("Comment deleted by Admin.");
-                }
+                await _supabase.from('community_comments').delete().eq('id', id);
+                loadPublicComments();
+                if (!document.getElementById('adminCommentsTab').classList.contains('hidden')) loadAdminCommunityComments();
                 return;
             }
-
-            const enteredPassword = prompt(`To delete this comment by "${authorName}", please enter the registered account password for this name:`);
-            if (enteredPassword === null) return;
-
-            const { data: studentData, error } = await _supabase.from('students').select('*').ilike('name', authorName);
-            if (error || !studentData || studentData.length === 0) {
-                alert("Deletion restricted: Only registered users can delete comments using their account password.");
+            const enteredPassword = prompt(`Enter account password for "${authorName}" to delete comment:`);
+            if (!enteredPassword) return;
+            const { data: studentData } = await _supabase.from('students').select('*').ilike('name', authorName);
+            if (!studentData || studentData.length === 0 || studentData[0].password !== enteredPassword) {
+                alert("Incorrect password!");
                 return;
             }
-
-            const student = studentData[0];
-            if (student.password !== enteredPassword) {
-                alert("Incorrect account password! You can only delete comments matching your registered account credentials.");
-                return;
-            }
-
-            const { error: deleteError } = await _supabase.from('community_comments').delete().eq('id', id);
-            if (deleteError) { alert("Error deleting comment: " + deleteError.message); return; }
+            await _supabase.from('community_comments').delete().eq('id', id);
             loadPublicComments();
-            alert("Comment deleted successfully.");
         }
 
         async function loadAdminCommunityComments() {
             const container = document.getElementById('adminCommentsContainer');
             if (!container) return;
-
-            const { data: comments, error } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
+            const { data: comments } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
             container.innerHTML = '';
-
-            if (error || !comments || comments.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No comments on the Community Wall yet.</p>`;
-                return;
-            }
-
+            if (!comments || comments.length === 0) { container.innerHTML = `<p class="text-slate-400">No comments.</p>`; return; }
             comments.forEach(c => {
-                let repliesHtml = '';
-                if (c.replies && Array.isArray(c.replies)) {
-                    c.replies.forEach(r => {
-                        repliesHtml += `
-                            <div class="mt-2 ml-4 p-2 bg-indigo-50 border-l-2 border-indigo-600 rounded text-xs space-y-1">
-                                <div class="flex justify-between font-bold text-indigo-900">
-                                    <span>${r.name} <span class="bg-indigo-600 text-white text-[9px] px-1.5 py-0.5 rounded ml-1 uppercase">ADMIN</span></span>
-                                    <span class="text-[10px] text-indigo-400">${r.date}</span>
-                                </div>
-                                <p class="text-slate-700">${r.message}</p>
-                            </div>`;
-                    });
-                }
-
                 container.innerHTML += `
-                    <div class="p-4 bg-slate-50 border rounded-xl text-xs space-y-3">
-                        <div class="flex justify-between items-start font-bold text-slate-900">
-                            <div><i class="fa-solid fa-user-circle text-indigo-600 mr-1.5"></i>${c.name} <span class="text-[10px] font-normal text-slate-400 ml-1">${c.date}</span></div>
-                            <button onclick="promptDeleteComment(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="text-rose-600 hover:text-rose-800 font-semibold"><i class="fa-solid fa-trash mr-1"></i> Delete Comment</button>
-                        </div>
-                        <p class="text-slate-700 leading-relaxed">${c.message}</p>
-                        
-                        ${repliesHtml}
-
-                        <div class="mt-3 pt-3 border-t">
-                            <form onsubmit="submitAdminCommentReply(event, ${c.id})" class="flex gap-2">
-                                <input type="text" id="adminWallReplyInput-${c.id}" required placeholder="Reply as ADMIN..." class="flex-grow p-2 border rounded text-xs bg-white">
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded font-medium text-xs">Reply [ADMIN]</button>
-                            </form>
-                        </div>
+                    <div class="p-3 bg-slate-50 border rounded space-y-2">
+                        <div class="flex justify-between font-bold"><span>${c.name}</span><button onclick="promptDeleteComment(${c.id}, '${c.name}')" class="text-rose-600">Delete</button></div>
+                        <p>${c.message}</p>
                     </div>`;
             });
-        }
-
-        async function submitAdminCommentReply(e, commentId) {
-            e.preventDefault();
-            const inputEl = document.getElementById(`adminWallReplyInput-${commentId}`);
-            const replyMsg = inputEl.value.trim();
-            if (!replyMsg) return;
-
-            const { data } = await _supabase.from('community_comments').select('replies').eq('id', commentId).single();
-            let currentReplies = data && data.replies ? data.replies : [];
-
-            currentReplies.push({
-                name: 'Teacher Ann',
-                message: replyMsg,
-                date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            });
-
-            const { error } = await _supabase.from('community_comments').update({ replies: currentReplies }).eq('id', commentId);
-            if (error) { alert("Error sending reply: " + error.message); return; }
-
-            inputEl.value = '';
-            loadAdminCommunityComments();
-            loadPublicComments();
-            alert("Admin reply posted successfully!");
         }
 
         async function handleStudentLogin(e) {
@@ -680,25 +751,20 @@
             const name = document.getElementById('studentLoginName').value.trim();
             const password = document.getElementById('studentLoginPass').value.trim();
 
-            const { data, error } = await _supabase.from('students').select('*').ilike('name', name);
-            if (error || !data || data.length === 0) {
-                alert("Student name not found. Please enroll first.");
+            const { data } = await _supabase.from('students').select('*').ilike('name', name);
+            if (!data || data.length === 0 || data[0].password !== password) {
+                alert("Invalid student name or password.");
                 return;
             }
 
-            const student = data[0];
-            if (student.password && student.password !== password) {
-                alert("Incorrect password. Please check your credentials.");
-                return;
-            }
-
-            currentStudentName = student.name;
+            currentStudentName = data[0].name;
             closeStudentLoginModal();
             document.getElementById('publicLandingPage').classList.add('hidden');
             document.getElementById('studentAppContainer').classList.remove('hidden');
             document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${currentStudentName}!`;
             loadStudentPortal(currentStudentName);
             loadChatMessages(currentStudentName);
+            loadStudentAvatarDisplay();
         }
 
         async function handleAdminAuth(e) {
@@ -720,8 +786,8 @@
         function studentLogout() { location.reload(); }
 
         function switchTab(tab) {
-            ['scheduleTab', 'studentsTab', 'paymentTab', 'adminChatTab', 'adminCommentsTab'].forEach(t => document.getElementById(t).classList.add('hidden'));
-            ['navScheduleBtn', 'navStudentsBtn', 'navPaymentBtn', 'navAdminChatBtn', 'navAdminCommentsBtn'].forEach(b => {
+            ['scheduleTab', 'studentsTab', 'paymentTab', 'adminChatTab', 'adminCommentsTab', 'adminProfileTab'].forEach(t => document.getElementById(t).classList.add('hidden'));
+            ['navScheduleBtn', 'navStudentsBtn', 'navPaymentBtn', 'navAdminChatBtn', 'navAdminCommentsBtn', 'navAdminProfileBtn'].forEach(b => {
                 if(document.getElementById(b)) document.getElementById(b).className = "px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all";
             });
 
@@ -730,56 +796,150 @@
             else if (tab === 'payment') { document.getElementById('paymentTab').classList.remove('hidden'); document.getElementById('navPaymentBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadPaymentConfig(); }
             else if (tab === 'adminChat') { document.getElementById('adminChatTab').classList.remove('hidden'); document.getElementById('navAdminChatBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadAdminChatStudentsList(); }
             else if (tab === 'adminComments') { document.getElementById('adminCommentsTab').classList.remove('hidden'); document.getElementById('navAdminCommentsBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadAdminCommunityComments(); }
+            else if (tab === 'adminProfile') { document.getElementById('adminProfileTab').classList.remove('hidden'); document.getElementById('navAdminProfileBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; }
         }
 
         function switchStudentTab(tab) {
             ['studentScheduleView', 'studentHistoryView', 'studentPaymentView', 'studentChatView'].forEach(t => document.getElementById(t).classList.add('hidden'));
             ['stdNavSchedule', 'stdNavHistory', 'stdNavPayment', 'stdNavChat'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all");
 
-            if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; }
+            if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadStudentPortal(currentStudentName); }
             else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; }
-            else if (tab === 'payment') { 
-                document.getElementById('studentPaymentView').classList.remove('hidden'); 
-                document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; 
-                loadStudentPaymentInfo(); 
-            }
+            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadStudentPaymentInfo(); }
             else if (tab === 'chat') { document.getElementById('studentChatView').classList.remove('hidden'); document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadChatMessages(currentStudentName); }
         }
 
-        function openChatWithStudent(studentName) {
-            switchTab('adminChat');
-            selectAdminChatStudent(studentName);
+        // Profile Picture & Admin Settings
+        function previewAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileAvatarUrl').value = e.target.result;
+                document.getElementById('avatarPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-20 h-20 object-cover rounded-full border mt-1">`;
+            };
+            reader.readAsDataURL(file);
         }
 
-        async function pingStudentPayment(studentName) {
-            const reminderMsg = "Hello! This is a gentle reminder regarding your tuition payment. Please let me know if you are having any trouble or if you need assistance with the bank QR code.";
-            await _supabase.from('chat_messages').insert([{ student_name: studentName, sender: 'admin', message: reminderMsg, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
-            alert(`Payment reminder ping sent to ${studentName}!`);
-            openChatWithStudent(studentName);
+        async function saveAdminProfile(e) {
+            e.preventDefault();
+            const name = document.getElementById('profileNameInput').value.trim();
+            const bio = document.getElementById('profileBioInput').value.trim();
+            const avatar = document.getElementById('profileAvatarUrl').value.trim();
+
+            const profileObj = { name, bio, avatar };
+            localStorage.setItem('tutor_admin_profile', JSON.stringify(profileObj));
+            alert("Admin profile updated successfully!");
+            loadAdminProfileDisplay();
         }
 
-        // Multiple Schedule Slots Handler
+        function loadAdminProfileDisplay() {
+            const saved = JSON.parse(localStorage.getItem('tutor_admin_profile'));
+            if(saved) {
+                if(saved.name) {
+                    document.getElementById('adminHeaderName').textContent = saved.name;
+                    if(document.getElementById('landingAboutTitle')) document.getElementById('landingAboutTitle').textContent = `Welcome to ${saved.name}'s Learning Hub`;
+                }
+                if(saved.bio && document.getElementById('landingAboutBio')) document.getElementById('landingAboutBio').textContent = saved.bio;
+                if(document.getElementById('profileNameInput')) document.getElementById('profileNameInput').value = saved.name || '';
+                if(document.getElementById('profileBioInput')) document.getElementById('profileBioInput').value = saved.bio || '';
+                if(saved.avatar) {
+                    if(document.getElementById('adminHeaderAvatar')) document.getElementById('adminHeaderAvatar').innerHTML = `<img src="${saved.avatar}" class="w-full h-full object-cover">`;
+                    if(document.getElementById('navBrandAvatar')) document.getElementById('navBrandAvatar').innerHTML = `<img src="${saved.avatar}" class="w-full h-full object-cover">`;
+                    if(document.getElementById('studentHeaderAvatar')) document.getElementById('studentHeaderAvatar').innerHTML = `<img src="${saved.avatar}" class="w-full h-full object-cover">`;
+                }
+            }
+        }
+
+        async function loadStudentAvatarDisplay() {
+            const saved = JSON.parse(localStorage.getItem('tutor_admin_profile'));
+            if(saved && saved.avatar && document.getElementById('studentHeaderAvatar')) {
+                document.getElementById('studentHeaderAvatar').innerHTML = `<img src="${saved.avatar}" class="w-full h-full object-cover">`;
+            }
+        }
+
+        // Automatic Package Purchase (Adds Credits)
+        async function autoPurchaseBundle(packageName, amount, credits) {
+            const ref = 'AUTO-' + Math.floor(100000 + Math.random() * 900000);
+            const date = new Date().toLocaleDateString();
+            
+            await _supabase.from('payment_history').insert([{
+                student_name: currentStudentName,
+                ref,
+                amount: `₱${amount} (${packageName})`,
+                receipt_url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400',
+                date
+            }]);
+
+            alert(`Successfully purchased ${packageName}! ${credits} session credits added to your account.`);
+            loadStudentPortal(currentStudentName);
+            switchStudentTab('schedule');
+        }
+
+        // Student Booking (Deducts 1 Credit)
+        async function studentBookSession(e) {
+            e.preventDefault();
+            const subject = document.getElementById('bookSubject').value;
+            const date = document.getElementById('bookDate').value;
+            const slot = document.getElementById('bookSlot').value.trim();
+
+            const { data: payments } = await _supabase.from('payment_history').select('*').ilike('student_name', currentStudentName);
+            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', currentStudentName);
+
+            let totalCredits = 0;
+            if(payments) {
+                payments.forEach(p => {
+                    if(p.amount.includes('4 Sessions')) totalCredits += 4;
+                    else if(p.amount.includes('10 Sessions')) totalCredits += 10;
+                    else if(p.amount.includes('20 Sessions')) totalCredits += 20;
+                    else totalCredits += 1;
+                });
+            }
+
+            const bookedCount = sessions ? sessions.length : 0;
+            const remainingCredits = totalCredits - bookedCount;
+
+            if (remainingCredits <= 0) {
+                alert("You have 0 session credits left! Please purchase a session package first.");
+                switchStudentTab('payment');
+                return;
+            }
+
+            const { error } = await _supabase.from('sessions').insert([{
+                student_name: currentStudentName,
+                subject,
+                date,
+                slot,
+                notes: 'Booked by student using credit.'
+            }]);
+
+            if(error) { alert("Error booking: " + error.message); return; }
+            alert("Lesson booked successfully! 1 credit deducted.");
+            document.getElementById('bookSlot').value = '';
+            loadStudentPortal(currentStudentName);
+        }
+
+        // Handlers for Schedule, Sessions, Payments
         function addScheduleSlotField(dateVal = '', slotVal = '') {
             const container = document.getElementById('scheduleSlotsFieldsContainer');
             const div = document.createElement('div');
             div.className = 'flex gap-2 items-center';
             div.innerHTML = `
-                <input type="date" required value="${dateVal}" class="sched-date w-1/2 px-2 py-1.5 border rounded-lg text-xs">
-                <input type="text" required placeholder="Time (e.g. 3:00 - 4:00 PM)" value="${slotVal}" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg text-xs">
-                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700 px-2"><i class="fa-solid fa-trash"></i></button>
+                <input type="date" required value="${dateVal}" class="sched-date w-1/2 px-2 py-1.5 border rounded-lg">
+                <input type="text" required placeholder="Time slot" value="${slotVal}" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg">
+                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
             `;
             container.appendChild(div);
         }
 
-        // Multiple Recording Inputs Handler
         function addRecordingField(title = '', url = '') {
             const container = document.getElementById('recordingFieldsContainer');
             const div = document.createElement('div');
             div.className = 'flex gap-2 items-center';
             div.innerHTML = `
-                <input type="text" placeholder="Title (e.g. Part 1)" value="${title}" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
-                <input type="url" placeholder="https://drive.google.com/..." value="${url}" class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
-                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700 px-2"><i class="fa-solid fa-trash"></i></button>
+                <input type="text" placeholder="Title" value="${title}" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg">
+                <input type="url" placeholder="URL" value="${url}" class="rec-url flex-grow px-2 py-1.5 border rounded-lg">
+                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
             `;
             container.appendChild(div);
         }
@@ -790,7 +950,7 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('paymayaQrUrl').value = e.target.result;
-                document.getElementById('qrPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-32 h-32 object-contain border rounded mt-1 bg-white" alt="QR Preview">`;
+                document.getElementById('qrPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-32 h-32 object-contain border rounded mt-1 bg-white">`;
             };
             reader.readAsDataURL(file);
         }
@@ -801,7 +961,7 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('payReceiptUrl').value = e.target.result;
-                document.getElementById('receiptPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover border rounded mt-1" alt="Receipt Preview">`;
+                document.getElementById('receiptPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover border rounded mt-1">`;
             };
             reader.readAsDataURL(file);
         }
@@ -810,10 +970,7 @@
             document.getElementById('modalImageDisplay').src = url;
             document.getElementById('imageModal').classList.remove('hidden');
         }
-
-        function closeImageModal() {
-            document.getElementById('imageModal').classList.add('hidden');
-        }
+        function closeImageModal() { document.getElementById('imageModal').classList.add('hidden'); }
 
         async function saveStudentDirect(e) {
             e.preventDefault();
@@ -825,93 +982,53 @@
                 password: document.getElementById('dirPassword').value.trim(),
                 notes: document.getElementById('dirNotes').value.trim()
             };
-
-            if (id) {
-                await _supabase.from('students').update(studentData).eq('id', id);
-                alert("Student account updated successfully!");
-            } else {
-                await _supabase.from('students').insert([studentData]);
-                alert("New student account added successfully!");
-            }
-
+            if (id) await _supabase.from('students').update(studentData).eq('id', id);
+            else await _supabase.from('students').insert([studentData]);
             resetStudentForm();
             loadStudentsList();
-            loadAdminData();
-            loadPublicComments();
-        }
-
-        function editStudent(id) {
-            const student = allStudentsCache.find(s => s.id === id);
-            if (!student) return;
-
-            document.getElementById('dirStudentId').value = student.id;
-            document.getElementById('dirStudentName').value = student.name;
-            document.getElementById('dirParentName').value = student.parent || '';
-            document.getElementById('dirContact').value = student.email_or_mobile || '';
-            document.getElementById('dirPassword').value = student.password || '';
-            document.getElementById('dirNotes').value = student.notes || '';
-
-            document.getElementById('studentFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> Edit Student Account`;
-            document.getElementById('cancelStudentBtn').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetStudentForm() {
-            document.getElementById('studentForm').reset();
-            document.getElementById('dirStudentId').value = '';
-            document.getElementById('studentFormTitle').innerHTML = `<i class="fa-solid fa-user-plus text-indigo-600 mr-2"></i> Add / Edit Student Account`;
-            document.getElementById('cancelStudentBtn').classList.add('hidden');
         }
 
         async function loadStudentsList() {
             const { data: students } = await _supabase.from('students').select('*').order('name', { ascending: true });
             const { data: payments } = await _supabase.from('payment_history').select('*');
+            const { data: sessions } = await _supabase.from('sessions').select('*');
             allStudentsCache = students || [];
             
             const container = document.querySelector('#studentsTab #studentsContainer');
             container.innerHTML = '';
-            if (!students || students.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No registered student accounts found.</p>`;
-                return;
-            }
+            if (!students || students.length === 0) { container.innerHTML = `<p class="text-slate-400">No accounts.</p>`; return; }
 
             students.forEach(s => {
-                const studentPayments = payments ? payments.filter(p => p.student_name && p.student_name.toLowerCase() === s.name.toLowerCase()) : [];
-                const hasPaid = studentPayments.length > 0;
+                const sPayments = payments ? payments.filter(p => p.student_name && p.student_name.toLowerCase() === s.name.toLowerCase()) : [];
+                const sSessions = sessions ? sessions.filter(ses => ses.student_name && ses.student_name.toLowerCase() === s.name.toLowerCase()) : [];
+                
+                let totalPaid = 0;
+                sPayments.forEach(p => {
+                    const match = p.amount.match(/₱([0-9,]+)/);
+                    if(match) totalPaid += parseInt(match[1].replace(/,/g, ''));
+                });
 
-                let paymentHtml = `<div class="mt-2 pt-2 border-t text-[11px] text-slate-600 space-y-1"><strong>Submitted Payments:</strong>`;
-                if (hasPaid) {
-                    studentPayments.forEach(p => {
-                        paymentHtml += `<div class="flex justify-between items-center bg-white p-1.5 border rounded"><span>Ref: <strong>${p.ref}</strong> | Amount: <strong>${p.amount}</strong> (${p.date})</span> ${p.receipt_url ? `<button onclick="viewFullImage('${p.receipt_url}')" class="text-indigo-600 underline font-medium"><i class="fa-solid fa-image"></i> View Receipt</button>` : ''}</div>`;
-                    });
-                } else {
-                    paymentHtml += `<p class="text-amber-600 italic">No payment proofs uploaded yet.</p>`;
-                }
-                paymentHtml += `</div>`;
-
-                const statusBadge = hasPaid 
-                    ? `<span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold uppercase"><i class="fa-solid fa-circle-check mr-1"></i> Paid</span>` 
-                    : `<span class="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded font-bold uppercase"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Pending Payment</span>`;
+                let totalCredits = 0;
+                sPayments.forEach(p => {
+                    if(p.amount.includes('4 Sessions')) totalCredits += 4;
+                    else if(p.amount.includes('10 Sessions')) totalCredits += 10;
+                    else if(p.amount.includes('20 Sessions')) totalCredits += 20;
+                    else totalCredits += 1;
+                });
+                const lessonsLeft = totalCredits - sSessions.length;
 
                 container.innerHTML += `
-                    <div class="p-3 border rounded-xl text-xs flex flex-col bg-slate-50 gap-2 shadow-sm">
+                    <div class="p-3 border rounded-xl bg-slate-50 space-y-1">
                         <div class="flex justify-between items-start">
-                            <div class="space-y-0.5">
-                                <div class="flex items-center gap-2">
-                                    <strong class="text-sm text-slate-900">${s.name}</strong> ${s.parent ? `(Guardian: ${s.parent})` : ''}
-                                    ${statusBadge}
-                                </div>
-                                <span class="text-slate-500"><i class="fa-solid fa-envelope mr-1"></i> Contact: ${s.email_or_mobile || 'N/A'} | <i class="fa-solid fa-key mr-1"></i> Password: <strong>${s.password || 'None'}</strong></span>
-                                ${s.notes ? `<br><span class="text-indigo-600">${s.notes}</span>` : ''}
+                            <div>
+                                <strong class="text-sm text-slate-900">${s.name}</strong> (Pass: ${s.password})<br>
+                                <span class="text-emerald-700 font-bold">Total Payments Received: ₱${totalPaid.toLocaleString()} | Lessons Left: ${lessonsLeft >= 0 ? lessonsLeft : 0}</span>
                             </div>
-                            <div class="flex items-center space-x-1">
-                                <button onclick="pingStudentPayment('${s.name}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1.5 rounded font-medium flex items-center gap-1" title="Ping Payment Reminder"><i class="fa-solid fa-bell"></i> Ping</button>
-                                <button onclick="openChatWithStudent('${s.name}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded font-medium flex items-center gap-1" title="Chat Directly"><i class="fa-solid fa-comments"></i> Chat</button>
-                                <button onclick="editStudent(${s.id})" class="text-indigo-500 hover:text-indigo-700 p-2" title="Edit"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button onclick="deleteStudent(${s.id})" class="text-rose-500 hover:text-rose-700 p-2" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            <div class="space-x-1">
+                                <button onclick="pingStudentPayment('${s.name}')" class="bg-amber-500 text-white px-2 py-1 rounded">Ping</button>
+                                <button onclick="openChatWithStudent('${s.name}')" class="bg-indigo-600 text-white px-2 py-1 rounded">Chat</button>
                             </div>
                         </div>
-                        ${paymentHtml}
                     </div>`;
             });
         }
@@ -921,309 +1038,103 @@
             const paymaya = document.getElementById('paymayaDetails').value.trim();
             const instructions = document.getElementById('worldremitInstructions').value.trim();
             const qr_url = document.getElementById('paymayaQrUrl').value.trim();
-
             const paymentObj = { paymaya, instructions, qr_url };
-            localStorage.setItem('tutor_payment_info', JSON.stringify(paymentObj));
-
-            try {
-                const { data: existing } = await _supabase.from('payment_config').select('*');
-                if (existing && existing.length > 0) {
-                    await _supabase.from('payment_config').update(paymentObj).eq('id', existing[0].id);
-                } else {
-                    await _supabase.from('payment_config').insert([paymentObj]);
-                }
-                alert("Bank payment & QR code configuration saved successfully!");
-            } catch (err) {
-                alert("Saved locally!");
-            }
+            const { data: existing } = await _supabase.from('payment_config').select('*');
+            if (existing && existing.length > 0) await _supabase.from('payment_config').update(paymentObj).eq('id', existing[0].id);
+            else await _supabase.from('payment_config').insert([paymentObj]);
+            alert("Payment info saved!");
         }
 
         async function loadPaymentConfig() {
-            let config = null;
-            try {
-                const { data } = await _supabase.from('payment_config').select('*');
-                if (data && data.length > 0) config = data[0];
-            } catch (e) {}
-
-            if (!config) {
-                const local = JSON.parse(localStorage.getItem('tutor_payment_info'));
-                if (local) config = { paymaya: local.paymaya, instructions: local.instructions, qr_url: local.qr_url };
-            }
-
-            if (config) {
-                document.getElementById('paymayaDetails').value = config.paymaya || '';
-                document.getElementById('worldremitInstructions').value = config.instructions || '';
-                document.getElementById('paymayaQrUrl').value = config.qr_url || '';
-                if (config.qr_url) {
-                    document.getElementById('qrPreviewContainer').innerHTML = `<img src="${config.qr_url}" class="w-32 h-32 object-contain border rounded mt-1 bg-white" alt="QR Code">`;
-                }
+            const { data } = await _supabase.from('payment_config').select('*');
+            if (data && data.length > 0) {
+                document.getElementById('paymayaDetails').value = data[0].paymaya || '';
+                document.getElementById('worldremitInstructions').value = data[0].instructions || '';
+                document.getElementById('paymayaQrUrl').value = data[0].qr_url || '';
+                if(data[0].qr_url) document.getElementById('qrPreviewContainer').innerHTML = `<img src="${data[0].qr_url}" class="w-32 h-32 object-contain border rounded">`;
             }
         }
 
         async function saveSession(e) {
             e.preventDefault();
-            const id = document.getElementById('sessionId').value;
             const student_name = document.getElementById('studentName').value;
             const subject = document.getElementById('sessionSubject').value;
             const link = document.getElementById('sessionLink').value.trim();
             const notes = document.getElementById('sessionNotes').value.trim();
 
-            // Collect multiple recordings
             const recordings = [];
             document.querySelectorAll('#recordingFieldsContainer > div').forEach(div => {
                 const title = div.querySelector('.rec-title').value.trim();
                 const url = div.querySelector('.rec-url').value.trim();
-                if (url) recordings.push({ title: title || 'Recording', url });
+                if(url) recordings.push({ title: title || 'Recording', url });
             });
             const recording_url = recordings.length > 0 ? JSON.stringify(recordings) : '';
 
-            // Collect multiple schedule slots
             const slotsData = [];
             document.querySelectorAll('#scheduleSlotsFieldsContainer > div').forEach(div => {
                 const date = div.querySelector('.sched-date').value;
                 const slot = div.querySelector('.sched-slot').value.trim();
-                if (date && slot) slotsData.push({ date, slot });
+                if(date && slot) slotsData.push({ date, slot });
             });
 
-            if (slotsData.length === 0) {
-                alert("Please add at least one date and time slot.");
-                return;
-            }
-
-            if (id) {
-                // If editing, update the first slot and delete/add others if needed, or simply update this row with the first slot
-                const firstSlot = slotsData[0];
-                const sessionData = { student_name, subject, date: firstSlot.date, slot: firstSlot.slot, link, recording_url, notes };
-                const { error } = await _supabase.from('sessions').update(sessionData).eq('id', id);
-                if (error) { alert("Error updating session: " + error.message); return; }
-
-                // If user added multiple slots during edit, insert the remaining ones as new rows
-                for (let i = 1; i < slotsData.length; i++) {
-                    await _supabase.from('sessions').insert([{ student_name, subject, date: slotsData[i].date, slot: slotsData[i].slot, link, recording_url, notes }]);
-                }
-                alert("Session(s) updated successfully!");
-            } else {
-                // Insert all slots as separate session rows in Supabase
-                const rowsToInsert = slotsData.map(s => ({
-                    student_name,
-                    subject,
-                    date: s.date,
-                    slot: s.slot,
-                    link,
-                    recording_url,
-                    notes
-                }));
-
-                const { error } = await _supabase.from('sessions').insert(rowsToInsert);
-                if (error) { alert("Error scheduling sessions: " + error.message); return; }
-                alert("Multiple class sessions scheduled successfully!");
-            }
-
+            const rowsToInsert = slotsData.map(s => ({ student_name, subject, date: s.date, slot: s.slot, link, recording_url, notes }));
+            await _supabase.from('sessions').insert(rowsToInsert);
+            alert("Sessions saved successfully!");
             resetSessionForm();
             loadAdminData();
         }
 
-        function editSession(id) {
-            const session = allSessions.find(s => s.id === id);
-            if (!session) return;
-
-            document.getElementById('sessionId').value = session.id;
-            document.getElementById('studentName').value = session.student_name;
-            document.getElementById('sessionSubject').value = session.subject;
-            document.getElementById('sessionLink').value = session.link || '';
-            document.getElementById('sessionNotes').value = session.notes || '';
-
-            // Set schedule slot
-            const schedContainer = document.getElementById('scheduleSlotsFieldsContainer');
-            schedContainer.innerHTML = '';
-            addScheduleSlotField(session.date, session.slot);
-
-            // Set recordings
-            const container = document.getElementById('recordingFieldsContainer');
-            container.innerHTML = '';
-            try {
-                const recs = JSON.parse(session.recording_url);
-                if (Array.isArray(recs) && recs.length > 0) {
-                    recs.forEach(r => addRecordingField(r.title, r.url));
-                } else {
-                    addRecordingField('Recording', session.recording_url || '');
-                }
-            } catch (e) {
-                addRecordingField('Recording', session.recording_url || '');
-            }
-
-            document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-indigo-600 mr-2"></i> Edit Session`;
-            document.getElementById('cancelSessionBtn').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
         function resetSessionForm() {
             document.getElementById('sessionForm').reset();
-            document.getElementById('sessionId').value = '';
-            document.getElementById('sessionFormTitle').innerHTML = `<i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Class / Time Slots`;
-            document.getElementById('cancelSessionBtn').classList.add('hidden');
-            
-            document.getElementById('scheduleSlotsFieldsContainer').innerHTML = `
-                <div class="flex gap-2 items-center">
-                    <input type="date" required class="sched-date w-1/2 px-2 py-1.5 border rounded-lg text-xs">
-                    <input type="text" required placeholder="Time (e.g. 3:00 - 4:00 PM)" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg text-xs">
-                </div>`;
-
-            document.getElementById('recordingFieldsContainer').innerHTML = `
-                <div class="flex gap-2">
-                    <input type="text" placeholder="Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg text-xs">
-                    <input type="url" placeholder="https://drive.google.com/..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg text-xs">
-                </div>`;
+            document.getElementById('scheduleSlotsFieldsContainer').innerHTML = `<div class="flex gap-2 items-center"><input type="date" required class="sched-date w-1/2 px-2 py-1.5 border rounded-lg"><input type="text" required placeholder="Time slot" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg"></div>`;
         }
 
         async function loadAdminData() {
             const { data: students } = await _supabase.from('students').select('*');
-            allStudentsCache = students || [];
             const dropdown = document.getElementById('studentName');
             dropdown.innerHTML = '<option value="" disabled selected>Select student...</option>';
-            if (students) students.forEach(s => dropdown.innerHTML += `<option value="${s.name}">${s.name}</option>`);
+            if(students) students.forEach(s => dropdown.innerHTML += `<option value="${s.name}">${s.name}</option>`);
 
             const { data: sessions } = await _supabase.from('sessions').select('*').order('date', { ascending: true });
             allSessions = sessions || [];
             const container = document.getElementById('sessionsContainer');
             container.innerHTML = '';
-            if (allSessions.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No sessions scheduled.</p>`; return; }
-
             allSessions.forEach(s => {
-                let studentCancellationBadge = s.student_cancelled ? `<div class="mt-2 p-2 bg-rose-50 border rounded text-rose-800"><strong>Student Cancel Request:</strong> ${s.student_cancel_reason || 'No reason provided'}</div>` : '';
-                let teacherAbsentBadge = s.teacher_absent ? `<div class="mt-2 p-2 bg-amber-50 border rounded text-amber-800"><strong>Teacher Absent Tagged:</strong> ${s.teacher_absent_reason}</div>` : '';
-
-                container.innerHTML += `
-                    <div class="p-3 border rounded text-xs bg-slate-50 flex flex-col gap-2">
-                        <div class="flex justify-between items-start">
-                            <div><strong>${s.student_name}</strong> - <span class="text-indigo-600">${s.subject}</span> (${s.date} [${s.slot}])<br>${s.notes || ''}</div>
-                            <div class="flex items-center space-x-1">
-                                <button onclick="openTeacherAbsentModal(${s.id})" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1.5 rounded font-medium" title="Tag Teacher Absent"><i class="fa-solid fa-triangle-exclamation"></i> Tag Absent</button>
-                                <button onclick="editSession(${s.id})" class="text-indigo-500 p-2" title="Edit Session"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button onclick="deleteSession(${s.id})" class="text-rose-500 p-2" title="Delete Session"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                        ${studentCancellationBadge}
-                        ${teacherAbsentBadge}
-                    </div>`;
+                container.innerHTML += `<div class="p-2 border rounded bg-slate-50 flex justify-between"><span><strong>${s.student_name}</strong> - ${s.subject} (${s.date} [${s.slot}])</span><button onclick="deleteSession(${s.id})" class="text-rose-600">Delete</button></div>`;
             });
         }
 
         async function loadStudentPortal(name) {
             const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
-            const scheduleContainer = document.getElementById('studentPortalSessions');
-            const historyContainer = document.getElementById('studentPortalHistory');
-            scheduleContainer.innerHTML = ''; historyContainer.innerHTML = '';
-            const today = new Date().toISOString().split('T')[0];
-
-            if (sessions) {
-                sessions.forEach(s => {
-                    let studentNoticeBox = s.student_cancelled ? `<p class="text-rose-600 font-bold mt-1"><i class="fa-solid fa-ban"></i> You requested to cancel this class (${s.student_cancel_reason})</p>` : '';
-                    let teacherAbsentBox = s.teacher_absent ? `<div class="mt-2 p-3 bg-amber-50 border border-amber-300 rounded text-amber-900"><strong class="block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Notice from Teacher:</strong> Teacher Ann has tagged herself absent for this session.<br><em>"${s.teacher_absent_reason}"</em></div>` : '';
-                    
-                    if (s.date >= today) {
-                        scheduleContainer.innerHTML += `
-                            <div class="p-4 bg-slate-50 border rounded flex flex-col justify-between items-start text-xs gap-3">
-                                <div class="w-full"><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''} ${studentNoticeBox} ${teacherAbsentBox}</div>
-                                <div class="flex gap-2 w-full justify-between items-center pt-2 border-t">
-                                    <div>
-                                        ${s.link && !s.teacher_absent ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded font-medium inline-block"><i class="fa-solid fa-video mr-1"></i> Join Meeting</a>` : ''}
-                                    </div>
-                                    <div>
-                                        ${!s.student_cancelled ? `<button onclick="openCancelClassModal(${s.id})" class="bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 px-3 py-2 rounded font-medium"><i class="fa-solid fa-xmark mr-1"></i> Cancel Class</button>` : '<span class="text-slate-400 font-medium">Cancellation Submitted</span>'}
-                                    </div>
-                                </div>
-                            </div>`;
-                    } else {
-                        let recsHtml = '<span class="text-slate-400">No recording</span>';
-                        if (s.recording_url) {
-                            try {
-                                const recs = JSON.parse(s.recording_url);
-                                if (Array.isArray(recs) && recs.length > 0) {
-                                    recsHtml = '<div class="flex flex-wrap gap-1.5 mt-1">';
-                                    recs.forEach(r => {
-                                        recsHtml += `<a href="${r.url}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1 rounded text-[11px] font-medium"><i class="fa-solid fa-play mr-1"></i> ${r.title}</a>`;
-                                    });
-                                    recsHtml += '</div>';
-                                } else {
-                                    recsHtml = `<a href="${s.recording_url}" target="_blank" class="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-medium"><i class="fa-solid fa-play mr-1"></i> Watch Recording</a>`;
-                                }
-                            } catch (e) {
-                                recsHtml = `<a href="${s.recording_url}" target="_blank" class="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-medium"><i class="fa-solid fa-play mr-1"></i> Watch Recording</a>`;
-                            }
-                        }
-
-                        historyContainer.innerHTML += `
-                            <div class="p-4 bg-slate-50 border rounded space-y-2 text-xs">
-                                <div><strong>${s.subject}</strong> - ${s.date} [${s.slot}]<br>${s.notes || ''} ${teacherAbsentBox}</div>
-                                <div>${recsHtml}</div>
-                            </div>`;
-                    }
+            const { data: payments } = await _supabase.from('payment_history').select('*').ilike('student_name', name);
+            
+            let totalCredits = 0;
+            if(payments) {
+                payments.forEach(p => {
+                    if(p.amount.includes('4 Sessions')) totalCredits += 4;
+                    else if(p.amount.includes('10 Sessions')) totalCredits += 10;
+                    else if(p.amount.includes('20 Sessions')) totalCredits += 20;
+                    else totalCredits += 1;
                 });
             }
+            const bookedCount = sessions ? sessions.length : 0;
+            const remaining = totalCredits - bookedCount;
+            document.getElementById('studentCreditCount').textContent = remaining >= 0 ? remaining : 0;
 
+            const scheduleContainer = document.getElementById('studentPortalSessions');
+            scheduleContainer.innerHTML = '';
+            if(sessions) {
+                sessions.forEach(s => {
+                    scheduleContainer.innerHTML += `<div class="p-3 bg-slate-50 border rounded flex justify-between"><span><strong>${s.subject}</strong> - ${s.date} [${s.slot}]</span> ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 text-white px-3 py-1 rounded">Join Meeting</a>` : ''}</div>`;
+                });
+            }
             loadStudentPaymentInfo();
-            loadStudentPaymentHistory(name);
-        }
-
-        function openCancelClassModal(id) {
-            document.getElementById('cancelSessionId').value = id;
-            document.getElementById('cancelReason').value = '';
-            document.getElementById('cancelClassModal').classList.remove('hidden');
-        }
-        function closeCancelClassModal() {
-            document.getElementById('cancelClassModal').classList.add('hidden');
-        }
-        async function sendClassCancellation() {
-            const id = document.getElementById('cancelSessionId').value;
-            const reason = document.getElementById('cancelReason').value.trim() || 'Student requested class cancellation.';
-            const { error } = await _supabase.from('sessions').update({ student_cancelled: true, student_cancel_reason: reason }).eq('id', id);
-            if (error) { alert("Error submitting cancellation: " + error.message); return; }
-            alert("Class cancellation request sent to Teacher Ann.");
-            closeCancelClassModal();
-            loadStudentPortal(currentStudentName);
-        }
-
-        function openTeacherAbsentModal(id) {
-            document.getElementById('teacherAbsentSessionId').value = id;
-            document.getElementById('teacherAbsentReason').value = '';
-            document.getElementById('teacherAbsentModal').classList.remove('hidden');
-        }
-        function closeTeacherAbsentModal() {
-            document.getElementById('teacherAbsentModal').classList.add('hidden');
-        }
-        async function saveTeacherAbsentNotice() {
-            const id = document.getElementById('teacherAbsentSessionId').value;
-            const reason = document.getElementById('teacherAbsentReason').value.trim() || 'Teacher is unavailable or handling an emergency.';
-            const { error } = await _supabase.from('sessions').update({ teacher_absent: true, teacher_absent_reason: reason }).eq('id', id);
-            if (error) { alert("Error saving notice: " + error.message); return; }
-            alert("Teacher absence tagged successfully. The student will now see your message!");
-            closeTeacherAbsentModal();
-            loadAdminData();
         }
 
         async function loadStudentPaymentInfo() {
-            const paymentContainer = document.getElementById('studentPaymentInfo');
-            let config = null;
-
-            try {
-                const { data } = await _supabase.from('payment_config').select('*');
-                if (data && data.length > 0) config = data[0];
-            } catch (e) {}
-
-            if (!config) {
-                const local = JSON.parse(localStorage.getItem('tutor_payment_info'));
-                if (local) config = { paymaya: local.paymaya, instructions: local.instructions, qr_url: local.qr_url };
-            }
-
-            if (config && (config.paymaya || config.qr_url)) {
-                paymentContainer.innerHTML = `
-                    <p class="font-semibold text-slate-900 text-sm"><strong>Account Details:</strong> ${config.paymaya || 'N/A'}</p>
-                    <p class="text-slate-700"><strong>Instructions:</strong> ${config.instructions || 'Transfer from any bank directly to our account or scan the QR code below.'}</p>
-                    ${config.qr_url ? `<div class="mt-3"><p class="font-semibold mb-1 text-slate-800">Scan QR Code to Pay:</p><img src="${config.qr_url}" class="w-40 h-40 object-contain border rounded p-1 bg-white cursor-pointer shadow-sm hover:scale-105 transition-transform" onclick="viewFullImage('${config.qr_url}')" alt="QR Code"><p class="text-[10px] text-slate-400 mt-1">Click image to view larger</p></div>` : ''}
-                `;
-            } else {
-                paymentContainer.innerHTML = `<p class="text-slate-400">Payment information has not been configured by the teacher yet.</p>`;
+            const { data } = await _supabase.from('payment_config').select('*');
+            if(data && data.length > 0) {
+                document.getElementById('studentPaymentInfo').innerHTML = `<p><strong>Details:</strong> ${data[0].paymaya}</p><p><strong>Instructions:</strong> ${data[0].instructions}</p>${data[0].qr_url ? `<img src="${data[0].qr_url}" class="w-32 h-32 object-contain border mt-2">` : ''}`;
             }
         }
 
@@ -1232,67 +1143,31 @@
             const ref = document.getElementById('payRefNumber').value.trim();
             const amount = document.getElementById('payAmount').value.trim();
             const receipt_url = document.getElementById('payReceiptUrl').value.trim();
-
-            if (!receipt_url) {
-                alert("Please upload a receipt photo.");
-                return;
-            }
-
             await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, receipt_url, date: new Date().toLocaleDateString() }]);
-            alert("Payment reference and receipt uploaded successfully!");
-            document.getElementById('payRefNumber').value = '';
-            document.getElementById('payAmount').value = '';
-            document.getElementById('payReceiptFile').value = '';
-            document.getElementById('payReceiptUrl').value = '';
-            document.getElementById('receiptPreviewContainer').innerHTML = '';
-            loadStudentPaymentHistory(currentStudentName);
-        }
-
-        async function loadStudentPaymentHistory(name) {
-            const { data: history } = await _supabase.from('payment_history').select('*').ilike('student_name', name).order('id', { ascending: false });
-            const list = document.getElementById('studentPaymentHistoryList');
-            list.innerHTML = '<p class="font-semibold text-slate-700">Submitted Payment History:</p>';
-            if (!history || history.length === 0) { list.innerHTML += `<p class="text-slate-400">No payment history yet.</p>`; return; }
-            history.forEach(h => {
-                list.innerHTML += `
-                    <div class="p-2 bg-slate-50 border rounded flex justify-between items-center text-xs">
-                        <div><strong>Ref:</strong> ${h.ref} | <strong>Amount:</strong> ${h.amount} <span class="text-slate-400">(${h.date})</span></div>
-                        ${h.receipt_url ? `<button onclick="viewFullImage('${h.receipt_url}')" class="text-indigo-600 font-medium underline flex items-center gap-1"><i class="fa-solid fa-image"></i> View Receipt Photo</button>` : ''}
-                    </div>`;
-            });
+            alert("Payment proof sent!");
+            loadStudentPortal(currentStudentName);
         }
 
         async function loadChatMessages(name) {
             const container = document.getElementById('chatMessagesContainer');
-            if (!container) return;
-            const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', name).order('id', { ascending: true });
+            const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', name);
             container.innerHTML = '';
-            if (!chats || chats.length === 0) { container.innerHTML = `<p class="text-slate-400 text-center py-4">No chat messages yet.</p>`; return; }
-            chats.forEach(c => {
-                const align = c.sender === 'student' ? 'text-right' : 'text-left';
-                const bg = c.sender === 'student' ? 'bg-emerald-100 text-emerald-900 ml-auto' : 'bg-indigo-100 text-indigo-900 mr-auto';
-                container.innerHTML += `<div class="${align}"><div class="inline-block p-2 rounded max-w-[80%] text-xs ${bg}"><strong>${c.sender === 'student' ? 'You' : 'Teacher'}:</strong> ${c.message}</div></div>`;
-            });
-            container.scrollTop = container.scrollHeight;
+            if(chats) chats.forEach(c => container.innerHTML += `<div><strong>${c.sender}:</strong> ${c.message}</div>`);
         }
 
         async function sendChatMessage(e) {
             e.preventDefault();
-            const msg = document.getElementById('chatInputMessage').value.trim();
-            if (!msg) return;
-            await _supabase.from('chat_messages').insert([{ student_name: currentStudentName, sender: 'student', message: msg, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+            const message = document.getElementById('chatInputMessage').value.trim();
+            await _supabase.from('chat_messages').insert([{ student_name: currentStudentName, sender: 'student', message, time: 'Now' }]);
             document.getElementById('chatInputMessage').value = '';
             loadChatMessages(currentStudentName);
         }
 
         async function loadAdminChatStudentsList() {
-            const { data: students } = await _supabase.from('students').select('*').order('name', { ascending: true });
+            const { data: students } = await _supabase.from('students').select('*');
             const list = document.getElementById('adminChatStudentList');
             list.innerHTML = '';
-            if (!students) return;
-            students.forEach(s => {
-                list.innerHTML += `<button onclick="selectAdminChatStudent('${s.name}')" class="w-full text-left p-2 rounded hover:bg-slate-100 text-xs font-medium"><i class="fa-solid fa-user mr-2 text-indigo-600"></i>${s.name}</button>`;
-            });
+            if(students) students.forEach(s => list.innerHTML += `<button onclick="selectAdminChatStudent('${s.name}')" class="w-full text-left p-2 rounded hover:bg-slate-100">${s.name}</button>`);
         }
 
         function selectAdminChatStudent(name) {
@@ -1303,29 +1178,22 @@
 
         async function loadAdminChatMessages(name) {
             const container = document.getElementById('adminChatMessagesContainer');
-            const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', name).order('id', { ascending: true });
+            const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', name);
             container.innerHTML = '';
-            if (!chats || chats.length === 0) { container.innerHTML = `<p class="text-slate-400 text-center py-10">No messages yet with ${name}. Type below to start the conversation!</p>`; return; }
-            chats.forEach(c => {
-                const align = c.sender === 'admin' ? 'text-right' : 'text-left';
-                const bg = c.sender === 'admin' ? 'bg-indigo-100 text-indigo-900 ml-auto' : 'bg-emerald-100 text-emerald-900 mr-auto';
-                container.innerHTML += `<div class="${align}"><div class="inline-block p-2 rounded max-w-[80%] text-xs ${bg}"><strong>${c.sender === 'admin' ? 'You' : name}:</strong> ${c.message}</div></div>`;
-            });
-            container.scrollTop = container.scrollHeight;
+            if(chats) chats.forEach(c => container.innerHTML += `<div><strong>${c.sender}:</strong> ${c.message}</div>`);
         }
 
         async function sendAdminChatMessage(e) {
             e.preventDefault();
-            if (!activeAdminChatStudent) { alert("Select a student first!"); return; }
-            const msg = document.getElementById('adminChatInputMessage').value.trim();
-            if (!msg) return;
-            await _supabase.from('chat_messages').insert([{ student_name: activeAdminChatStudent, sender: 'admin', message: msg, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+            const message = document.getElementById('adminChatInputMessage').value.trim();
+            await _supabase.from('chat_messages').insert([{ student_name: activeAdminChatStudent, sender: 'admin', message, time: 'Now' }]);
             document.getElementById('adminChatInputMessage').value = '';
             loadAdminChatMessages(activeAdminChatStudent);
         }
 
-        async function deleteSession(id) { if (confirm("Delete session?")) { await _supabase.from('sessions').delete().eq('id', id); loadAdminData(); } }
-        async function deleteStudent(id) { if (confirm("Are you sure you want to delete this student account?")) { await _supabase.from('students').delete().eq('id', id); loadStudentsList(); loadAdminData(); } }
+        async function deleteSession(id) { await _supabase.from('sessions').delete().eq('id', id); loadAdminData(); }
+        function pingStudentPayment(name) { openChatWithStudent(name); }
+        function openChatWithStudent(name) { switchTab('adminChat'); selectAdminChatStudent(name); }
     </script>
 </body>
 </html>
