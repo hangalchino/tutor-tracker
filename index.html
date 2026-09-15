@@ -234,7 +234,7 @@
                     <form onsubmit="saveAdminPaymentConfig(event)" class="space-y-3 text-xs">
                         <div>
                             <label class="block font-semibold mb-1">GCash / PayMaya Details & Account Number</label>
-                            <textarea id="adminPaymaya" required rows="3" placeholder="e.g. GCash / PayMaya: 0917-123-4567 (Teacher Ann)" class="w-full p-2.5 border rounded"></textarea>
+                            <textarea id="adminPaymaya" required rows="3" placeholder="e.g. Gcash / PayMaya: 09150112872 Kristine Ann A. Dasok" class="w-full p-2.5 border rounded"></textarea>
                         </div>
                         <div>
                             <label class="block font-semibold mb-1">Payment QR Code Image</label>
@@ -286,38 +286,6 @@
                         <span id="studentCreditCount" class="text-2xl font-extrabold text-pink-600">0</span>
                     </div>
                     <button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-bold shadow">Buy Session Package</button>
-                </div>
-
-                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-calendar-days text-pink-600 mr-2"></i> Pick & Book Lesson (Your Local Timezone)</h3>
-                    </div>
-                    <form onsubmit="studentBookSession(event)" class="space-y-3">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block font-semibold mb-1">Program / Subject</label>
-                                <select id="bookSubject" required class="w-full p-2.5 border rounded bg-white">
-                                    <option value="Reading Program">📖 Reading Program (₱250)</option>
-                                    <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
-                                    <option value="Math (Grade 4-6)">🔢 Math (Grade 4-6) (₱500)</option>
-                                    <option value="Math (Junior High)">🔢 Math (Junior High) (₱700)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block font-semibold mb-1">Date</label>
-                                <input type="date" id="bookDate" required class="w-full p-2.5 border rounded">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block font-semibold mb-1">Time Slot (Local Time)</label>
-                                <input type="text" id="bookSlot" required placeholder="e.g. 3:00 PM - 4:00 PM" class="w-full p-2.5 border rounded">
-                            </div>
-                            <div class="flex items-end">
-                                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Book Class (Deduct 1 Credit)</button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
 
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
@@ -380,7 +348,7 @@
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL WITH DYNAMIC BANK / QR DETAILS -->
+    <!-- CHECKOUT MODAL WITH CLICKABLE ZOOMABLE QR CODE -->
     <div id="checkoutModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-2">
@@ -406,6 +374,15 @@
                 <div id="chkPreviewBox"></div>
                 <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg">Submit Payment Proof</button>
             </form>
+        </div>
+    </div>
+
+    <!-- QR CODE LIGHTBOX ZOOM MODAL -->
+    <div id="qrZoomModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onclick="closeQrZoom()">
+        <div class="relative max-w-2xl w-full text-center space-y-3" onclick="event.stopPropagation()">
+            <button onclick="closeQrZoom()" class="absolute -top-10 right-0 text-white text-2xl font-bold bg-slate-800/80 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            <img id="zoomedQrImage" src="" alt="Zoomed QR Code" class="max-h-[80vh] max-w-full mx-auto rounded-xl border-4 border-white shadow-2xl bg-white p-2">
+            <p class="text-white text-xs font-semibold">Click anywhere outside to close zoom view</p>
         </div>
     </div>
 
@@ -478,14 +455,13 @@
             document.getElementById('chkReceiptBase64').value = '';
             document.getElementById('chkPreviewBox').innerHTML = '';
 
-            // Load dynamic payment details into checkout modal
             const { data } = await _supabase.from('payment_config').select('*').limit(1);
             const box = document.getElementById('chkViewBank');
             if (data && data.length > 0) {
                 const cfg = data[0];
                 box.innerHTML = `
                     <p class="whitespace-pre-line"><strong>Details:</strong> ${cfg.paymaya || 'N/A'}</p>
-                    ${cfg.qr_url ? `<div class="mt-2 text-center"><img src="${cfg.qr_url}" class="w-32 h-32 object-contain mx-auto border rounded bg-white p-1"></div>` : ''}
+                    ${cfg.qr_url ? `<div class="mt-2 text-center"><img src="${cfg.qr_url}" alt="QR Code" onclick="openQrZoom('${cfg.qr_url}')" class="w-32 h-32 object-contain mx-auto border rounded bg-white p-1 cursor-pointer hover:opacity-90 hover:scale-105 transition-all shadow-sm" title="Click to zoom QR Code"> <p class="text-[10px] text-pink-600 font-semibold mt-1"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i>Click QR to Zoom</p></div>` : ''}
                 `;
             } else {
                 box.innerHTML = `<p>No payment details configured yet by admin. Please contact Teacher Ann.</p>`;
@@ -495,6 +471,15 @@
         }
 
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
+
+        function openQrZoom(imgUrl) {
+            document.getElementById('zoomedQrImage').src = imgUrl;
+            document.getElementById('qrZoomModal').classList.remove('hidden');
+        }
+
+        function closeQrZoom() {
+            document.getElementById('qrZoomModal').classList.add('hidden');
+        }
 
         function previewAdminQr(event) {
             const file = event.target.files[0];
@@ -512,7 +497,6 @@
             const paymaya = document.getElementById('adminPaymaya').value.trim();
             const qr_url = document.getElementById('adminQrBase64').value;
 
-            // Check if record exists
             const { data: existing } = await _supabase.from('payment_config').select('*').limit(1);
             
             let error;
@@ -752,20 +736,6 @@
             } else {
                 container.innerHTML = `<p class="text-slate-400">No lesson history found.</p>`;
             }
-        }
-
-        async function studentBookSession(e) {
-            e.preventDefault();
-            const subject = document.getElementById('bookSubject').value;
-            const date = document.getElementById('bookDate').value;
-            const slot = document.getElementById('bookSlot').value.trim();
-
-            const { error } = await _supabase.from('sessions').insert([{ student_name: currentStudentName, subject, date, slot, status: 'Active' }]);
-            if (error) { alert("Booking error: " + error.message); return; }
-
-            alert("Lesson booked successfully!");
-            document.getElementById('bookSlot').value = '';
-            loadStudentPortal(currentStudentName);
         }
     </script>
 </body>
