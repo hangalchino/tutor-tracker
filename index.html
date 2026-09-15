@@ -482,11 +482,9 @@
         let allPayments = [];
         let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        // Calendar Date States
         let adminCalendarDate = new Date();
         let studentCalendarDate = new Date();
 
-        // Motivational Sentences Collection
         const motivations = [
             "Education is the passport to the future, for tomorrow belongs to those who prepare for it today.",
             "Believe in yourself! Every expert was once a beginner.",
@@ -661,7 +659,14 @@
             const password = document.getElementById('newStudPass').value.trim();
             const credits = parseInt(document.getElementById('newStudCredits').value) || 0;
 
-            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile, password, credits }]);
+            let payload = { name, parent, email_or_mobile, password, credits };
+            let { error } = await _supabase.from('students').insert([payload]);
+            if (error) {
+                // Fallback if 'credits' column doesn't exist yet in Supabase table
+                delete payload.credits;
+                let res = await _supabase.from('students').insert([payload]);
+                error = res.error;
+            }
             if (error) { alert("Error adding student: " + error.message); return; }
 
             alert(`Student ${name} added successfully!`);
@@ -812,8 +817,16 @@
             const password = document.getElementById('enrollPassword').value.trim();
             const subject = document.getElementById('enrollSubject').value;
 
-            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile, password, credits: 0, notes: `Program: ${subject}` }]);
+            let payload = { name, parent, email_or_mobile, password, credits: 0, notes: `Program: ${subject}` };
+            let { error } = await _supabase.from('students').insert([payload]);
+            if (error) {
+                // Fallback if 'credits' column doesn't exist yet in Supabase table
+                delete payload.credits;
+                let res = await _supabase.from('students').insert([payload]);
+                error = res.error;
+            }
             if (error) { alert("Enrollment error: " + error.message); return; }
+
             alert("Enrollment successful! You can now sign in.");
             document.getElementById('enrollStudentName').value = '';
             document.getElementById('enrollParentName').value = '';
