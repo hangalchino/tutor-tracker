@@ -90,7 +90,7 @@
                     </div>
                     <ul class="space-y-3 text-slate-700 border-t pt-3">
                         <li class="flex justify-between items-center">
-                            <span>Reading / General (25-min):</span> 
+                            <span>Reading (25-min):</span> 
                             <strong class="text-pink-700 text-sm">₱5,000 <span class="text-[10px] font-normal text-slate-500">/ 20 sessions</span></strong>
                         </li>
                         <li class="flex justify-between items-center border-t pt-2">
@@ -123,10 +123,11 @@
                     <div>
                         <label class="block font-semibold text-white uppercase mb-1">Preferred Program</label>
                         <select id="enrollSubject" class="w-full p-2.5 rounded-lg border-0 bg-white">
-                            <option value="Reading Program (20 Sessions)">📖 Reading Program (20 Sessions)</option>
-                            <option value="English Program (20 Sessions)">📝 English Program (20 Sessions)</option>
-                            <option value="Math Program (20 Sessions)">🔢 Math Program (20 Sessions)</option>
-                            <option value="Filipino Program (20 Sessions)">🇵🇭 Filipino Program (20 Sessions)</option>
+                            <option value="Reading Program (20 Sessions)">📖 Reading Program (20 Sessions - ₱5,000)</option>
+                            <option value="English Program (20 Sessions)">📝 English Program (20 Sessions - ₱10,000)</option>
+                            <option value="Math Program (20 Sessions)">🔢 Math Program (20 Sessions - ₱10,000)</option>
+                            <option value="Filipino Program (20 Sessions)">🇵🇭 Filipino Program (20 Sessions - ₱10,000)</option>
+                            <option value="Junior High Program (20 Sessions)">🎒 Junior High Program (20 Sessions - ₱14,000)</option>
                             <option value="Single Session (Pay-per-session, Good for today only)">⚠️ Single Session (Pay-per-session, Good for today only)</option>
                         </select>
                     </div>
@@ -565,9 +566,10 @@
 
         const defaultPackages = [
             { id: 'pkg_1', title: 'Reading Program (20 Sessions)', category: 'Reading', price: 5000, credits: 20 },
-            { id: 'pkg_2', title: 'English Program (20 Sessions)', category: 'English', price: 5000, credits: 20 },
-            { id: 'pkg_3', title: 'Math Program (20 Sessions)', category: 'Math', price: 5000, credits: 20 },
-            { id: 'pkg_4', title: 'Filipino Program (20 Sessions)', category: 'Filipino', price: 5000, credits: 20 }
+            { id: 'pkg_2', title: 'English Program (20 Sessions)', category: 'English', price: 10000, credits: 20 },
+            { id: 'pkg_3', title: 'Math Program (20 Sessions)', category: 'Math', price: 10000, credits: 20 },
+            { id: 'pkg_4', title: 'Filipino Program (20 Sessions)', category: 'Filipino', price: 10000, credits: 20 },
+            { id: 'pkg_5', title: 'Junior High Program (20 Sessions)', category: 'Junior High', price: 14000, credits: 20 }
         ];
 
         const motivations = [
@@ -701,7 +703,10 @@
         async function getSavedPackages() {
             const { data } = await _supabase.from('payment_config').select('*').limit(1);
             if (data && data.length > 0 && data[0].packages_json) {
-                try { return JSON.parse(data[0].packages_json); } catch(e) {}
+                try { 
+                    let parsed = JSON.parse(data[0].packages_json);
+                    if (parsed && parsed.length > 0) return parsed;
+                } catch(e) {}
             }
             return defaultPackages;
         }
@@ -850,7 +855,6 @@
             const password = document.getElementById('newStudPass').value.trim();
             const credits = parseInt(document.getElementById('newStudCredits').value) || 0;
 
-            // Check if username is already taken
             const { data: existing } = await _supabase.from('students').select('*').ilike('username', username);
             if (existing && existing.length > 0) {
                 alert("Error: Username is already taken by another student. Please choose a unique username.");
@@ -1014,7 +1018,6 @@
                 return;
             }
 
-            // Check if username is already taken in database
             const { data: existing } = await _supabase.from('students').select('*').ilike('username', username);
             if (existing && existing.length > 0) {
                 alert("This username is already taken. Please choose another unique username.");
@@ -1039,7 +1042,6 @@
             const identifier = document.getElementById('studentLoginIdentifier').value.trim();
             const password = document.getElementById('studentLoginPass').value.trim();
 
-            // Query by either username or full name (case-insensitive check)
             const { data } = await _supabase.from('students').select('*').or(`username.ilike.${identifier},name.ilike.${identifier}`);
             
             if (!data || data.length === 0 || data[0].password !== password) {
