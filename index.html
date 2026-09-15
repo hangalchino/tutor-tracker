@@ -111,12 +111,15 @@
             <div class="bg-pink-600 text-white p-8 rounded-2xl shadow-xl space-y-6">
                 <div class="text-center space-y-2">
                     <h3 class="text-xl font-bold">Enroll Now & Register Portal Account</h3>
+                    <p class="text-pink-100 text-[11px]">Parents can register their own name and include their child's details.</p>
                 </div>
                 <form onsubmit="handlePublicEnrollment(event)" class="space-y-4 text-xs text-slate-800">
-                    <div><label class="block font-semibold text-white uppercase mb-1">Student Full Name</label><input type="text" id="enrollStudentName" required class="w-full p-2.5 rounded-lg border-0"></div>
-                    <div><label class="block font-semibold text-white uppercase mb-1">Parent / Guardian Name</label><input type="text" id="enrollParentName" required class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Student Full Name (Child's Name)</label><input type="text" id="enrollStudentName" required class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Parent / Guardian Name (Your Name)</label><input type="text" id="enrollParentName" required class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Unique Student Username</label><input type="text" id="enrollUsername" required placeholder="e.g. chris_reading2026" class="w-full p-2.5 rounded-lg border-0"></div>
                     <div><label class="block font-semibold text-white uppercase mb-1">Email or Mobile Number</label><input type="text" id="enrollContact" required class="w-full p-2.5 rounded-lg border-0"></div>
                     <div><label class="block font-semibold text-white uppercase mb-1">Create Portal Password</label><input type="password" id="enrollPassword" required class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Retype Password</label><input type="password" id="enrollPasswordConfirm" required class="w-full p-2.5 rounded-lg border-0"></div>
                     <div>
                         <label class="block font-semibold text-white uppercase mb-1">Preferred Program</label>
                         <select id="enrollSubject" class="w-full p-2.5 rounded-lg border-0 bg-white">
@@ -144,12 +147,18 @@
     <div id="studentLoginModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="font-bold text-sm"><i class="fa-solid fa-user-graduate text-pink-600 mr-2"></i> Student Portal Sign In</h3>
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-user-graduate text-pink-600 mr-2"></i> Student / Parent Sign In</h3>
                 <button onclick="closeStudentLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="handleStudentLogin(event)" class="space-y-3 text-xs">
-                <div><label class="block font-semibold uppercase mb-1">Student Full Name</label><input type="text" id="studentLoginName" required class="w-full p-2.5 border rounded-lg"></div>
-                <div><label class="block font-semibold uppercase mb-1">Password</label><input type="password" id="studentLoginPass" required class="w-full p-2.5 border rounded-lg"></div>
+                <div>
+                    <label class="block font-semibold uppercase mb-1">Username or Full Name</label>
+                    <input type="text" id="studentLoginIdentifier" required placeholder="Enter username or full name" class="w-full p-2.5 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase mb-1">Password</label>
+                    <input type="password" id="studentLoginPass" required class="w-full p-2.5 border rounded-lg">
+                </div>
                 <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg">Sign In</button>
             </form>
         </div>
@@ -329,6 +338,7 @@
             <form onsubmit="submitNewStudent(event)" class="space-y-3">
                 <div><label class="block font-semibold mb-1">Student Full Name</label><input type="text" id="newStudName" required class="w-full p-2.5 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Parent Name</label><input type="text" id="newStudParent" required class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Unique Username</label><input type="text" id="newStudUsername" required class="w-full p-2.5 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Contact / Email</label><input type="text" id="newStudContact" required class="w-full p-2.5 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Portal Password</label><input type="text" id="newStudPass" required class="w-full p-2.5 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Initial Remaining Class</label><input type="number" id="newStudCredits" value="0" min="0" required class="w-full p-2.5 border rounded"></div>
@@ -822,6 +832,7 @@
         function openAddStudentModal() {
             document.getElementById('newStudName').value = '';
             document.getElementById('newStudParent').value = '';
+            document.getElementById('newStudUsername').value = '';
             document.getElementById('newStudContact').value = '';
             document.getElementById('newStudPass').value = '';
             document.getElementById('newStudCredits').value = '0';
@@ -834,11 +845,19 @@
             e.preventDefault();
             const name = document.getElementById('newStudName').value.trim();
             const parent = document.getElementById('newStudParent').value.trim();
+            const username = document.getElementById('newStudUsername').value.trim().toLowerCase();
             const email_or_mobile = document.getElementById('newStudContact').value.trim();
             const password = document.getElementById('newStudPass').value.trim();
             const credits = parseInt(document.getElementById('newStudCredits').value) || 0;
 
-            let payload = { name, parent, email_or_mobile, password, credits };
+            // Check if username is already taken
+            const { data: existing } = await _supabase.from('students').select('*').ilike('username', username);
+            if (existing && existing.length > 0) {
+                alert("Error: Username is already taken by another student. Please choose a unique username.");
+                return;
+            }
+
+            let payload = { name, parent, username, email_or_mobile, password, credits };
             let { error } = await _supabase.from('students').insert([payload]);
             if (error) { alert("Error adding student: " + error.message); return; }
 
@@ -984,29 +1003,47 @@
             e.preventDefault();
             const name = document.getElementById('enrollStudentName').value.trim();
             const parent = document.getElementById('enrollParentName').value.trim();
+            const username = document.getElementById('enrollUsername').value.trim().toLowerCase();
             const email_or_mobile = document.getElementById('enrollContact').value.trim();
             const password = document.getElementById('enrollPassword').value.trim();
+            const passwordConfirm = document.getElementById('enrollPasswordConfirm').value.trim();
             const subject = document.getElementById('enrollSubject').value;
 
-            let payload = { name, parent, email_or_mobile, password, credits: 0, notes: `Program: ${subject}` };
+            if (password !== passwordConfirm) {
+                alert("Passwords do not match. Please retype your password correctly.");
+                return;
+            }
+
+            // Check if username is already taken in database
+            const { data: existing } = await _supabase.from('students').select('*').ilike('username', username);
+            if (existing && existing.length > 0) {
+                alert("This username is already taken. Please choose another unique username.");
+                return;
+            }
+
+            let payload = { name, parent, username, email_or_mobile, password, credits: 0, notes: `Program: ${subject}` };
             let { error } = await _supabase.from('students').insert([payload]);
             if (error) { alert("Enrollment error: " + error.message); return; }
 
-            alert("Enrollment successful! You can now sign in.");
+            alert("Enrollment successful! You can now sign in using your username or full name.");
             document.getElementById('enrollStudentName').value = '';
             document.getElementById('enrollParentName').value = '';
+            document.getElementById('enrollUsername').value = '';
             document.getElementById('enrollContact').value = '';
             document.getElementById('enrollPassword').value = '';
+            document.getElementById('enrollPasswordConfirm').value = '';
         }
 
         async function handleStudentLogin(e) {
             e.preventDefault();
-            const name = document.getElementById('studentLoginName').value.trim();
+            const identifier = document.getElementById('studentLoginIdentifier').value.trim();
             const password = document.getElementById('studentLoginPass').value.trim();
 
-            const { data } = await _supabase.from('students').select('*').ilike('name', name);
+            // Query by either username or full name (case-insensitive check)
+            const { data } = await _supabase.from('students').select('*').or(`username.ilike.${identifier},name.ilike.${identifier}`);
+            
             if (!data || data.length === 0 || data[0].password !== password) {
-                alert("Invalid student name or password.");
+                alert("Invalid username, full name, or password.");
                 return;
             }
 
@@ -1014,7 +1051,7 @@
             closeStudentLoginModal();
             document.getElementById('publicLandingPage').classList.add('hidden');
             document.getElementById('studentAppContainer').classList.remove('hidden');
-            document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${currentStudentName}!`;
+            document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${currentStudentName} (Parent: ${data[0].parent || 'N/A'})!`;
             loadStudentPortal(currentStudentName);
         }
 
@@ -1068,7 +1105,7 @@
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-2">
                                 <div>
                                     <strong class="text-sm text-pink-700">${s.name}</strong> <span class="text-slate-400">| Parent: ${s.parent || 'N/A'}</span><br>
-                                    <span class="text-slate-500">Password: ${s.password} | Contact: ${s.email_or_mobile || 'N/A'}</span>
+                                    <span class="text-slate-500">Username: <strong>${s.username || 'None'}</strong> | Password: ${s.password} | Contact: ${s.email_or_mobile || 'N/A'}</span>
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <label class="font-semibold">Remaining Class:</label>
