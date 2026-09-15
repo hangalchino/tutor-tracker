@@ -1219,7 +1219,7 @@
         async function requestFreeAssessment() {
             const { data: existing } = await _supabase.from('assessment_requests').select('*').ilike('student_name', currentStudentName);
             if (existing && existing.length > 0) {
-                alert("You have already requested your 1 Free Assessment Class.");
+                alert("You have already claimed your 1 Free Assessment Class.");
                 return;
             }
 
@@ -1231,7 +1231,7 @@
 
             if (error) { alert("Error requesting assessment: " + error.message); return; }
 
-            alert("Free Assessment requested successfully! Teacher Ann has been notified and will review your request.");
+            alert("Free Assessment requested successfully! Teacher Ann has been notified.");
             loadStudentPortal(currentStudentName);
         }
 
@@ -1256,7 +1256,7 @@
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
                                 <div>
-                                    ${isScheduled ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><strong>Teacher Note:</strong> ${req.notes || 'None'} <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : `<p class="text-slate-500 italic">Not scheduled yet. Click plot schedule below.</p>`}
+                                    ${isScheduled ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><strong>Teacher Message:</strong> ${req.notes || 'None'} <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : `<p class="text-slate-500 italic">Not scheduled yet. Click plot schedule below.</p>`}
                                 </div>
                                 <div class="flex gap-2">
                                     <button onclick="openPlotAssessmentModal(${req.id}, '${req.student_name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm"><i class="fa-solid fa-calendar-days mr-1"></i> ${isScheduled ? 'Reschedule' : 'Plot Schedule & Link'}</button>
@@ -1620,7 +1620,7 @@
                 document.getElementById('studentCreditCount').textContent = studentData[0].credits || 0;
             }
 
-            // Load Free Assessment button state
+            // Load Free Assessment button state (claimed / requested or not)
             const { data: assessData } = await _supabase.from('assessment_requests').select('*').ilike('student_name', name);
             const assessBox = document.getElementById('freeAssessmentActionContainer');
             if (assessData && assessData.length > 0) {
@@ -1628,7 +1628,7 @@
                 if (req.status === 'Scheduled') {
                     assessBox.innerHTML = `<p class="font-bold text-emerald-100 bg-emerald-700/60 p-2 rounded"><i class="fa-solid fa-check mr-1"></i> Assessment Scheduled on ${req.scheduled_date} (${req.slot})!<br><strong>Teacher Message:</strong> ${req.notes || 'None'}<br><a href="${req.meeting_link}" target="_blank" class="underline text-white font-bold">Join Classroom Link</a></p>`;
                 } else {
-                    assessBox.innerHTML = `<p class="font-bold text-pink-100 bg-pink-700/50 p-2 rounded"><i class="fa-solid fa-clock mr-1"></i> Free Assessment requested. Waiting for Teacher Ann to plot schedule & message.</p>`;
+                    assessBox.innerHTML = `<p class="font-bold text-pink-100 bg-pink-700/50 p-2 rounded"><i class="fa-solid fa-clock mr-1"></i> Free Assessment requested & claimed! Waiting for Teacher Ann to plot schedule & message.</p>`;
                 }
             } else {
                 assessBox.innerHTML = `<button onclick="requestFreeAssessment()" class="w-full bg-white hover:bg-pink-50 text-pink-700 font-bold py-2 rounded-lg shadow"><i class="fa-solid fa-paper-plane mr-1"></i> Request Free Assessment Now</button>`;
@@ -1653,6 +1653,7 @@
                                 </span>
                                 ${s.absence_reason ? `<br><span class="text-amber-800 font-semibold bg-amber-50 p-1 rounded block mt-1"><i class="fa-solid fa-comment mr-1"></i>Teacher Note: ${s.absence_reason}</span>` : ''}
                                 ${s.cancel_reason ? `<br><span class="text-rose-800 font-semibold bg-rose-50 p-1 rounded block mt-1"><i class="fa-solid fa-comment mr-1"></i>Your Cancel Reason: ${s.cancel_reason}</span>` : ''}
+                                ${isCancelled && s.subject.includes('Assessment') ? `<div class="mt-2 bg-amber-100 border border-amber-300 text-amber-900 p-2 rounded font-semibold"><i class="fa-solid fa-headset mr-1"></i> Assessment cancelled. Please chat support/Teacher Ann to ask if there is another assessment available.</div>` : ''}
                             </div>
                             <div class="flex items-center space-x-2">
                                 ${s.meeting_link && !isCancelled && !isDone && !isAbsent ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join</a>` : ''}
