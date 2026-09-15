@@ -254,7 +254,7 @@
                     <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
                         <div class="border-b pb-3">
                             <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-clipboard-question text-pink-600 mr-2"></i> Free Assessment Requests (1 Free per Student)</h3>
-                            <p class="text-[11px] text-slate-500">Review requested free assessment classes, chat/message the student, or plot their assessment schedule.</p>
+                            <p class="text-[11px] text-slate-500">Review student requests, chat/message notes, or schedule the assessment date and meeting link.</p>
                         </div>
                         <div id="adminAssessmentContainer" class="space-y-3 text-xs"></div>
                     </div>
@@ -341,7 +341,7 @@
                 <div><label class="block font-semibold mb-1">Assessment Date</label><input type="date" id="assessDate" required class="w-full p-2.5 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="assessSlot" required placeholder="e.g. 4:00 PM - 4:30 PM" class="w-full p-2.5 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Online Classroom / Zoom Meeting Link</label><input type="url" id="assessLink" required placeholder="https://zoom.us/j/..." class="w-full p-2.5 border rounded"></div>
-                <div><label class="block font-semibold mb-1">Teacher Notes / Instructions</label><textarea id="assessNotes" rows="2" placeholder="e.g. Please prepare pencil and paper." class="w-full p-2.5 border rounded"></textarea></div>
+                <div><label class="block font-semibold mb-1">Teacher Notes / Message to Student</label><textarea id="assessNotes" rows="2" placeholder="e.g. Looking forward to meeting you!" class="w-full p-2.5 border rounded"></textarea></div>
                 <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Confirm Assessment Schedule & Notify Student</button>
             </form>
         </div>
@@ -1256,11 +1256,11 @@
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
                                 <div>
-                                    ${isScheduled ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : `<p class="text-slate-500 italic">Not scheduled yet.</p>`}
+                                    ${isScheduled ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><strong>Teacher Note:</strong> ${req.notes || 'None'} <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : `<p class="text-slate-500 italic">Not scheduled yet. Click plot schedule below.</p>`}
                                 </div>
                                 <div class="flex gap-2">
                                     <button onclick="openPlotAssessmentModal(${req.id}, '${req.student_name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm"><i class="fa-solid fa-calendar-days mr-1"></i> ${isScheduled ? 'Reschedule' : 'Plot Schedule & Link'}</button>
-                                    <button onclick="deleteAssessmentRequest(${req.id})" class="text-slate-400 hover:text-rose-600 px-2" title="Delete Request"><i class="fa-solid fa-xmark"></i></button>
+                                    <button onclick="deleteAssessmentRequest(${req.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold shadow-sm" title="Delete/Cancel Request"><i class="fa-solid fa-trash mr-1"></i> Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -1321,7 +1321,7 @@
         }
 
         async function deleteAssessmentRequest(id) {
-            if (!confirm("Delete this request?")) return;
+            if (!confirm("Are you sure you want to cancel/delete this assessment request?")) return;
             await _supabase.from('assessment_requests').delete().eq('id', id);
             loadAdminAssessmentTab();
         }
@@ -1626,9 +1626,9 @@
             if (assessData && assessData.length > 0) {
                 const req = assessData[0];
                 if (req.status === 'Scheduled') {
-                    assessBox.innerHTML = `<p class="font-bold text-emerald-100 bg-emerald-700/60 p-2 rounded"><i class="fa-solid fa-check mr-1"></i> Assessment Scheduled on ${req.scheduled_date} (${req.slot})!<br><a href="${req.meeting_link}" target="_blank" class="underline text-white font-bold">Join Classroom Link</a></p>`;
+                    assessBox.innerHTML = `<p class="font-bold text-emerald-100 bg-emerald-700/60 p-2 rounded"><i class="fa-solid fa-check mr-1"></i> Assessment Scheduled on ${req.scheduled_date} (${req.slot})!<br><strong>Teacher Message:</strong> ${req.notes || 'None'}<br><a href="${req.meeting_link}" target="_blank" class="underline text-white font-bold">Join Classroom Link</a></p>`;
                 } else {
-                    assessBox.innerHTML = `<p class="font-bold text-pink-100 bg-pink-700/50 p-2 rounded"><i class="fa-solid fa-clock mr-1"></i> Free Assessment requested. Waiting for Teacher Ann to plot schedule.</p>`;
+                    assessBox.innerHTML = `<p class="font-bold text-pink-100 bg-pink-700/50 p-2 rounded"><i class="fa-solid fa-clock mr-1"></i> Free Assessment requested. Waiting for Teacher Ann to plot schedule & message.</p>`;
                 }
             } else {
                 assessBox.innerHTML = `<button onclick="requestFreeAssessment()" class="w-full bg-white hover:bg-pink-50 text-pink-700 font-bold py-2 rounded-lg shadow"><i class="fa-solid fa-paper-plane mr-1"></i> Request Free Assessment Now</button>`;
