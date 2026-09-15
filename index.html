@@ -77,20 +77,11 @@
                 <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
                     <div class="flex items-center space-x-3 text-pink-600 font-bold text-sm">
                         <i class="fa-solid fa-book-open-reader text-lg"></i>
-                        <h5>Reading Program (Mon–Fri, Daily)</h5>
-                    </div>
-                    <ul class="space-y-2 text-slate-700 border-t pt-3">
-                        <li class="flex justify-between"><span>Preschool to Elementary (25 mins):</span> <strong class="text-pink-700">₱250 / session</strong></li>
-                    </ul>
-
-                    <div class="flex items-center space-x-3 text-pink-600 font-bold text-sm pt-4 border-t">
-                        <i class="fa-solid fa-calculator text-lg"></i>
-                        <h5>Math Program</h5>
+                        <h5>Core Lessons (Reading, English, Math, Filipino)</h5>
                     </div>
                     <ul class="space-y-3 text-slate-700 border-t pt-3">
-                        <li class="flex justify-between"><span>Preschool to Grade 3 (25 mins):</span> <strong class="text-pink-700">₱250 / session</strong></li>
-                        <li class="flex justify-between border-t pt-2"><span>Grade 4 to Grade 6:</span> <div class="text-right"><strong class="text-pink-700 block">₱250 / 25 mins</strong><strong class="text-pink-700 block">₱500 / 50 mins <span class="text-[10px] text-indigo-600">(Recommended)</span></strong></div></li>
-                        <li class="flex justify-between border-t pt-2"><span>Grade 7 to Grade 10 / Junior High (50 mins):</span> <strong class="text-pink-700">₱700 / session</strong></li>
+                        <li class="flex justify-between"><span>Preschool / Elementary:</span> <strong class="text-pink-700">₱250 / 25 mins</strong></li>
+                        <li class="flex justify-between border-t pt-2"><span>Intermediate / Secondary:</span> <div class="text-right"><strong class="text-pink-700 block">₱500 / 50 mins</strong><strong class="text-pink-700 block">₱700 / Junior High (50 mins)</strong></div></li>
                     </ul>
                 </div>
 
@@ -102,25 +93,21 @@
                     </div>
                     <ul class="space-y-3 text-slate-700 border-t pt-3">
                         <li class="flex justify-between items-center">
-                            <span>Reading Program (25-min class):</span> 
+                            <span>Reading / General (25-min):</span> 
                             <strong class="text-pink-700 text-sm">₱5,000 <span class="text-[10px] font-normal text-slate-500">/ 20 sessions</span></strong>
                         </li>
                         <li class="flex justify-between items-center border-t pt-2">
-                            <span>Math Program (25-min class, 5x/wk):</span> 
-                            <strong class="text-pink-700 text-sm">₱5,000 <span class="text-[10px] font-normal text-slate-500">/ 20 sessions</span></strong>
-                        </li>
-                        <li class="flex justify-between items-center border-t pt-2">
-                            <span>Grade 4–6 Math (50-min class):</span> 
+                            <span>Math / English / Filipino (50-min):</span> 
                             <strong class="text-pink-700 text-sm">₱10,000 <span class="text-[10px] font-normal text-slate-500">/ 20 sessions</span></strong>
                         </li>
                         <li class="flex justify-between items-center border-t pt-2">
-                            <span>Grade 7–10 Math (50-min class):</span> 
+                            <span>Junior High (Grade 7–10):</span> 
                             <strong class="text-pink-700 text-sm">₱14,000 <span class="text-[10px] font-normal text-slate-500">/ 20 sessions</span></strong>
                         </li>
                     </ul>
                     <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-[11px] text-amber-800 space-y-1">
-                        <p class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Single Session Booking Notice:</p>
-                        <p>We prefer 20 sessions paid in advance. However, you can choose to pay for only 1 session, but please note that <strong>it is only good for today/that specific slot</strong>. We cannot guarantee that the same time slot will still be available next time.</p>
+                        <p class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Single Session Notice:</p>
+                        <p>Single-session bookings are <strong>only good for today / that specific slot</strong>. We cannot guarantee slot availability for future sessions.</p>
                     </div>
                 </div>
             </div>
@@ -141,9 +128,9 @@
                         <label class="block font-semibold text-white uppercase mb-1">Preferred Program</label>
                         <select id="enrollSubject" class="w-full p-2.5 rounded-lg border-0 bg-white">
                             <option value="Reading Program (20 Sessions)">📖 Reading Program (20 Sessions)</option>
-                            <option value="Math Program (25 mins, 20 Sessions)">🔢 Math (25-min, 20 Sessions)</option>
-                            <option value="Grade 4-6 Math (50 mins, 20 Sessions)">🔢 Grade 4-6 Math (50-min, 20 Sessions)</option>
-                            <option value="Grade 7-10 Junior High Math (20 Sessions)">🔢 Grade 7-10 Math (20 Sessions)</option>
+                            <option value="English Program (20 Sessions)">📝 English Program (20 Sessions)</option>
+                            <option value="Math Program (20 Sessions)">🔢 Math Program (20 Sessions)</option>
+                            <option value="Filipino Program (20 Sessions)">🇵🇭 Filipino Program (20 Sessions)</option>
                             <option value="Single Session (Pay-per-session, Good for today only)">⚠️ Single Session (Pay-per-session, Good for today only)</option>
                         </select>
                     </div>
@@ -285,7 +272,7 @@
                     </div>
                 </div>
 
-                <!-- STUDENTS & SCHEDULE PLOT TAB WITH ADD / REMOVE -->
+                <!-- STUDENTS & SCHEDULE PLOT TAB -->
                 <div id="tabStudents" class="hidden space-y-6">
                     <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-6">
                         <div class="flex justify-between items-center border-b pb-3">
@@ -296,7 +283,7 @@
                     </div>
                 </div>
 
-                <!-- VERIFY PAYMENTS TAB WITH SAVE & CLEAR -->
+                <!-- VERIFY PAYMENTS TAB -->
                 <div id="tabVerify" class="hidden space-y-6">
                     <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
                         <div class="flex justify-between items-center border-b pb-3">
@@ -307,7 +294,7 @@
                     </div>
                 </div>
 
-                <!-- PACKAGE PRICING TAB (EDIT / PROMO / SALE) -->
+                <!-- PACKAGE PRICING TAB -->
                 <div id="tabPricing" class="hidden space-y-6">
                     <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-6 max-w-2xl">
                         <div class="border-b pb-3 flex justify-between items-center">
@@ -390,7 +377,7 @@
             </div>
         </header>
 
-        <!-- STUDENT PORTAL MAIN AREA WITH LEFT CALENDAR & ADS -->
+        <!-- STUDENT PORTAL MAIN AREA -->
         <div class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
             <!-- LEFT SIDEBAR: CALENDAR & ADS -->
             <div class="w-full md:w-80 shrink-0 space-y-6">
@@ -412,15 +399,6 @@
                     <p class="font-bold text-pink-700"><i class="fa-solid fa-star mr-1"></i> Daily Student Motivation</p>
                     <p id="studentMotivationText" class="italic text-slate-600">"Believe in yourself! Every expert was once a beginner."</p>
                     <button onclick="nextMotivation('student')" class="w-full bg-pink-50 hover:bg-pink-100 text-pink-700 py-1.5 rounded-lg font-bold transition-colors">New Motivation</button>
-                </div>
-
-                <!-- TUTORING PROMO AD -->
-                <div class="bg-gradient-to-br from-pink-600 to-rose-500 text-white p-5 rounded-2xl shadow-md space-y-3 text-xs">
-                    <div class="flex items-center space-x-2 font-bold text-sm">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        <h4>Book 20-Session Packages</h4>
-                    </div>
-                    <p class="text-pink-100">Ensure consistent slot reservations and comprehensive topic coverage by topping up your 20-session advance packages today!</p>
                 </div>
             </div>
 
@@ -449,7 +427,7 @@
                     </div>
                 </div>
 
-                <!-- BUY PACKAGES VIEW WITH DYNAMIC PRICING -->
+                <!-- BUY PACKAGES VIEW -->
                 <div id="studentPaymentView" class="hidden space-y-6 text-xs">
                     <div class="bg-white border rounded-xl p-6 shadow-sm space-y-6">
                         <div class="border-b pb-3">
@@ -457,11 +435,9 @@
                             <p class="text-slate-500 text-[11px]">Advance payment of packages guarantees your slot schedule.</p>
                         </div>
 
-                        <div id="studentDynamicPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <!-- Dynamically Loaded Packages -->
-                        </div>
+                        <div id="studentDynamicPackagesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 
-                        <!-- Single Session Option with Notice -->
+                        <!-- Single Session Option with Dropdowns -->
                         <div class="border border-amber-300 bg-amber-50 rounded-xl p-4 space-y-3">
                             <div class="flex items-center space-x-2 text-amber-900 font-bold">
                                 <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
@@ -471,11 +447,46 @@
                                 You can book and pay for only <strong>1 single session</strong>.<br>
                                 <strong class="text-rose-700 underline block mt-1">Notice: This is only good for today / that specific slot. We can’t be sure if the same slot will still be available next time.</strong>
                             </p>
-                            <button onclick="openSingleSessionCheckout()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold shadow">Book & Pay Single Session</button>
+                            <button onclick="openSingleSessionModal()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-bolt mr-1"></i> Book Single Session Now</button>
                         </div>
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- SINGLE SESSION BOOKING MODAL -->
+    <div id="singleSessionModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-bolt text-amber-600 mr-2"></i> Book Single Session</h3>
+                <button onclick="closeSingleSessionModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg text-[11px] text-amber-900">
+                <strong>Notice:</strong> This single session is only good for today / that specific slot. Slot availability cannot be guaranteed for future dates.
+            </div>
+
+            <form onsubmit="submitSingleSessionCheckout(event)" class="space-y-3">
+                <div>
+                    <label class="block font-semibold mb-1 uppercase">Select Lesson</label>
+                    <select id="singleLesson" class="w-full p-2.5 border rounded bg-white">
+                        <option value="Reading">Reading</option>
+                        <option value="English">English</option>
+                        <option value="Math">Math</option>
+                        <option value="Filipino">Filipino</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold mb-1 uppercase">Select Rate / Amount</label>
+                    <select id="singleRate" class="w-full p-2.5 border rounded bg-white font-bold text-pink-700">
+                        <option value="250">₱250 (25 mins / Preschool-Elementary)</option>
+                        <option value="500">₱500 (50 mins / Intermediate)</option>
+                        <option value="700">₱700 (50 mins / Junior High)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-lg shadow">Proceed to Payment</button>
+            </form>
         </div>
     </div>
 
@@ -529,12 +540,11 @@
         let adminCalendarDate = new Date();
         let studentCalendarDate = new Date();
 
-        // Default Package Data Structure
         const defaultPackages = [
-            { id: 'pkg_1', title: 'Reading Program (20 Sessions)', category: 'Reading Program', price: 5000, credits: 20 },
-            { id: 'pkg_2', title: 'Math Program (25 mins, 20 Sessions)', category: 'Math Program', price: 5000, credits: 20 },
-            { id: 'pkg_3', title: 'Grade 4-6 Math (50 mins, 20 Sessions)', category: 'Grade 4-6 Math', price: 10000, credits: 20 },
-            { id: 'pkg_4', title: 'Grade 7-10 Junior High Math (20 Sessions)', category: 'Grade 7-10 Junior High', price: 14000, credits: 20 }
+            { id: 'pkg_1', title: 'Reading Program (20 Sessions)', category: 'Reading', price: 5000, credits: 20 },
+            { id: 'pkg_2', title: 'English Program (20 Sessions)', category: 'English', price: 5000, credits: 20 },
+            { id: 'pkg_3', title: 'Math Program (20 Sessions)', category: 'Math', price: 5000, credits: 20 },
+            { id: 'pkg_4', title: 'Filipino Program (20 Sessions)', category: 'Filipino', price: 5000, credits: 20 }
         ];
 
         const motivations = [
@@ -752,6 +762,22 @@
             });
         }
 
+        function openSingleSessionModal() {
+            document.getElementById('singleSessionModal').classList.remove('hidden');
+        }
+
+        function closeSingleSessionModal() {
+            document.getElementById('singleSessionModal').classList.add('hidden');
+        }
+
+        function submitSingleSessionCheckout(e) {
+            e.preventDefault();
+            const lesson = document.getElementById('singleLesson').value;
+            const rate = parseInt(document.getElementById('singleRate').value) || 250;
+            closeSingleSessionModal();
+            openCheckoutModal(`Single Session - ${lesson} (${rate} PHP, Good for today only)`, rate, 1);
+        }
+
         async function openCheckoutModal(packageName, amount, credits) {
             document.getElementById('checkoutPackageTitle').textContent = packageName;
             document.getElementById('checkoutPackagePrice').textContent = `₱${amount.toLocaleString()}`;
@@ -776,13 +802,6 @@
             }
 
             document.getElementById('checkoutModal').classList.remove('hidden');
-        }
-
-        function openSingleSessionCheckout() {
-            const amountInput = prompt("Enter single session amount (₱250, ₱500, or ₱700):", "250");
-            if (!amountInput) return;
-            const amount = parseInt(amountInput) || 250;
-            openCheckoutModal(`Single Session (Good for today only)`, amount, 1);
         }
 
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
