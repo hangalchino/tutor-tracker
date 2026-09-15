@@ -18,7 +18,7 @@
     <!-- CONFIGURATION SCRIPT -->
     <script>
         // ==========================================
-        // PASTE YOUR SUPABASE CREDENTIALS HERE
+        // SUPABASE CREDENTIALS & INITIALIZATION
         // ==========================================
         const SUPABASE_URL = 'https://yprnrpxiilvfbhmtxjmh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable__OHnitAo4WatbiwqDSYAkA_1R21V-D3';
@@ -1329,17 +1329,30 @@
                 }
             });
             document.getElementById('statMonthlyDue').textContent = '₱' + totalVerifiedRevenue.toLocaleString();
+
+            // Load Admin Chat Notification Badge in background
+            const { data: msgs } = await _supabase.from('chat_messages').select('*');
+            let totalAdminUnread = 0;
+            if (msgs) {
+                msgs.forEach(m => {
+                    if (m.sender === 'student' && !m.is_read) totalAdminUnread++;
+                });
+            }
+            updateAdminChatBadge(totalAdminUnread);
         }
 
-        // ================= CHAT SUPPORT FUNCTIONS =================
+        // ================= CHAT SUPPORT FUNCTIONS WITH NOTIFICATIONS =================
         async function loadStudentChatMessages(name) {
             const { data: msgs } = await _supabase.from('chat_messages').select('*').ilike('student_name', name).order('id', { ascending: true });
             const container = document.getElementById('studentChatMessages');
             container.innerHTML = '';
 
+            let unreadCount = 0;
+
             if (msgs && msgs.length > 0) {
                 msgs.forEach(m => {
                     const isTeacher = m.sender === 'teacher';
+                    if (isTeacher && !m.is_read) unreadCount++;
                     container.innerHTML += `
                         <div class="flex ${isTeacher ? 'justify-start' : 'justify-end'}">
                             <div class="max-w-[75%] p-3 rounded-xl ${isTeacher ? 'bg-white border text-slate-800' : 'bg-pink-600 text-white shadow-sm'}">
@@ -1351,8 +1364,26 @@
                     `;
                 });
                 container.scrollTop = container.scrollHeight;
+
+                // Mark teacher messages as read when student views chat
+                await _supabase.from('chat_messages').update({ is_read: true }).ilike('student_name', name).eq('sender', 'teacher');
             } else {
                 container.innerHTML = `<p class="text-slate-400 italic text-center py-6">No chat messages yet. Send a message to Teacher Ann below!</p>`;
+            }
+
+            updateStudentChatBadge(unreadCount);
+        }
+
+        function updateStudentChatBadge(count) {
+            const navBtn = document.getElementById('stdNavChat');
+            if (!navBtn) return;
+            const existingBadge = navBtn.querySelector('.chat-badge');
+            if (existingBadge) existingBadge.remove();
+
+            if (count > 0) {
+                navBtn.innerHTML = `Chat Support <span class="chat-badge bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full ml-1 font-bold">${count}</span>`;
+            } else {
+                navBtn.innerHTML = `Chat Support`;
             }
         }
 
@@ -1366,7 +1397,8 @@
                 student_name: currentStudentName,
                 sender: 'student',
                 message,
-                date: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+                date: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                is_read: false
             }]);
 
             if (error) { alert("Error sending message: " + error.message); return; }
@@ -1380,16 +1412,23 @@
             container.innerHTML = '';
 
             let studentGroups = {};
+            let totalAdminUnread = 0;
+
             if (msgs) {
                 msgs.forEach(m => {
                     if (!studentGroups[m.student_name]) studentGroups[m.student_name] = [];
                     studentGroups[m.student_name].push(m);
+                    if (m.sender === 'student' && !m.is_read) totalAdminUnread++;
                 });
             }
 
+            updateAdminChatBadge(totalAdminUnread);
+
             if (Object.keys(studentGroups).length > 0) {
                 for (let studentName in studentGroups) {
+                    let unreadForThisStudent = studentGroups[studentName].filter(m => m.sender === 'student' && !m.is_read).length;
                     let historyHtml = '';
+                    
                     studentGroups[studentName].slice().reverse().forEach(m => {
                         const isTeacher = m.sender === 'teacher';
                         historyHtml += `
@@ -1404,8 +1443,14 @@
                     container.innerHTML += `
                         <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
                             <div class="flex justify-between items-center border-b pb-2">
-                                <strong class="text-sm text-pink-700"><i class="fa-solid fa-user-graduate mr-1"></i> ${studentName}</strong>
-                                <button onclick="deleteStudentChat('${studentName}')" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash mr-1"></i> Clear Chat</button>
+                                <strong class="text-sm text-pink-700 flex items-center gap-2">
+                                    <i class="fa-solid fa-user-graduate"></i> ${studentName}
+                                    ${unreadForThisStudent > 0 ? `<span class="bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">${unreadForThisStudent} new</span>` : ''}
+                                </strong>
+                                <div class="flex gap-2">
+                                    <button onclick="markChatRead('${studentName}')" class="text-indigo-600 hover:underline text-[11px] font-semibold"><i class="fa-solid fa-check-double mr-1"></i> Mark Read</button>
+                                    <button onclick="deleteStudentChat('${studentName}')" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash mr-1"></i> Clear</button>
+                                </div>
                             </div>
                             <div class="space-y-2 max-h-48 overflow-y-auto p-2 bg-white rounded border">${historyHtml}</div>
                             <form onsubmit="sendAdminReply(event, '${studentName}')" class="flex gap-2 pt-1">
@@ -1430,7 +1475,8 @@
                 student_name: studentName,
                 sender: 'teacher',
                 message,
-                date: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+                date: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                is_read: false
             }]);
 
             if (error) { alert("Error sending reply: " + error.message); return; }
@@ -1438,10 +1484,28 @@
             loadAdminChatTab();
         }
 
+        async function markChatRead(studentName) {
+            await _supabase.from('chat_messages').update({ is_read: true }).ilike('student_name', studentName).eq('sender', 'student');
+            loadAdminChatTab();
+        }
+
         async function deleteStudentChat(studentName) {
             if (!confirm(`Clear chat history for ${studentName}?`)) return;
             await _supabase.from('chat_messages').delete().ilike('student_name', studentName);
             loadAdminChatTab();
+        }
+
+        function updateAdminChatBadge(count) {
+            const navBtn = document.getElementById('navChat');
+            if (!navBtn) return;
+            const existingBadge = navBtn.querySelector('.admin-chat-badge');
+            if (existingBadge) existingBadge.remove();
+
+            if (count > 0) {
+                navBtn.innerHTML = `<i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span> <span class="admin-chat-badge bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold ml-auto">${count}</span>`;
+            } else {
+                navBtn.innerHTML = `<i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span>`;
+            }
         }
 
         // ================= FREE ASSESSMENT FUNCTIONS =================
