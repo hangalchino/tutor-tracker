@@ -33,7 +33,7 @@
             <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl overflow-hidden shadow border border-pink-200">
-                        <img src="image_ea3222.jpg" alt="Logo" class="w-full h-full object-cover">
+                        <img src="TEACHER.jpg" alt="Logo" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h1 class="text-base font-bold text-slate-900">Learn with Teacher Ann</h1>
@@ -181,9 +181,10 @@
         <!-- SIDEBAR -->
         <aside class="w-72 sidebar-pink text-white flex flex-col justify-between p-4 shadow-xl shrink-0 min-h-screen">
             <div class="space-y-6">
+                <!-- Top Logo -->
                 <div class="text-center space-y-2 pt-2">
-                    <div class="w-24 h-24 mx-auto rounded-full bg-white p-1 shadow-md overflow-hidden border-2 border-pink-200">
-                        <img src="image_ea3222.jpg" alt="Logo" class="w-full h-full object-cover rounded-full">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-white p-1 shadow-md overflow-hidden border-2 border-pink-200">
+                        <img src="TEACHER.jpg" alt="Logo" class="w-full h-full object-cover rounded-full">
                     </div>
                     <div>
                         <h1 class="font-extrabold text-lg text-white drop-shadow-sm">Teacher Ann ♡</h1>
@@ -191,17 +192,17 @@
                     </div>
                 </div>
 
-                <!-- Profile Photo Card -->
+                <!-- Profile Photo Card WITH UPLOAD & REMOVE BUTTONS -->
                 <div class="bg-white/95 backdrop-blur rounded-2xl p-3 text-slate-800 text-center shadow-inner space-y-2">
                     <div class="w-full h-32 rounded-xl overflow-hidden bg-pink-100 border">
-                        <img id="sidebarDisplayImg" src="image_ea3222.jpg" alt="Teacher Ann" class="w-full h-full object-cover">
+                        <img id="sidebarDisplayImg" src="TEACHER.jpg" alt="Teacher Ann" class="w-full h-full object-cover">
                     </div>
                     <p class="text-[11px] italic text-slate-600 leading-tight">"Every lesson is a step forward, and every step brings you closer to your goals. ♡"</p>
-                    <div class="flex gap-1 pt-1">
-                        <label class="flex-1 bg-pink-600 hover:bg-pink-700 text-white text-[10px] font-bold py-1.5 rounded-lg cursor-pointer text-center shadow">
+                    <div class="flex gap-1.5 pt-1">
+                        <label class="flex-1 bg-pink-600 hover:bg-pink-700 text-white text-[10px] font-bold py-1.5 rounded-lg cursor-pointer text-center shadow transition-colors">
                             Upload Photo <input type="file" accept="image/*" class="hidden" onchange="uploadTeacherSidebarPhoto(event)">
                         </label>
-                        <button onclick="resetSidebarPhoto()" class="px-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-[10px] rounded-lg">Reset</button>
+                        <button onclick="removeTeacherSidebarPhoto()" class="flex-1 bg-slate-200 hover:bg-rose-500 hover:text-white text-slate-700 text-[10px] font-bold py-1.5 rounded-lg transition-colors shadow-sm">Remove Photo</button>
                     </div>
                 </div>
 
@@ -414,7 +415,7 @@
             <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-lg overflow-hidden bg-white shadow">
-                        <img src="image_ea3222.jpg" alt="Logo" class="w-full h-full object-cover">
+                        <img src="TEACHER.jpg" alt="Logo" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h1 class="text-lg font-bold" id="studentWelcomeTitle">Student Portal</h1>
@@ -606,13 +607,19 @@
             };
             reader.readAsDataURL(file);
         }
-        function resetSidebarPhoto() {
+
+        function removeTeacherSidebarPhoto() {
             localStorage.removeItem('teacher_ann_photo');
-            document.getElementById('sidebarDisplayImg').src = 'image_ea3222.jpg';
+            document.getElementById('sidebarDisplayImg').src = 'TEACHER.jpg';
         }
+
         function loadSidebarPhoto() {
             const saved = localStorage.getItem('teacher_ann_photo');
-            if (saved) document.getElementById('sidebarDisplayImg').src = saved;
+            if (saved) {
+                document.getElementById('sidebarDisplayImg').src = saved;
+            } else {
+                document.getElementById('sidebarDisplayImg').src = 'TEACHER.jpg';
+            }
         }
 
         async function handleAdminAuth(e) {
