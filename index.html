@@ -214,10 +214,13 @@
                 </div>
             </div>
 
-            <!-- STUDENTS & SCHEDULE PLOT TAB -->
+            <!-- STUDENTS & SCHEDULE PLOT TAB WITH ADD / REMOVE -->
             <div id="tabStudents" class="hidden space-y-6">
-                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-calendar-plus text-pink-600 mr-2"></i> Plot Student Schedule, Remaining Credits & Bulk Sessions (Up to 20 Sessions)</h3>
+                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-6">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-users text-pink-600 mr-2"></i> Student Directory & Schedule Plotting</h3>
+                        <button onclick="openAddStudentModal()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-user-plus mr-1.5"></i> Add New Student</button>
+                    </div>
                     <div id="studentsDirectoryContainer" class="space-y-4 text-xs"></div>
                 </div>
             </div>
@@ -259,6 +262,24 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- ADD STUDENT MODAL -->
+    <div id="addStudentModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-slate-800 text-sm">Add New Student</h3>
+                <button onclick="closeAddStudentModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="submitNewStudent(event)" class="space-y-3">
+                <div><label class="block font-semibold mb-1">Student Full Name</label><input type="text" id="newStudName" required class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Parent Name</label><input type="text" id="newStudParent" required class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Contact / Email</label><input type="text" id="newStudContact" required class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Portal Password</label><input type="text" id="newStudPass" required class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Initial Remaining Slots (Credits)</label><input type="number" id="newStudCredits" value="0" min="0" required class="w-full p-2.5 border rounded"></div>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Add Student</button>
+            </form>
+        </div>
     </div>
 
     <!-- ================= STUDENT APP CONTAINER ================= -->
@@ -462,6 +483,45 @@
 
         function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
 
+        function openAddStudentModal() {
+            document.getElementById('newStudName').value = '';
+            document.getElementById('newStudParent').value = '';
+            document.getElementById('newStudContact').value = '';
+            document.getElementById('newStudPass').value = '';
+            document.getElementById('newStudCredits').value = '0';
+            document.getElementById('addStudentModal').classList.remove('hidden');
+        }
+
+        function closeAddStudentModal() { document.getElementById('addStudentModal').classList.add('hidden'); }
+
+        async function submitNewStudent(e) {
+            e.preventDefault();
+            const name = document.getElementById('newStudName').value.trim();
+            const parent = document.getElementById('newStudParent').value.trim();
+            const email_or_mobile = document.getElementById('newStudContact').value.trim();
+            const password = document.getElementById('newStudPass').value.trim();
+            const credits = parseInt(document.getElementById('newStudCredits').value) || 0;
+
+            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile, password, credits }]);
+            if (error) { alert("Error adding student: " + error.message); return; }
+
+            alert(`Student ${name} added successfully!`);
+            closeAddStudentModal();
+            loadStudentsTab();
+            loadAdminData();
+        }
+
+        async function removeStudent(studentId, studentName) {
+            if (!confirm(`Are you sure you want to remove student "${studentName}"? This will also remove their scheduled classes.`)) return;
+            
+            await _supabase.from('students').delete().eq('id', studentId);
+            await _supabase.from('sessions').delete().ilike('student_name', studentName);
+            
+            alert(`Student ${studentName} removed successfully.`);
+            loadStudentsTab();
+            loadAdminData();
+        }
+
         function openQrZoom(imgUrl) {
             document.getElementById('zoomedQrImage').src = imgUrl;
             document.getElementById('qrZoomModal').classList.remove('hidden');
@@ -647,13 +707,14 @@
                         <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-2">
                                 <div>
-                                    <strong class="text-sm text-pink-700">${s.name}</strong><br>
+                                    <strong class="text-sm text-pink-700">${s.name}</strong> <span class="text-slate-400">| Parent: ${s.parent || 'N/A'}</span><br>
                                     <span class="text-slate-500">Password: ${s.password} | Contact: ${s.email_or_mobile || 'N/A'}</span>
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <label class="font-semibold">Remaining Slots:</label>
                                     <input type="number" id="cred_${s.id}" value="${s.credits || 0}" class="w-16 p-1.5 border rounded text-center font-bold">
                                     <button onclick="updateStudentCredits(${s.id}, '${s.name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm">Save</button>
+                                    <button onclick="removeStudent(${s.id}, '${s.name}')" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold shadow-sm" title="Remove Student"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
                             
@@ -689,7 +750,6 @@
 
         async function plotBulkSchedule(e, studentName) {
             e.preventDefault();
-            // Find student ID
             const { data: stud } = await _supabase.from('students').select('*').ilike('name', studentName);
             if (!stud || stud.length === 0) return;
             const sId = stud[0].id;
@@ -715,7 +775,6 @@
                     meeting_link,
                     status: 'Active'
                 });
-                // advance 1 day for next session (or customize interval)
                 currentDate.setDate(currentDate.getDate() + 1);
             }
 
