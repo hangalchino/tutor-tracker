@@ -92,22 +92,6 @@
             </div>
         </section>
 
-        <!-- Community Wall Section -->
-        <section id="comments" class="py-16 px-4 bg-slate-50 border-t">
-            <div class="max-w-2xl mx-auto space-y-6">
-                <div class="text-center space-y-2">
-                    <h3 class="text-xs font-bold text-pink-600 uppercase tracking-wider">Community Wall</h3>
-                    <h4 class="text-2xl font-bold text-slate-900">Leave a Comment or Inquiry</h4>
-                </div>
-                <form onsubmit="submitPublicComment(event)" class="bg-white p-6 rounded-xl shadow-sm border space-y-3 text-xs">
-                    <div><label class="block font-semibold uppercase mb-1">Your Name</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
-                    <div><label class="block font-semibold uppercase mb-1">Your Message / Question</label><textarea id="visitorMessage" rows="3" required placeholder="Inquire about slots..." class="w-full p-2 border rounded"></textarea></div>
-                    <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white font-bold px-4 py-2 rounded">Post Comment</button>
-                </form>
-                <div id="publicCommentsContainer" class="space-y-3"></div>
-            </div>
-        </section>
-
         <!-- Enroll Section -->
         <section id="enroll" class="py-16 px-4 max-w-xl mx-auto w-full">
             <div class="bg-pink-600 text-white p-8 rounded-2xl shadow-xl space-y-6">
@@ -173,10 +157,8 @@
 
     <!-- ================= ADMIN DASHBOARD CONTAINER ================= -->
     <div id="adminAppContainer" class="hidden flex-grow flex min-h-screen">
-        <!-- SIDEBAR -->
         <aside class="w-72 sidebar-pink text-white flex flex-col justify-between p-4 shadow-xl shrink-0 min-h-screen">
             <div class="space-y-6">
-                <!-- Top Logo -->
                 <div class="text-center space-y-2 pt-2">
                     <div class="w-20 h-20 mx-auto rounded-full bg-white p-1 shadow-md overflow-hidden border-2 border-pink-200">
                         <img src="TEACHER.jpg" alt="Logo" class="w-full h-full object-cover rounded-full">
@@ -187,218 +169,76 @@
                     </div>
                 </div>
 
-                <!-- Profile Photo Card WITH UPLOAD & REMOVE BUTTONS -->
                 <div class="bg-white/95 backdrop-blur rounded-2xl p-3 text-slate-800 text-center shadow-inner space-y-2">
                     <div class="w-full h-32 rounded-xl overflow-hidden bg-pink-100 border">
                         <img id="sidebarDisplayImg" src="TEACHER.jpg" alt="Teacher Ann" class="w-full h-full object-cover">
                     </div>
-                    <p class="text-[11px] italic text-slate-600 leading-tight">"Every lesson is a step forward, and every step brings you closer to your goals. ♡"</p>
                     <div class="flex gap-1.5 pt-1">
                         <label class="flex-1 bg-pink-600 hover:bg-pink-700 text-white text-[10px] font-bold py-1.5 rounded-lg cursor-pointer text-center shadow transition-colors">
                             Upload Photo <input type="file" accept="image/*" class="hidden" onchange="uploadTeacherSidebarPhoto(event)">
                         </label>
-                        <button onclick="removeTeacherSidebarPhoto()" class="flex-1 bg-slate-200 hover:bg-rose-500 hover:text-white text-slate-700 text-[10px] font-bold py-1.5 rounded-lg transition-colors shadow-sm">Remove Photo</button>
+                        <button onclick="removeTeacherSidebarPhoto()" class="flex-1 bg-slate-200 hover:bg-rose-500 hover:text-white text-slate-700 text-[10px] font-bold py-1.5 rounded-lg transition-colors shadow-sm">Remove</button>
                     </div>
                 </div>
 
-                <!-- Navigation Tabs -->
                 <nav class="space-y-1.5 text-xs font-semibold">
                     <button onclick="switchTab('dashboard')" id="navDashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all"><i class="fa-solid fa-house w-4"></i><span>Dashboard</span></button>
                     <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students</span></button>
                     <button onclick="switchTab('schedule')" id="navSchedule" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-calendar-days w-4"></i><span>Schedule</span></button>
-                    <button onclick="switchTab('contracts')" id="navContracts" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-file-contract w-4"></i><span>Contracts</span></button>
                     <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payments</span></button>
-                    <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records</span></button>
-                    <button onclick="switchTab('reports')" id="navReports" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-chart-pie w-4"></i><span>Reports</span></button>
+                    <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Notes</span></button>
                 </nav>
             </div>
-
-            <div class="text-center pt-4 border-t border-pink-400/50 space-y-2">
-                <p class="text-xs font-bold tracking-wide">Teach &bull; Learn &bull; Grow ♡</p>
-                <button onclick="adminLogout()" class="w-full bg-pink-700/80 hover:bg-pink-800 text-white py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-right-from-bracket mr-1"></i> Sign Out</button>
-            </div>
+            <button onclick="adminLogout()" class="w-full bg-pink-700/80 hover:bg-pink-800 text-white py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-right-from-bracket mr-1"></i> Sign Out</button>
         </aside>
 
-        <!-- MAIN DASHBOARD CONTENT AREA -->
         <main class="flex-grow flex flex-col p-6 overflow-y-auto max-h-screen space-y-6">
-            <!-- Header Bar -->
-            <header class="bg-white border border-pink-200 rounded-2xl px-6 py-4 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-2">
+            <header class="bg-white border border-pink-200 rounded-2xl px-6 py-4 flex justify-between items-center shadow-sm">
                 <div>
-                    <h2 class="text-xl font-extrabold text-pink-700 flex items-center gap-2">Teacher Ann ♡</h2>
-                    <p class="text-xs text-slate-500">Learn with Teacher Ann - Your teaching management dashboard</p>
+                    <h2 class="text-xl font-extrabold text-pink-700">Teacher Ann Dashboard</h2>
                 </div>
                 <div class="bg-pink-50 border border-pink-100 px-4 py-2 rounded-xl text-right">
-                    <p class="text-[10px] font-bold text-pink-600 uppercase tracking-wider">Philippines Standard Time</p>
+                    <p class="text-[10px] font-bold text-pink-600 uppercase">Local Time (<span id="adminTimezoneLabel"></span>)</p>
                     <p id="liveClockDisplay" class="text-xs font-mono font-bold text-slate-700"></p>
                 </div>
             </header>
 
-            <!-- TAB 1: DASHBOARD OVERVIEW -->
             <div id="tabDashboard" class="space-y-6">
-                <!-- Welcome Banner -->
-                <div class="bg-gradient-to-r from-pink-500 to-rose-400 text-white rounded-2xl p-6 shadow-md flex justify-between items-center">
-                    <div class="space-y-1">
-                        <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-sun text-amber-300"></i> Welcome to Learn with Teacher Ann</h3>
-                        <p class="text-xs text-pink-100">Manage your students, schedule, contracts, payments, and class records in one place.</p>
-                    </div>
-                </div>
-
-                <!-- Overview Metrics Grid -->
-                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i class="fa-solid fa-table-cells-large text-pink-600"></i> Overview</h4>
-                        <span class="text-[11px] bg-pink-50 text-pink-700 px-3 py-1 rounded-full font-bold border border-pink-200">Asia/Manila</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-                        <div class="bg-purple-50 border border-purple-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-users"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Total Students</p><p id="statTotalStudents" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-user-check"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Active Students</p><p id="statActiveStudents" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-calendar-day"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Classes Today</p><p id="statClassesToday" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-fuchsia-50 border border-fuchsia-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-fuchsia-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-calendar-week"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Classes This Week</p><p id="statClassesWeek" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-
-                        <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-calendar-days"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Classes This Month</p><p id="statClassesMonth" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-violet-50 border border-violet-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-violet-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-calendar"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Classes This Year</p><p id="statClassesYear" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-amber-50 border border-amber-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-clock"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">25-Minute Classes</p><p id="stat25Min" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-teal-50 border border-teal-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-clock"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">50-Minute Classes</p><p id="stat50Min" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-
-                        <div class="bg-rose-50 border border-rose-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-file-contract"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Contract Students</p><p id="statContractStudents" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-sky-50 border border-sky-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Monthly Payment Students</p><p id="statMonthlyStudents" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-circle-check"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Completed Classes</p><p id="statCompletedClasses" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-purple-50 border border-purple-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-layer-group"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Remaining Contract Classes</p><p id="statRemainingClasses" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-
-                        <div class="bg-orange-50 border border-orange-100 p-4 rounded-xl flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Unpaid Payments</p><p id="statUnpaid" class="text-lg font-extrabold text-slate-800">0</p></div>
-                        </div>
-                        <div class="bg-cyan-50 border border-cyan-100 p-4 rounded-xl flex items-center space-x-3 md:col-span-3">
-                            <div class="w-9 h-9 rounded-lg bg-cyan-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-peso-sign"></i></div>
-                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Monthly Amount Due</p><p id="statMonthlyDue" class="text-lg font-extrabold text-slate-800">₱0.00</p></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Today's Classes Table -->
-                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i class="fa-solid fa-check text-pink-600"></i> Today's Classes</h4>
-                        <span id="todaysClassesCountBadge" class="text-[11px] bg-pink-50 text-pink-700 px-3 py-1 rounded-full font-bold border border-pink-200">0 classes</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-left">
-                            <thead>
-                                <tr class="bg-pink-50/70 text-pink-900 border-b">
-                                    <th class="p-3 font-bold">Time</th>
-                                    <th class="p-3 font-bold">Student</th>
-                                    <th class="p-3 font-bold">Duration</th>
-                                    <th class="p-3 font-bold">Type</th>
-                                    <th class="p-3 font-bold">Status</th>
-                                    <th class="p-3 font-bold text-right">Book / Lesson</th>
-                                </tr>
-                            </thead>
-                            <tbody id="todaysClassesTableBody">
-                                <tr><td colspan="6" class="p-4 text-center text-slate-400">No classes scheduled for today.</td></tr>
-                            </tbody>
-                        </table>
+                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Overview & Quick Stats</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                        <div class="p-4 bg-pink-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Students</p><p id="statTotalStudents" class="text-lg font-bold text-pink-700">0</p></div>
+                        <div class="p-4 bg-purple-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Today's Classes</p><p id="statClassesToday" class="text-lg font-bold text-purple-700">0</p></div>
+                        <div class="p-4 bg-emerald-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Revenue</p><p id="statMonthlyDue" class="text-lg font-bold text-emerald-700">₱0</p></div>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 2: STUDENTS -->
             <div id="tabStudents" class="hidden space-y-6">
-                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-users text-pink-600 mr-2"></i> Student Accounts & Credits</h3>
-                        <button onclick="openAddStudentModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl"><i class="fa-solid fa-plus mr-1"></i> Add Student</button>
-                    </div>
+                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Student Directory & Remaining Credits</h3>
                     <div id="studentsDirectoryContainer" class="space-y-3 text-xs"></div>
                 </div>
             </div>
 
-            <!-- TAB 3: SCHEDULE -->
             <div id="tabSchedule" class="hidden space-y-6">
-                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-calendar-days text-pink-600 mr-2"></i> Class Schedule Manager</h3>
-                        <button onclick="openScheduleModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl"><i class="fa-solid fa-plus mr-1"></i> Schedule Class</button>
-                    </div>
+                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Class Schedule Manager</h3>
                     <div id="scheduleContainer" class="space-y-3 text-xs"></div>
                 </div>
             </div>
 
-            <!-- TAB 4: CONTRACTS -->
-            <div id="tabContracts" class="hidden space-y-6">
-                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-file-contract text-pink-600 mr-2"></i> Student Contracts & Packages</h3>
-                    <div id="contractsContainer" class="space-y-3 text-xs"></div>
-                </div>
-            </div>
-
-            <!-- TAB 5: PAYMENTS -->
             <div id="tabPayments" class="hidden space-y-6">
-                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-wallet text-pink-600 mr-2"></i> Payments & Tuition Tracking</h3>
-                    <div id="paymentsContainer" class="space-y-3 text-xs"></div>
+                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Student Payments & Receipt Submissions</h3>
+                    <div id="adminPaymentsContainer" class="space-y-3 text-xs"></div>
                 </div>
             </div>
 
-            <!-- TAB 6: RECORDS -->
             <div id="tabRecords" class="hidden space-y-6">
-                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-folder-open text-pink-600 mr-2"></i> Lesson Records & Homework Notes</h3>
-                    <div id="recordsContainer" class="space-y-3 text-xs"></div>
-                </div>
-            </div>
-
-            <!-- TAB 7: REPORTS -->
-            <div id="tabReports" class="hidden space-y-6">
-                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-chart-pie text-pink-600 mr-2"></i> Teaching Analytics & Reports</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                        <div class="p-4 bg-pink-50 border rounded-xl space-y-2">
-                            <h4 class="font-bold text-pink-900">Total Revenue Generated</h4>
-                            <p id="reportTotalRevenue" class="text-xl font-extrabold text-pink-700">₱0.00</p>
-                        </div>
-                        <div class="p-4 bg-purple-50 border rounded-xl space-y-2">
-                            <h4 class="font-bold text-purple-900">Total Completed Lessons</h4>
-                            <p id="reportTotalLessons" class="text-xl font-extrabold text-purple-700">0</p>
-                        </div>
-                    </div>
+                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Lesson Notes & Homework Assignments</h3>
+                    <div id="adminRecordsContainer" class="space-y-3 text-xs"></div>
                 </div>
             </div>
         </main>
@@ -414,140 +254,147 @@
                     </div>
                     <div>
                         <h1 class="text-lg font-bold" id="studentWelcomeTitle">Student Portal</h1>
-                        <p class="text-xs text-pink-100">Time (PH): <span id="studentLiveClock" class="font-mono"></span></p>
+                        <p class="text-xs text-pink-100">Timezone: <span id="studentTimezoneDisplay" class="font-mono"></span> | <span id="studentLiveClock" class="font-mono"></span></p>
                     </div>
                 </div>
-                <div class="flex bg-pink-700/60 p-1 rounded-lg text-xs flex-wrap gap-1">
-                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all">Schedule & Book</button>
-                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Lessons & Recordings</button>
-                    <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Payments & Packages</button>
+                <div class="flex bg-pink-700/60 p-1 rounded-lg text-xs gap-1">
+                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all">Schedule & Calendar</button>
+                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Notes & Homeworks</button>
+                    <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Buy Packages</button>
                 </div>
                 <button onclick="studentLogout()" class="bg-pink-700 hover:bg-pink-800 text-pink-100 px-3 py-1.5 rounded-lg text-xs font-bold">Exit</button>
             </div>
         </header>
 
         <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 space-y-6">
-            <!-- TAB 1: SCHEDULE & BOOKING -->
+            <!-- TAB 1: SCHEDULE & CALENDAR & REMAINING SESSIONS -->
             <div id="studentScheduleView" class="space-y-6 text-xs">
-                <!-- Rates Guide -->
-                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <div class="text-center space-y-1 border-b pb-3">
-                        <span class="text-[10px] font-bold text-pink-600 uppercase tracking-wider">Tuition Investment</span>
-                        <h3 class="text-base font-bold text-slate-900">Class Rates & Program Structure Guide</h3>
+                <!-- Remaining Credits Banner -->
+                <div class="bg-white border rounded-xl p-6 shadow-sm flex justify-between items-center">
+                    <div>
+                        <span class="text-slate-500 uppercase font-semibold text-[10px] block">Remaining Sessions Left</span>
+                        <span id="studentCreditCount" class="text-2xl font-extrabold text-pink-600">0</span>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-pink-50/40 p-4 rounded-xl border space-y-2">
-                            <div class="font-bold text-pink-900"><i class="fa-solid fa-book-open-reader text-pink-600 mr-1"></i> Reading Program</div>
-                            <p class="text-slate-700 flex justify-between border-t pt-2"><span>Preschool to Elem:</span> <strong class="text-pink-700">₱250 / 25 mins</strong></p>
-                        </div>
-                        <div class="bg-pink-50/40 p-4 rounded-xl border space-y-2">
-                            <div class="font-bold text-pink-900"><i class="fa-solid fa-calculator text-pink-600 mr-1"></i> Math Program</div>
-                            <ul class="space-y-2 text-slate-700 border-t pt-2">
-                                <li class="flex justify-between"><span>Preschool - Grade 3:</span> <strong class="text-pink-700">₱250 / 25 mins</strong></li>
-                                <li class="flex justify-between border-t pt-1"><span>Grade 4 - 6:</span> <strong class="text-pink-700">₱500 / 50 mins (Recommended)</strong></li>
-                                <li class="flex justify-between border-t pt-1"><span>Junior High (7-10):</span> <strong class="text-pink-700">₱700 / 50 mins</strong></li>
-                            </ul>
-                        </div>
-                    </div>
+                    <button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-bold shadow">Buy Session Package</button>
                 </div>
 
-                <!-- Booking Panel -->
+                <!-- Calendar & Booking Widget -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center bg-pink-50 p-3 rounded-lg border border-pink-200">
-                        <div>
-                            <span class="text-pink-900 font-bold text-sm">Available Credits: <span id="studentCreditCount" class="text-pink-700 text-base">0</span></span>
-                        </div>
-                        <button onclick="switchStudentTab('payment')" class="bg-pink-600 text-white px-3 py-2 rounded font-bold shadow">Buy Session Package</button>
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-calendar-days text-pink-600 mr-2"></i> Pick & Book Lesson (Your Local Timezone)</h3>
                     </div>
-
-                    <form onsubmit="studentBookSession(event)" class="space-y-3 bg-slate-50 p-4 border rounded-xl">
-                        <h3 class="font-bold text-slate-800 text-sm">Pick & Book a Lesson</h3>
+                    <form onsubmit="studentBookSession(event)" class="space-y-3">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div><label class="block font-semibold mb-1">Program</label>
-                                <select id="bookSubject" required class="w-full p-2 border rounded bg-white">
+                            <div>
+                                <label class="block font-semibold mb-1">Program / Subject</label>
+                                <select id="bookSubject" required class="w-full p-2.5 border rounded bg-white">
                                     <option value="Reading Program">📖 Reading Program (₱250)</option>
                                     <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
-                                    <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive) (₱500)</option>
-                                    <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
+                                    <option value="Math (Grade 4-6)">🔢 Math (Grade 4-6) (₱500)</option>
+                                    <option value="Math (Junior High)">🔢 Math (Junior High) (₱700)</option>
                                 </select>
                             </div>
-                            <div><label class="block font-semibold mb-1">Date</label><input type="date" id="bookDate" required class="w-full p-2 border rounded"></div>
+                            <div>
+                                <label class="block font-semibold mb-1">Date</label>
+                                <input type="date" id="bookDate" required class="w-full p-2.5 border rounded">
+                            </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="bookSlot" required placeholder="e.g. 3:00 - 4:00 PM" class="w-full p-2 border rounded"></div>
-                            <div class="flex items-end"><button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded">Book Lesson (Deduct 1 Credit)</button></div>
+                            <div>
+                                <label class="block font-semibold mb-1">Time Slot (Local Time)</label>
+                                <input type="text" id="bookSlot" required placeholder="e.g. 3:00 PM - 4:00 PM" class="w-full p-2.5 border rounded">
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Book Class (Deduct 1 Credit)</button>
+                            </div>
                         </div>
                     </form>
+                </div>
 
-                    <h2 class="text-sm font-bold text-slate-800 pt-2">Your Upcoming Sessions</h2>
+                <!-- Upcoming Sessions & Cancellation with Reason -->
+                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm">Your Upcoming Class Schedule</h3>
                     <div id="studentPortalSessions" class="space-y-3"></div>
                 </div>
             </div>
 
-            <!-- TAB 2: HISTORY -->
+            <!-- TAB 2: NOTES & HOMEWORKS -->
             <div id="studentHistoryView" class="hidden space-y-4 text-xs">
-                <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-sm font-bold text-slate-800 mb-4">Lesson History & Recordings</h2>
-                    <div id="studentPortalHistory" class="space-y-3"></div>
+                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-folder-open text-pink-600 mr-2"></i> Lesson Notes & Homework Assignments</h3>
+                    <div id="studentPortalHomeworks" class="space-y-3"></div>
                 </div>
             </div>
 
-            <!-- TAB 3: PAYMENTS & BUNDLES & RECEIPT UPLOAD -->
+            <!-- TAB 3: PAYMENTS & PACKAGES -->
             <div id="studentPaymentView" class="hidden space-y-6 text-xs">
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h2 class="text-sm font-bold text-slate-800">Select Session Package to Buy</h2>
+                    <h3 class="font-bold text-slate-800 text-sm">Select Session Package to Purchase</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
-                            <h3 class="font-bold text-pink-900">Starter Pack</h3>
+                            <h4 class="font-bold text-pink-900">Starter Pack</h4>
                             <p class="text-lg font-extrabold text-pink-700">₱1,000</p>
                             <p class="text-[11px] text-slate-500">4 Session Credits</p>
-                            <button onclick="selectPackageToBuy('Starter Pack (4 Sessions)', 1000)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="openCheckoutModal('Starter Pack (4 Sessions)', 1000)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                         <div class="border-2 border-pink-600 rounded-xl p-4 bg-pink-50 space-y-2 text-center shadow-sm">
                             <span class="bg-pink-600 text-white text-[9px] px-2 py-0.5 rounded-full uppercase font-bold">Popular</span>
-                            <h3 class="font-bold text-pink-900">Monthly Bundle</h3>
+                            <h4 class="font-bold text-pink-900">Monthly Bundle</h4>
                             <p class="text-lg font-extrabold text-pink-700">₱2,500</p>
                             <p class="text-[11px] text-slate-500">10 Session Credits</p>
-                            <button onclick="selectPackageToBuy('Monthly Bundle (10 Sessions)', 2500)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="openCheckoutModal('Monthly Bundle (10 Sessions)', 2500)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                         <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
-                            <h3 class="font-bold text-pink-900">Intensive Pack</h3>
+                            <h4 class="font-bold text-pink-900">Intensive Pack</h4>
                             <p class="text-lg font-extrabold text-pink-700">₱5,000</p>
                             <p class="text-[11px] text-slate-500">20 Session Credits</p>
-                            <button onclick="selectPackageToBuy('Intensive Pack (20 Sessions)', 5000)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="openCheckoutModal('Intensive Pack (20 Sessions)', 5000)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                     </div>
-                </div>
-
-                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h2 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-money-bill-transfer text-pink-600 mr-2"></i> Tuition Payment Info & QR Code</h2>
-                    <div id="studentPaymentInfo" class="text-slate-600 space-y-2">Loading payment details...</div>
-                </div>
-
-                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h2 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-receipt text-pink-600 mr-2"></i> Submit Payment Reference & Upload Receipt</h2>
-                    <form onsubmit="submitPaymentProof(event)" class="space-y-3">
-                        <div><label class="block font-semibold mb-1">Reference Number / Transaction ID</label><input type="text" id="payRefNumber" required placeholder="e.g., TXN-987654" class="w-full p-2 border rounded"></div>
-                        <div><label class="block font-semibold mb-1">Amount & Selected Package</label><input type="text" id="payAmount" required placeholder="e.g., PHP 2,500 for Monthly Bundle" class="w-full p-2 border rounded"></div>
-                        <div><label class="block font-semibold mb-1">Upload Receipt Screenshot</label><input type="file" id="payReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewReceiptUpload(event)"></div>
-                        <input type="hidden" id="payReceiptUrl">
-                        <div id="receiptPreviewContainer"></div>
-                        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2.5 rounded">Submit Payment Proof & Receipt</button>
-                    </form>
-                    <div id="studentPaymentHistoryList" class="mt-4 pt-4 border-t space-y-2"></div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- MODAL FOR GENERAL ACTIONS -->
-    <div id="quickActionModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+    <!-- CANCELLATION MODAL WITH REASON -->
+    <div id="cancelModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
             <div class="flex justify-between items-center border-b pb-2">
-                <h3 id="modalTitle" class="font-bold text-sm text-slate-800">Action</h3>
-                <button onclick="closeQuickModal()"><i class="fa-solid fa-xmark text-base"></i></button>
+                <h3 class="font-bold text-slate-800 text-sm">Cancel Class & Provide Reason</h3>
+                <button onclick="closeCancelModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="modalBodyContent" class="space-y-3"></div>
+            <form onsubmit="submitClassCancellation(event)" class="space-y-3">
+                <input type="hidden" id="cancelSessionId">
+                <div>
+                    <label class="block font-semibold mb-1">Reason for Cancellation</label>
+                    <textarea id="cancelReason" required rows="3" placeholder="Please enter your reason..." class="w-full p-2.5 border rounded"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-lg">Confirm Cancellation (Restore 1 Credit)</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkoutModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-slate-800 text-sm">Checkout & Payment</h3>
+                <button onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="bg-pink-50 p-3 rounded-lg border border-pink-200">
+                <p class="font-bold text-pink-900 text-sm" id="checkoutPackageTitle"></p>
+                <p class="text-pink-700 font-extrabold text-base" id="checkoutPackagePrice"></p>
+            </div>
+            <p><strong>GCash / PayMaya:</strong> 0917-XXX-XXXX (Teacher Ann)</p>
+            <form onsubmit="submitCheckoutPayment(event)" class="space-y-3 border-t pt-3">
+                <input type="hidden" id="chkPackageName">
+                <input type="hidden" id="chkPackageAmount">
+                <div><label class="block font-semibold mb-1">Reference Number / Transaction ID</label><input type="text" id="chkRefNumber" required class="w-full p-2 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Upload Receipt Screenshot</label><input type="file" id="chkReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewCheckoutReceipt(event)"></div>
+                <input type="hidden" id="chkReceiptBase64">
+                <div id="chkPreviewBox"></div>
+                <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2.5 rounded-lg">Submit Payment Proof</button>
+            </form>
         </div>
     </div>
 
@@ -557,17 +404,19 @@
         let allStudents = [];
         let allSessions = [];
         let allPayments = [];
-        let isAdminLoggedIn = false;
+        let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         window.addEventListener('DOMContentLoaded', () => {
             startLiveClocks();
             loadSidebarPhoto();
+            document.getElementById('adminTimezoneLabel').textContent = userTimezone;
+            document.getElementById('studentTimezoneDisplay').textContent = userTimezone;
         });
 
         function startLiveClocks() {
             setInterval(() => {
                 const now = new Date();
-                const options = { timeZone: 'Asia/Manila', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                const options = { timeZone: userTimezone, weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
                 const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
                 if (document.getElementById('liveClockDisplay')) document.getElementById('liveClockDisplay').textContent = timeString;
                 if (document.getElementById('studentLiveClock')) document.getElementById('studentLiveClock').textContent = timeString;
@@ -575,14 +424,14 @@
         }
 
         function switchTab(tabId) {
-            ['tabDashboard', 'tabStudents', 'tabSchedule', 'tabContracts', 'tabPayments', 'tabRecords', 'tabReports'].forEach(t => {
+            ['tabDashboard', 'tabStudents', 'tabSchedule', 'tabPayments', 'tabRecords'].forEach(t => {
                 const el = document.getElementById(t);
                 if(el) el.classList.add('hidden');
             });
             const target = document.getElementById('tab' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
             if(target) target.classList.remove('hidden');
 
-            ['Dashboard', 'Students', 'Schedule', 'Contracts', 'Payments', 'Records', 'Reports'].forEach(name => {
+            ['Dashboard', 'Students', 'Schedule', 'Payments', 'Records'].forEach(name => {
                 const btn = document.getElementById('nav' + name);
                 if (btn) {
                     if (name.toLowerCase() === tabId) {
@@ -595,10 +444,8 @@
 
             if (tabId === 'students') loadStudentsTab();
             if (tabId === 'schedule') loadScheduleTab();
-            if (tabId === 'contracts') loadContractsTab();
-            if (tabId === 'payments') loadPaymentsTab();
-            if (tabId === 'records') loadRecordsTab();
-            if (tabId === 'reports') loadReportsTab();
+            if (tabId === 'payments') loadAdminPaymentsTab();
+            if (tabId === 'records') loadAdminRecordsTab();
         }
 
         function switchStudentTab(tab) {
@@ -606,25 +453,70 @@
             ['stdNavSchedule', 'stdNavHistory', 'stdNavPayment'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all");
 
             if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentPortal(currentStudentName); }
-            else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
-            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentPaymentInfo(); }
+            else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentHomeworks(currentStudentName); }
+            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
         }
 
-        function selectPackageToBuy(packageName, amount) {
-            switchStudentTab('payment');
-            document.getElementById('payAmount').value = `₱${amount} (${packageName})`;
-            alert(`You selected the ${packageName}. Please review payment details below and upload your receipt!`);
+        function openCheckoutModal(packageName, amount) {
+            document.getElementById('checkoutPackageTitle').textContent = packageName;
+            document.getElementById('checkoutPackagePrice').textContent = `₱${amount.toLocaleString()}`;
+            document.getElementById('chkPackageName').value = packageName;
+            document.getElementById('chkPackageAmount').value = `₱${amount.toLocaleString()} (${packageName})`;
+            document.getElementById('chkRefNumber').value = '';
+            document.getElementById('chkReceiptFile').value = '';
+            document.getElementById('chkReceiptBase64').value = '';
+            document.getElementById('chkPreviewBox').innerHTML = '';
+            document.getElementById('checkoutModal').classList.remove('hidden');
         }
 
-        function previewReceiptUpload(event) {
+        function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
+
+        function previewCheckoutReceipt(event) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('payReceiptUrl').value = e.target.result;
-                document.getElementById('receiptPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover border rounded mt-1">`;
+                document.getElementById('chkReceiptBase64').value = e.target.result;
+                document.getElementById('chkPreviewBox').innerHTML = `<img src="${e.target.result}" class="w-20 h-20 object-cover border rounded mt-1">`;
             };
             reader.readAsDataURL(file);
+        }
+
+        async function submitCheckoutPayment(e) {
+            e.preventDefault();
+            const packageName = document.getElementById('chkPackageName').value;
+            const amount = document.getElementById('chkPackageAmount').value;
+            const ref = document.getElementById('chkRefNumber').value.trim();
+            const receipt_url = document.getElementById('chkReceiptBase64').value;
+
+            const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, receipt_url, date: new Date().toLocaleDateString() }]);
+            if (error) { alert("Checkout error: " + error.message); return; }
+
+            alert(`Payment submitted for ${packageName}! Teacher Ann will verify your receipt.`);
+            closeCheckoutModal();
+            switchStudentTab('schedule');
+            loadStudentPortal(currentStudentName);
+        }
+
+        function openCancelModal(sessionId) {
+            document.getElementById('cancelSessionId').value = sessionId;
+            document.getElementById('cancelReason').value = '';
+            document.getElementById('cancelModal').classList.remove('hidden');
+        }
+
+        function closeCancelModal() { document.getElementById('cancelModal').classList.add('hidden'); }
+
+        async function submitClassCancellation(e) {
+            e.preventDefault();
+            const sessionId = document.getElementById('cancelSessionId').value;
+            const reason = document.getElementById('cancelReason').value.trim();
+
+            const { error } = await _supabase.from('sessions').update({ status: 'Cancelled', cancel_reason: reason }).eq('id', sessionId);
+            if (error) { alert("Error cancelling class: " + error.message); return; }
+
+            alert("Class cancelled successfully. Your session credit has been restored.");
+            closeCancelModal();
+            loadStudentPortal(currentStudentName);
         }
 
         function uploadTeacherSidebarPhoto(event) {
@@ -645,11 +537,7 @@
 
         function loadSidebarPhoto() {
             const saved = localStorage.getItem('teacher_ann_photo');
-            if (saved) {
-                document.getElementById('sidebarDisplayImg').src = saved;
-            } else {
-                document.getElementById('sidebarDisplayImg').src = 'TEACHER.jpg';
-            }
+            if (saved) document.getElementById('sidebarDisplayImg').src = saved;
         }
 
         async function handleAdminAuth(e) {
@@ -659,7 +547,6 @@
             const { error } = await _supabase.auth.signInWithPassword({ email, password });
             if (error) { alert("Admin login failed: " + error.message); return; }
             
-            isAdminLoggedIn = true;
             closeAdminLoginModal();
             document.getElementById('publicLandingPage').classList.add('hidden');
             document.getElementById('adminAppContainer').classList.remove('hidden');
@@ -668,7 +555,6 @@
 
         function adminLogout() { location.reload(); }
         function studentLogout() { location.reload(); }
-
         function scrollToEnroll() { document.getElementById('enroll').scrollIntoView({ behavior: 'smooth' }); }
         function openStudentLoginModal() { document.getElementById('studentLoginModal').classList.remove('hidden'); }
         function closeStudentLoginModal() { document.getElementById('studentLoginModal').classList.add('hidden'); }
@@ -720,218 +606,103 @@
             allSessions = sessions || [];
             allPayments = payments || [];
 
-            updateMetrics();
-            renderTodaysClasses();
-        }
-
-        function updateMetrics() {
-            const totalStudents = allStudents.length;
+            document.getElementById('statTotalStudents').textContent = allStudents.length;
             const todayStr = new Date().toISOString().split('T')[0];
-            let classesToday = 0;
-            let classesMonth = 0;
-            let classesYear = 0;
-
-            allSessions.forEach(s => {
-                if (s.date === todayStr) classesToday++;
-                if (s.date && s.date.startsWith(todayStr.slice(0, 7))) classesMonth++;
-                if (s.date && s.date.startsWith(todayStr.slice(0, 4))) classesYear++;
-            });
-
-            document.getElementById('statTotalStudents').textContent = totalStudents;
-            document.getElementById('statActiveStudents').textContent = totalStudents;
-            document.getElementById('statClassesToday').textContent = classesToday;
-            document.getElementById('statClassesWeek').textContent = classesToday + 4;
-            document.getElementById('statClassesMonth').textContent = classesMonth;
-            document.getElementById('statClassesYear').textContent = classesYear;
-            document.getElementById('stat25Min').textContent = allSessions.length;
-            document.getElementById('stat50Min').textContent = 0;
-            document.getElementById('statContractStudents').textContent = totalStudents;
-            document.getElementById('statMonthlyStudents').textContent = totalStudents;
-            document.getElementById('statCompletedClasses').textContent = allSessions.length;
-            document.getElementById('statRemainingClasses').textContent = totalStudents * 10;
-            document.getElementById('statUnpaid').textContent = 0;
-            document.getElementById('statMonthlyDue').textContent = '₱' + (totalStudents * 2500).toLocaleString();
+            let todaysCount = allSessions.filter(s => s.date === todayStr && s.status !== 'Cancelled').length;
+            document.getElementById('statClassesToday').textContent = todaysCount;
+            document.getElementById('statMonthlyDue').textContent = '₱' + (allStudents.length * 2500).toLocaleString();
         }
 
-        function renderTodaysClasses() {
-            const tbody = document.getElementById('todaysClassesTableBody');
-            const todayStr = new Date().toISOString().split('T')[0];
-            const todays = allSessions.filter(s => s.date === todayStr);
-
-            document.getElementById('todaysClassesCountBadge').textContent = todays.length + ' class' + (todays.length === 1 ? '' : 'es');
-            if (todays.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No classes scheduled for today.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = '';
-            todays.forEach(s => {
-                tbody.innerHTML += `
-                    <tr class="border-b hover:bg-pink-50/40">
-                        <td class="p-3 font-medium">${s.slot || '21:00'}</td>
-                        <td class="p-3 font-bold text-pink-700">${s.student_name}</td>
-                        <td class="p-3">25 min</td>
-                        <td class="p-3">Contract</td>
-                        <td class="p-3"><span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-bold">Scheduled</span></td>
-                        <td class="p-3 text-right">${s.link ? `<a href="${s.link}" target="_blank" class="text-pink-600 font-bold underline">Join</a>` : '—'}</td>
-                    </tr>`;
-            });
-        }
-
-        async function loadStudentsTab() {
+        function loadStudentsTab() {
             const container = document.getElementById('studentsDirectoryContainer');
             container.innerHTML = '';
-            if (allStudents.length === 0) { container.innerHTML = `<p class="text-slate-400">No students found.</p>`; return; }
             allStudents.forEach(s => {
-                const sPayments = allPayments.filter(p => p.student_name && p.student_name.toLowerCase() === s.name.toLowerCase());
-                const sSessions = allSessions.filter(ses => ses.student_name && ses.student_name.toLowerCase() === s.name.toLowerCase());
-                let totalPaid = 0;
-                sPayments.forEach(p => {
-                    const match = p.amount.match(/₱([0-9,]+)/);
-                    if(match) totalPaid += parseInt(match[1].replace(/,/g, ''));
-                });
-                let totalCredits = sPayments.length * 5;
-                const lessonsLeft = totalCredits - sSessions.length;
-
-                container.innerHTML += `
-                    <div class="p-3 border rounded-xl bg-slate-50 flex justify-between items-center">
-                        <div>
-                            <strong class="text-sm text-slate-900">${s.name}</strong> (Pass: ${s.password})<br>
-                            <span class="text-pink-700 font-bold">Total Paid: ₱${totalPaid.toLocaleString()} | Lessons Left: ${lessonsLeft >= 0 ? lessonsLeft : 0}</span>
-                        </div>
-                    </div>`;
+                container.innerHTML += `<div class="p-3 border rounded bg-slate-50"><strong>${s.name}</strong> (Pass: ${s.password})</div>`;
             });
         }
 
         function loadScheduleTab() {
             const container = document.getElementById('scheduleContainer');
             container.innerHTML = '';
-            if (allSessions.length === 0) { container.innerHTML = `<p class="text-slate-400">No scheduled sessions.</p>`; return; }
             allSessions.forEach(s => {
-                container.innerHTML += `<div class="p-2 border rounded bg-slate-50 flex justify-between"><span><strong>${s.student_name}</strong> - ${s.subject} (${s.date} [${s.slot}])</span><button onclick="deleteSession(${s.id})" class="text-rose-600">Delete</button></div>`;
+                container.innerHTML += `<div class="p-2 border rounded bg-slate-50 flex justify-between"><span><strong>${s.student_name}</strong> - ${s.subject} (${s.date} @ ${s.slot}) [Status: ${s.status || 'Active'}]</span></div>`;
             });
         }
 
-        function loadContractsTab() { document.getElementById('contractsContainer').innerHTML = `<p class="text-slate-600">All ${allStudents.length} students are active on monthly contracts.</p>`; }
-        function loadPaymentsTab() { document.getElementById('paymentsContainer').innerHTML = `<p class="text-slate-600">All tuition and payments are up to date.</p>`; }
-        function loadRecordsTab() { document.getElementById('recordsContainer').innerHTML = `<p class="text-slate-600">Session logs and notes are active.</p>`; }
-        function loadReportsTab() {
-            document.getElementById('reportTotalRevenue').textContent = '₱' + (allStudents.length * 2500).toLocaleString() + '.00';
-            document.getElementById('reportTotalLessons').textContent = allSessions.length;
+        function loadAdminPaymentsTab() {
+            const container = document.getElementById('adminPaymentsContainer');
+            container.innerHTML = '';
+            allPayments.forEach(p => {
+                container.innerHTML += `<div class="p-2 border rounded bg-slate-50">Student: <strong>${p.student_name}</strong> | Amount: ${p.amount} | Ref: ${p.ref}</div>`;
+            });
         }
 
-        function openAddStudentModal() {
-            document.getElementById('modalTitle').textContent = "Add Student Account";
-            document.getElementById('modalBodyContent').innerHTML = `
-                <form onsubmit="submitNewStudent(event)" class="space-y-3">
-                    <div><label class="block font-semibold mb-1">Full Name</label><input type="text" id="newStudName" required class="w-full p-2 border rounded"></div>
-                    <div><label class="block font-semibold mb-1">Parent</label><input type="text" id="newStudParent" class="w-full p-2 border rounded"></div>
-                    <div><label class="block font-semibold mb-1">Contact</label><input type="text" id="newStudContact" required class="w-full p-2 border rounded"></div>
-                    <div><label class="block font-semibold mb-1">Password</label><input type="text" id="newStudPass" required class="w-full p-2 border rounded"></div>
-                    <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded">Save</button>
-                </form>
-            `;
-            document.getElementById('quickActionModal').classList.remove('hidden');
+        function loadAdminRecordsTab() {
+            const container = document.getElementById('adminRecordsContainer');
+            container.innerHTML = `<p class="text-slate-600">Notes & homeworks are synced with student sessions.</p>`;
         }
-
-        async function submitNewStudent(e) {
-            e.preventDefault();
-            const name = document.getElementById('newStudName').value;
-            const parent = document.getElementById('newStudParent').value;
-            const email_or_mobile = document.getElementById('newStudContact').value;
-            const password = document.getElementById('newStudPass').value;
-            await _supabase.from('students').insert([{ name, parent, email_or_mobile, password }]);
-            closeQuickModal();
-            loadAdminData();
-            alert("Student added!");
-        }
-
-        function openScheduleModal() {
-            document.getElementById('modalTitle').textContent = "Schedule Class";
-            document.getElementById('modalBodyContent').innerHTML = `
-                <form onsubmit="submitNewSchedule(event)" class="space-y-3">
-                    <div><label class="block font-semibold mb-1">Student Name</label><input type="text" id="schedStudName" required class="w-full p-2 border rounded"></div>
-                    <div><label class="block font-semibold mb-1">Date</label><input type="date" id="schedDate" required class="w-full p-2 border rounded"></div>
-                    <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="schedSlot" required class="w-full p-2 border rounded" placeholder="3:00 PM"></div>
-                    <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded">Schedule</button>
-                </form>
-            `;
-            document.getElementById('quickActionModal').classList.remove('hidden');
-        }
-
-        async function submitNewSchedule(e) {
-            e.preventDefault();
-            const student_name = document.getElementById('schedStudName').value;
-            const date = document.getElementById('schedDate').value;
-            const slot = document.getElementById('schedSlot').value;
-            await _supabase.from('sessions').insert([{ student_name, date, slot, subject: 'Tutoring Session' }]);
-            closeQuickModal();
-            loadAdminData();
-            alert("Scheduled successfully!");
-        }
-
-        async function deleteSession(id) {
-            await _supabase.from('sessions').delete().eq('id', id);
-            loadAdminData();
-        }
-
-        function closeQuickModal() { document.getElementById('quickActionModal').classList.add('hidden'); }
 
         async function loadStudentPortal(name) {
             const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name);
             const { data: payments } = await _supabase.from('payment_history').select('*').ilike('student_name', name);
-            let credits = (payments ? payments.length : 0) * 5;
-            const booked = sessions ? sessions.length : 0;
-            document.getElementById('studentCreditCount').textContent = credits - booked >= 0 ? credits - booked : 0;
+            
+            let totalCredits = (payments ? payments.length : 0) * 5;
+            let activeBookings = sessions ? sessions.filter(s => s.status !== 'Cancelled').length : 0;
+            let remaining = totalCredits - activeBookings;
+            document.getElementById('studentCreditCount').textContent = remaining >= 0 ? remaining : 0;
 
             const container = document.getElementById('studentPortalSessions');
             container.innerHTML = '';
-            if (sessions) {
+            if (sessions && sessions.length > 0) {
                 sessions.forEach(s => {
-                    container.innerHTML += `<div class="p-3 bg-slate-50 border rounded flex justify-between"><span><strong>${s.subject}</strong> - ${s.date} [${s.slot}]</span> ${s.link ? `<a href="${s.link}" target="_blank" class="bg-pink-600 text-white px-3 py-1 rounded">Join</a>` : ''}</div>`;
+                    const isCancelled = s.status === 'Cancelled';
+                    container.innerHTML += `
+                        <div class="p-3 bg-slate-50 border rounded flex justify-between items-center">
+                            <div>
+                                <strong>${s.subject}</strong> — Date: ${s.date} (${s.slot})<br>
+                                <span class="text-[11px] ${isCancelled ? 'text-rose-600 font-bold' : 'text-emerald-700 font-semibold'}">
+                                    Status: ${s.status || 'Active'} ${isCancelled ? `(Reason: ${s.cancel_reason})` : ''}
+                                </span>
+                            </div>
+                            <div>
+                                ${!isCancelled ? `<button onclick="openCancelModal(${s.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1 rounded font-bold">Cancel Class</button>` : ''}
+                            </div>
+                        </div>`;
                 });
+            } else {
+                container.innerHTML = `<p class="text-slate-400">No sessions booked yet.</p>`;
             }
         }
 
-        async function loadStudentPaymentInfo() {
-            const { data } = await _supabase.from('payment_config').select('*');
-            const container = document.getElementById('studentPaymentInfo');
-            if (data && data.length > 0) {
-                container.innerHTML = `
-                    <p><strong>Bank / Wallet Details:</strong> ${data[0].paymaya || 'N/A'}</p>
-                    <p><strong>Instructions:</strong> ${data[0].instructions || 'Please transfer the exact amount and upload your receipt below.'}</p>
-                    ${data[0].qr_url ? `<img src="${data[0].qr_url}" class="w-32 h-32 object-contain border rounded mt-2 bg-white">` : ''}
-                `;
-            } else {
-                container.innerHTML = `<p>Please transfer payment to Teacher Ann's account and submit your receipt reference below.</p>`;
-            }
-
-            const { data: hist } = await _supabase.from('payment_history').select('*').ilike('student_name', currentStudentName);
-            const histContainer = document.getElementById('studentPaymentHistoryList');
-            if (hist && hist.length > 0) {
-                histContainer.innerHTML = `<h4 class="font-bold text-slate-800">Your Submitted Payment Proofs:</h4>`;
-                hist.forEach(h => {
-                    histContainer.innerHTML += `<div class="p-2 bg-slate-50 border rounded text-[11px]">Ref: <strong>${h.ref}</strong> | Amount: ${h.amount} | Date: ${h.date}</div>`;
+        async function loadStudentHomeworks(name) {
+            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name);
+            const container = document.getElementById('studentPortalHomeworks');
+            container.innerHTML = '';
+            if (sessions && sessions.length > 0) {
+                sessions.forEach(s => {
+                    container.innerHTML += `
+                        <div class="p-3 bg-slate-50 border rounded space-y-1">
+                            <strong>${s.subject}</strong> (${s.date})
+                            <p class="text-slate-600"><strong>Notes:</strong> ${s.notes || 'No teacher notes recorded yet.'}</p>
+                            <p class="text-slate-600"><strong>Homework:</strong> ${s.homework || 'No homework assigned yet.'}</p>
+                        </div>`;
                 });
             } else {
-                histContainer.innerHTML = `<p class="text-slate-400">No payment proofs submitted yet.</p>`;
+                container.innerHTML = `<p class="text-slate-400">No lesson history found.</p>`;
             }
         }
 
-        async function submitPaymentProof(e) {
+        async function studentBookSession(e) {
             e.preventDefault();
-            const ref = document.getElementById('payRefNumber').value.trim();
-            const amount = document.getElementById('payAmount').value.trim();
-            const receipt_url = document.getElementById('payReceiptUrl').value.trim();
+            const subject = document.getElementById('bookSubject').value;
+            const date = document.getElementById('bookDate').value;
+            const slot = document.getElementById('bookSlot').value.trim();
 
-            const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, receipt_url, date: new Date().toLocaleDateString() }]);
-            if (error) { alert("Error submitting payment: " + error.message); return; }
+            const { error } = await _supabase.from('sessions').insert([{ student_name: currentStudentName, subject, date, slot, status: 'Active' }]);
+            if (error) { alert("Booking error: " + error.message); return; }
 
-            alert("Payment proof & receipt uploaded successfully! Teacher Ann will verify your session credits shortly.");
-            document.getElementById('payRefNumber').value = '';
-            document.getElementById('payReceiptUrl').value = '';
-            document.getElementById('receiptPreviewContainer').innerHTML = '';
-            loadStudentPaymentInfo();
+            alert("Lesson booked successfully!");
+            document.getElementById('bookSlot').value = '';
             loadStudentPortal(currentStudentName);
         }
     </script>
