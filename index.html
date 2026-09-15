@@ -38,8 +38,8 @@
                 <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
                     <a href="#home" class="hover:text-pink-600 transition-colors">Home</a>
                     <a href="#rates" class="hover:text-pink-600 transition-colors">Class Rates</a>
+                    <a href="#quote" class="hover:text-pink-600 transition-colors">Instant Quote</a>
                     <a href="#about" class="hover:text-pink-600 transition-colors">About</a>
-                    <a href="#comments" class="hover:text-pink-600 transition-colors">Comments</a>
                 </nav>
                 <div class="flex items-center space-x-2">
                     <button onclick="scrollToEnroll()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm">Enroll Now</button>
@@ -54,9 +54,42 @@
                 <span class="bg-pink-100 text-pink-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Online Tutoring Excellence</span>
                 <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">Empowering Young Minds in Reading, English, Math & Filipino</h2>
                 <p class="text-sm text-slate-600 max-w-xl mx-auto">Welcome to my official learning hub! Providing engaging, personalized online lessons designed to help your child excel academically with confidence.</p>
+                <!-- Motivational Banner -->
+                <div class="bg-pink-600 text-white p-3 rounded-xl text-xs font-medium italic shadow-inner max-w-lg mx-auto">
+                    <i class="fa-solid fa-quote-left mr-1"></i> <span id="publicMotivationText">"Education is the passport to the future, for tomorrow belongs to those who prepare for it today."</span>
+                </div>
                 <div class="flex justify-center gap-3 pt-2">
                     <button onclick="scrollToEnroll()" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl text-xs font-bold shadow-md transition-all">Get Started & Enroll</button>
                     <button onclick="openStudentLoginModal()" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-6 py-3 rounded-xl text-xs font-bold transition-all">Student Portal Sign In</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instant Quote Generator Section -->
+        <section id="quote" class="py-12 px-4 max-w-xl mx-auto w-full">
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-pink-200 space-y-4">
+                <div class="text-center space-y-1">
+                    <h3 class="text-base font-bold text-pink-700"><i class="fa-solid fa-calculator mr-2"></i> Online Quote Generator</h3>
+                    <p class="text-xs text-slate-500">Calculate estimated tuition instantly for your tutoring package.</p>
+                </div>
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="block font-semibold mb-1">Select Program / Subject</label>
+                        <select id="quoteProgram" class="w-full p-2.5 border rounded-lg bg-slate-50" onchange="calculateQuote()">
+                            <option value="250">📖 Reading Program (₱250 / 25 mins)</option>
+                            <option value="250">🔢 Math Preschool to Grade 3 (₱250 / 25 mins)</option>
+                            <option value="500">🔢 Math Grade 4-6 Comprehensive (₱500 / 50 mins)</option>
+                            <option value="700">🔢 Math Junior High Grade 7-10 (₱700 / 50 mins)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Number of Sessions</label>
+                        <input type="number" id="quoteSessions" value="10" min="1" max="50" class="w-full p-2.5 border rounded-lg" oninput="calculateQuote()">
+                    </div>
+                    <div class="p-4 bg-pink-50 rounded-xl border border-pink-200 text-center space-y-1">
+                        <span class="text-slate-600 font-medium">Estimated Total Investment:</span>
+                        <p id="quoteResultDisplay" class="text-2xl font-extrabold text-pink-700">₱5,000</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -192,76 +225,115 @@
             <button onclick="adminLogout()" class="w-full bg-pink-700/80 hover:bg-pink-800 text-white py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-right-from-bracket mr-1"></i> Sign Out</button>
         </aside>
 
-        <main class="flex-grow flex flex-col p-6 overflow-y-auto max-h-screen space-y-6">
-            <header class="bg-white border border-pink-200 rounded-2xl px-6 py-4 flex justify-between items-center shadow-sm">
-                <div>
-                    <h2 class="text-xl font-extrabold text-pink-700">Teacher Ann Dashboard</h2>
-                </div>
-                <div class="bg-pink-50 border border-pink-100 px-4 py-2 rounded-xl text-right">
-                    <p class="text-[10px] font-bold text-pink-600 uppercase">Local Time (<span id="adminTimezoneLabel"></span>)</p>
-                    <p id="liveClockDisplay" class="text-xs font-mono font-bold text-slate-700"></p>
-                </div>
-            </header>
-
-            <div id="tabDashboard" class="space-y-6">
-                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Overview & Quick Stats</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                        <div class="p-4 bg-pink-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Students</p><p id="statTotalStudents" class="text-lg font-bold text-pink-700">0</p></div>
-                        <div class="p-4 bg-purple-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Today's Classes</p><p id="statClassesToday" class="text-lg font-bold text-purple-700">0</p></div>
-                        <div class="p-4 bg-emerald-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Revenue</p><p id="statMonthlyDue" class="text-lg font-bold text-emerald-700">₱0</p></div>
+        <!-- ADMIN MAIN AREA WITH LEFT CALENDAR & ADS -->
+        <div class="flex-grow flex flex-col md:flex-row p-6 overflow-y-auto max-h-screen gap-6">
+            <!-- LEFT SIDEBAR: CALENDAR & TUTORING ADS -->
+            <div class="w-full md:w-80 shrink-0 space-y-6">
+                <!-- CALENDAR WIDGET -->
+                <div class="bg-white border border-pink-200 rounded-2xl p-4 shadow-sm space-y-3">
+                    <div class="flex justify-between items-center font-bold text-sm text-pink-700">
+                        <button onclick="changeAdminMonth(-1)" class="hover:bg-pink-50 p-1 rounded"><i class="fa-solid fa-chevron-left"></i></button>
+                        <span id="adminCalendarMonthLabel">Month Year</span>
+                        <button onclick="changeAdminMonth(1)" class="hover:bg-pink-50 p-1 rounded"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
+                    <div class="grid grid-cols-7 text-center font-bold text-[10px] text-slate-400">
+                        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                    </div>
+                    <div id="adminCalendarDaysGrid" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
+                </div>
+
+                <!-- TUTORING PROMO AD -->
+                <div class="bg-gradient-to-br from-pink-600 to-rose-500 text-white p-5 rounded-2xl shadow-md space-y-3 text-xs">
+                    <div class="flex items-center space-x-2 font-bold text-sm">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <h4>Teacher Ann Tutoring</h4>
+                    </div>
+                    <p class="text-pink-100">Enroll your child in Reading, English, Math, and Filipino. Interactive 1-on-1 online sessions built for success!</p>
+                    <div class="bg-white/10 p-2.5 rounded-xl text-center font-bold">
+                        🌟 Rates starting at ₱250 only!
+                    </div>
+                </div>
+
+                <!-- MOTIVATIONAL SENTENCE BANNER -->
+                <div class="bg-white border border-pink-200 p-4 rounded-2xl shadow-sm space-y-2 text-xs">
+                    <p class="font-bold text-pink-700"><i class="fa-solid fa-lightbulb mr-1"></i> Teacher Daily Inspiration</p>
+                    <p id="adminMotivationText" class="italic text-slate-600">"Teaching is a work of heart. Inspire greatness every single day."</p>
+                    <button onclick="nextMotivation('admin')" class="w-full bg-pink-50 hover:bg-pink-100 text-pink-700 py-1.5 rounded-lg font-bold transition-colors">New Inspiration</button>
                 </div>
             </div>
 
-            <!-- STUDENTS & SCHEDULE PLOT TAB WITH ADD / REMOVE -->
-            <div id="tabStudents" class="hidden space-y-6">
-                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-6">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-users text-pink-600 mr-2"></i> Student Directory & Schedule Plotting</h3>
-                        <button onclick="openAddStudentModal()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-user-plus mr-1.5"></i> Add New Student</button>
+            <!-- RIGHT CONTENT AREA -->
+            <main class="flex-grow flex flex-col space-y-6">
+                <header class="bg-white border border-pink-200 rounded-2xl px-6 py-4 flex justify-between items-center shadow-sm">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-pink-700">Teacher Ann Dashboard</h2>
                     </div>
-                    <div id="studentsDirectoryContainer" class="space-y-4 text-xs"></div>
-                </div>
-            </div>
-
-            <!-- VERIFY PAYMENTS TAB WITH SAVE & CLEAR -->
-            <div id="tabVerify" class="hidden space-y-6">
-                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-check-to-slot text-pink-600 mr-2"></i> Verify Uploaded Payment Receipts & Save Locally</h3>
-                        <button onclick="clearPaymentHistory()" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold"><i class="fa-solid fa-trash mr-1"></i> Clear Verified History</button>
+                    <div class="bg-pink-50 border border-pink-100 px-4 py-2 rounded-xl text-right">
+                        <p class="text-[10px] font-bold text-pink-600 uppercase">Local Time (<span id="adminTimezoneLabel"></span>)</p>
+                        <p id="liveClockDisplay" class="text-xs font-mono font-bold text-slate-700"></p>
                     </div>
-                    <div id="adminVerifyPaymentsContainer" class="space-y-3 text-xs"></div>
-                </div>
-            </div>
+                </header>
 
-            <div id="tabPayments" class="hidden space-y-6">
-                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4 max-w-xl">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-wallet text-pink-600 mr-2"></i> Configure Payment Details & QR Code</h3>
-                    <form onsubmit="saveAdminPaymentConfig(event)" class="space-y-3 text-xs">
-                        <div>
-                            <label class="block font-semibold mb-1">GCash / PayMaya Details & Account Number</label>
-                            <textarea id="adminPaymaya" required rows="3" placeholder="e.g. Gcash / PayMaya: 09150112872 Kristine Ann A. Dasok" class="w-full p-2.5 border rounded"></textarea>
+                <div id="tabDashboard" class="space-y-6">
+                    <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                        <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Overview & Quick Stats</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                            <div class="p-4 bg-pink-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Students</p><p id="statTotalStudents" class="text-lg font-bold text-pink-700">0</p></div>
+                            <div class="p-4 bg-purple-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Today's Classes</p><p id="statClassesToday" class="text-lg font-bold text-purple-700">0</p></div>
+                            <div class="p-4 bg-emerald-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Revenue</p><p id="statMonthlyDue" class="text-lg font-bold text-emerald-700">₱0</p></div>
                         </div>
-                        <div>
-                            <label class="block font-semibold mb-1">Payment QR Code Image</label>
-                            <input type="file" id="adminQrFile" accept="image/*" class="w-full p-2 border rounded bg-slate-50" onchange="previewAdminQr(event)">
-                        </div>
-                        <input type="hidden" id="adminQrBase64">
-                        <div id="adminQrPreviewContainer" class="mt-2"></div>
-                        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Save Payment Details</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
 
-            <div id="tabRecords" class="hidden space-y-6">
-                <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-video text-pink-600 mr-2"></i> Add / Update Lesson Notes, Homework & Recordings</h3>
-                    <div id="adminRecordsContainer" class="space-y-3 text-xs"></div>
+                <!-- STUDENTS & SCHEDULE PLOT TAB WITH ADD / REMOVE -->
+                <div id="tabStudents" class="hidden space-y-6">
+                    <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-6">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-users text-pink-600 mr-2"></i> Student Directory & Schedule Plotting</h3>
+                            <button onclick="openAddStudentModal()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-user-plus mr-1.5"></i> Add New Student</button>
+                        </div>
+                        <div id="studentsDirectoryContainer" class="space-y-4 text-xs"></div>
+                    </div>
                 </div>
-            </div>
-        </main>
+
+                <!-- VERIFY PAYMENTS TAB WITH SAVE & CLEAR -->
+                <div id="tabVerify" class="hidden space-y-6">
+                    <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-check-to-slot text-pink-600 mr-2"></i> Verify Uploaded Payment Receipts & Save Locally</h3>
+                            <button onclick="clearPaymentHistory()" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold"><i class="fa-solid fa-trash mr-1"></i> Clear Verified History</button>
+                        </div>
+                        <div id="adminVerifyPaymentsContainer" class="space-y-3 text-xs"></div>
+                    </div>
+                </div>
+
+                <div id="tabPayments" class="hidden space-y-6">
+                    <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4 max-w-xl">
+                        <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-wallet text-pink-600 mr-2"></i> Configure Payment Details & QR Code</h3>
+                        <form onsubmit="saveAdminPaymentConfig(event)" class="space-y-3 text-xs">
+                            <div>
+                                <label class="block font-semibold mb-1">GCash / PayMaya Details & Account Number</label>
+                                <textarea id="adminPaymaya" required rows="3" placeholder="e.g. Gcash / PayMaya: 09150112872 Kristine Ann A. Dasok" class="w-full p-2.5 border rounded"></textarea>
+                            </div>
+                            <div>
+                                <label class="block font-semibold mb-1">Payment QR Code Image</label>
+                                <input type="file" id="adminQrFile" accept="image/*" class="w-full p-2 border rounded bg-slate-50" onchange="previewAdminQr(event)">
+                            </div>
+                            <input type="hidden" id="adminQrBase64">
+                            <div id="adminQrPreviewContainer" class="mt-2"></div>
+                            <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Save Payment Details</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="tabRecords" class="hidden space-y-6">
+                    <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                        <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-video text-pink-600 mr-2"></i> Add / Update Lesson Notes, Homework & Recordings</h3>
+                        <div id="adminRecordsContainer" class="space-y-3 text-xs"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
 
     <!-- ADD STUDENT MODAL -->
@@ -285,7 +357,7 @@
     <!-- ================= STUDENT APP CONTAINER ================= -->
     <div id="studentAppContainer" class="hidden flex-grow flex flex-col min-h-screen bg-pink-50/50">
         <header class="bg-pink-600 text-white shadow-md">
-            <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-lg overflow-hidden bg-white shadow">
                         <img src="TEACHER.jpg" alt="Logo" class="w-full h-full object-cover">
@@ -304,57 +376,93 @@
             </div>
         </header>
 
-        <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 space-y-6">
-            <div id="studentScheduleView" class="space-y-6 text-xs">
-                <div class="bg-white border rounded-xl p-6 shadow-sm flex justify-between items-center">
-                    <div>
-                        <span class="text-slate-500 uppercase font-semibold text-[10px] block">Remaining Sessions Left</span>
-                        <span id="studentCreditCount" class="text-2xl font-extrabold text-pink-600">0</span>
+        <!-- STUDENT PORTAL MAIN AREA WITH LEFT CALENDAR & ADS -->
+        <div class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
+            <!-- LEFT SIDEBAR: CALENDAR & ADS -->
+            <div class="w-full md:w-80 shrink-0 space-y-6">
+                <!-- STUDENT CALENDAR WIDGET -->
+                <div class="bg-white border border-pink-200 rounded-2xl p-4 shadow-sm space-y-3">
+                    <div class="flex justify-between items-center font-bold text-sm text-pink-700">
+                        <button onclick="changeStudentMonth(-1)" class="hover:bg-pink-50 p-1 rounded"><i class="fa-solid fa-chevron-left"></i></button>
+                        <span id="studentCalendarMonthLabel">Month Year</span>
+                        <button onclick="changeStudentMonth(1)" class="hover:bg-pink-50 p-1 rounded"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
-                    <button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-bold shadow">Buy Session Package</button>
+                    <div class="grid grid-cols-7 text-center font-bold text-[10px] text-slate-400">
+                        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                    </div>
+                    <div id="studentCalendarDaysGrid" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
                 </div>
 
-                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-slate-800 text-sm">Your Upcoming Class Schedule & Classroom Links</h3>
-                    <div id="studentPortalSessions" class="space-y-3"></div>
+                <!-- STUDENT MOTIVATIONAL BANNER -->
+                <div class="bg-white border border-pink-200 p-4 rounded-2xl shadow-sm space-y-2 text-xs">
+                    <p class="font-bold text-pink-700"><i class="fa-solid fa-star mr-1"></i> Daily Student Motivation</p>
+                    <p id="studentMotivationText" class="italic text-slate-600">"Believe in yourself! Every expert was once a beginner."</p>
+                    <button onclick="nextMotivation('student')" class="w-full bg-pink-50 hover:bg-pink-100 text-pink-700 py-1.5 rounded-lg font-bold transition-colors">New Motivation</button>
+                </div>
+
+                <!-- TUTORING PROMO AD -->
+                <div class="bg-gradient-to-br from-pink-600 to-rose-500 text-white p-5 rounded-2xl shadow-md space-y-3 text-xs">
+                    <div class="flex items-center space-x-2 font-bold text-sm">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <h4>Book More Sessions</h4>
+                    </div>
+                    <p class="text-pink-100">Keep your learning streak alive! Top up your session credits today and secure your preferred study slots.</p>
                 </div>
             </div>
 
-            <!-- PREVIOUS LESSONS & RECORDINGS -->
-            <div id="studentHistoryView" class="hidden space-y-4 text-xs">
-                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-video text-pink-600 mr-2"></i> Previous Lessons, Notes & Recordings</h3>
-                    <div id="studentPortalRecordings" class="space-y-3"></div>
-                </div>
-            </div>
+            <!-- RIGHT STUDENT VIEWS -->
+            <main class="flex-grow space-y-6">
+                <div id="studentScheduleView" class="space-y-6 text-xs">
+                    <div class="bg-white border rounded-xl p-6 shadow-sm flex justify-between items-center">
+                        <div>
+                            <span class="text-slate-500 uppercase font-semibold text-[10px] block">Remaining Sessions Left</span>
+                            <span id="studentCreditCount" class="text-2xl font-extrabold text-pink-600">0</span>
+                        </div>
+                        <button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 rounded-xl font-bold shadow">Buy Session Package</button>
+                    </div>
 
-            <div id="studentPaymentView" class="hidden space-y-6 text-xs">
-                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-slate-800 text-sm">Select Session Package to Purchase</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
-                            <h4 class="font-bold text-pink-900">Starter Pack</h4>
-                            <p class="text-lg font-extrabold text-pink-700">₱1,000</p>
-                            <p class="text-[11px] text-slate-500">4 Session Credits</p>
-                            <button onclick="openCheckoutModal('Starter Pack (4 Sessions)', 1000, 4)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
-                        </div>
-                        <div class="border-2 border-pink-600 rounded-xl p-4 bg-pink-50 space-y-2 text-center shadow-sm">
-                            <span class="bg-pink-600 text-white text-[9px] px-2 py-0.5 rounded-full uppercase font-bold">Popular</span>
-                            <h4 class="font-bold text-pink-900">Monthly Bundle</h4>
-                            <p class="text-lg font-extrabold text-pink-700">₱2,500</p>
-                            <p class="text-[11px] text-slate-500">10 Session Credits</p>
-                            <button onclick="openCheckoutModal('Monthly Bundle (10 Sessions)', 2500, 10)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
-                        </div>
-                        <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
-                            <h4 class="font-bold text-pink-900">Intensive Pack</h4>
-                            <p class="text-lg font-extrabold text-pink-700">₱5,000</p>
-                            <p class="text-[11px] text-slate-500">20 Session Credits</p>
-                            <button onclick="openCheckoutModal('Intensive Pack (20 Sessions)', 5000, 20)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                    <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm">Your Upcoming Class Schedule & Classroom Links</h3>
+                        <div id="studentPortalSessions" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <!-- PREVIOUS LESSONS & RECORDINGS -->
+                <div id="studentHistoryView" class="hidden space-y-4 text-xs">
+                    <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-video text-pink-600 mr-2"></i> Previous Lessons, Notes & Recordings</h3>
+                        <div id="studentPortalRecordings" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div id="studentPaymentView" class="hidden space-y-6 text-xs">
+                    <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                        <h3 class="font-bold text-slate-800 text-sm">Select Session Package to Purchase</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
+                                <h4 class="font-bold text-pink-900">Starter Pack</h4>
+                                <p class="text-lg font-extrabold text-pink-700">₱1,000</p>
+                                <p class="text-[11px] text-slate-500">4 Session Credits</p>
+                                <button onclick="openCheckoutModal('Starter Pack (4 Sessions)', 1000, 4)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            </div>
+                            <div class="border-2 border-pink-600 rounded-xl p-4 bg-pink-50 space-y-2 text-center shadow-sm">
+                                <span class="bg-pink-600 text-white text-[9px] px-2 py-0.5 rounded-full uppercase font-bold">Popular</span>
+                                <h4 class="font-bold text-pink-900">Monthly Bundle</h4>
+                                <p class="text-lg font-extrabold text-pink-700">₱2,500</p>
+                                <p class="text-[11px] text-slate-500">10 Session Credits</p>
+                                <button onclick="openCheckoutModal('Monthly Bundle (10 Sessions)', 2500, 10)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            </div>
+                            <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
+                                <h4 class="font-bold text-pink-900">Intensive Pack</h4>
+                                <p class="text-lg font-extrabold text-pink-700">₱5,000</p>
+                                <p class="text-[11px] text-slate-500">20 Session Credits</p>
+                                <button onclick="openCheckoutModal('Intensive Pack (20 Sessions)', 5000, 20)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 
     <!-- CHECKOUT MODAL -->
@@ -404,12 +512,101 @@
         let allPayments = [];
         let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+        // Calendar Date States
+        let adminCalendarDate = new Date();
+        let studentCalendarDate = new Date();
+
+        // Motivational Sentences Collection
+        const motivations = [
+            "Education is the passport to the future, for tomorrow belongs to those who prepare for it today.",
+            "Believe in yourself! Every expert was once a beginner.",
+            "Small progress each day adds up to big results.",
+            "Teaching is a work of heart. Inspire greatness every single day.",
+            "The secret of getting ahead is getting started.",
+            "Mistakes are proof that you are trying and growing."
+        ];
+
         window.addEventListener('DOMContentLoaded', () => {
             startLiveClocks();
             loadSidebarPhoto();
+            renderAdminCalendar();
+            renderStudentCalendar();
+            calculateQuote();
             document.getElementById('adminTimezoneLabel').textContent = userTimezone;
             document.getElementById('studentTimezoneDisplay').textContent = userTimezone;
         });
+
+        function calculateQuote() {
+            const rate = parseInt(document.getElementById('quoteProgram').value) || 250;
+            const sessions = parseInt(document.getElementById('quoteSessions').value) || 1;
+            const total = rate * sessions;
+            document.getElementById('quoteResultDisplay').textContent = '₱' + total.toLocaleString();
+        }
+
+        function nextMotivation(target) {
+            const randomQuote = motivations[Math.floor(Math.random() * motivations.length)];
+            if (target === 'admin') {
+                document.getElementById('adminMotivationText').textContent = `"${randomQuote}"`;
+            } else if (target === 'student') {
+                document.getElementById('studentMotivationText').textContent = `"${randomQuote}"`;
+            } else {
+                document.getElementById('publicMotivationText').textContent = randomQuote;
+            }
+        }
+
+        function renderAdminCalendar() {
+            const year = adminCalendarDate.getFullYear();
+            const month = adminCalendarDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('adminCalendarMonthLabel').textContent = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const grid = document.getElementById('adminCalendarDaysGrid');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < firstDayIndex; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+
+            const today = new Date();
+            for (let day = 1; day <= totalDays; day++) {
+                const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                grid.innerHTML += `<div class="p-1 rounded ${isToday ? 'bg-pink-600 text-white font-bold' : 'hover:bg-pink-50 text-slate-700'}">${day}</div>`;
+            }
+        }
+
+        function changeAdminMonth(direction) {
+            adminCalendarDate.setMonth(adminCalendarDate.getMonth() + direction);
+            renderAdminCalendar();
+        }
+
+        function renderStudentCalendar() {
+            const year = studentCalendarDate.getFullYear();
+            const month = studentCalendarDate.getMonth();
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('studentCalendarMonthLabel').textContent = `${monthNames[month]} ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const grid = document.getElementById('studentCalendarDaysGrid');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < firstDayIndex; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+
+            const today = new Date();
+            for (let day = 1; day <= totalDays; day++) {
+                const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                grid.innerHTML += `<div class="p-1 rounded ${isToday ? 'bg-pink-600 text-white font-bold' : 'hover:bg-pink-50 text-slate-700'}">${day}</div>`;
+            }
+        }
+
+        function changeStudentMonth(direction) {
+            studentCalendarDate.setMonth(studentCalendarDate.getMonth() + direction);
+            renderStudentCalendar();
+        }
 
         function startLiveClocks() {
             setInterval(() => {
