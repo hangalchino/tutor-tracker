@@ -679,7 +679,6 @@
             document.getElementById('adminTimezoneLabel').textContent = userTimezone;
             document.getElementById('studentTimezoneDisplay').textContent = userTimezone;
 
-            // Check existing login session from localStorage
             checkPersistedSession();
             initIdleTimeoutListener();
         });
@@ -704,7 +703,6 @@
 
         function resetIdleTimer() {
             clearTimeout(idleTimer);
-            // Only run timer if logged in (admin or student container is active)
             const isAdminActive = !document.getElementById('adminAppContainer').classList.contains('hidden');
             const isStudentActive = !document.getElementById('studentAppContainer').classList.contains('hidden');
 
@@ -1219,7 +1217,6 @@
             const { error } = await _supabase.auth.signInWithPassword({ email, password });
             if (error) { alert("Admin login failed: " + error.message); return; }
             
-            // Save admin session state
             localStorage.setItem('lwta_role', 'admin');
             localStorage.removeItem('lwta_name');
 
@@ -1296,7 +1293,6 @@
 
             currentStudentName = data[0].name;
 
-            // Save student session state
             localStorage.setItem('lwta_role', 'student');
             localStorage.setItem('lwta_name', currentStudentName);
 
@@ -1322,7 +1318,6 @@
             let todaysCount = allSessions.filter(s => s.date === todayStr && s.status !== 'Cancelled').length;
             document.getElementById('statClassesToday').textContent = todaysCount;
 
-            // Calculate total verified revenue only (ignoring assessment and pending payments)
             let totalVerifiedRevenue = 0;
             allPayments.forEach(p => {
                 if (p.status === 'Verified') {
@@ -1481,13 +1476,16 @@
         async function cancelStudentAssessment() {
             if (!confirm("Are you sure you want to cancel your Free Assessment? The classroom link will be removed.")) return;
             
-            // Update assessment request status
-            await _supabase.from('assessment_requests').update({
+            const { error: reqErr } = await _supabase.from('assessment_requests').update({
                 status: 'Cancelled',
                 meeting_link: ''
             }).ilike('student_name', currentStudentName);
 
-            // Update corresponding session status and remove meeting link
+            if (reqErr) {
+                alert("Error cancelling assessment request: " + reqErr.message);
+                return;
+            }
+
             await _supabase.from('sessions').update({
                 status: 'Cancelled by Student',
                 meeting_link: ''
@@ -1567,7 +1565,6 @@
 
             if (error) { alert("Error scheduling assessment: " + error.message); return; }
 
-            // Also add/update session so student sees it on their schedule
             const { data: existingSess } = await _supabase.from('sessions').select('*').ilike('student_name', studentName).ilike('subject', '%Assessment%');
             if (existingSess && existingSess.length > 0) {
                 await _supabase.from('sessions').update({
@@ -1897,7 +1894,6 @@
                 document.getElementById('studentCreditCount').textContent = studentData[0].credits || 0;
             }
 
-            // Load Free Assessment state
             const { data: assessData } = await _supabase.from('assessment_requests').select('*').ilike('student_name', name);
             const assessBox = document.getElementById('freeAssessmentActionContainer');
             if (assessData && assessData.length > 0) {
