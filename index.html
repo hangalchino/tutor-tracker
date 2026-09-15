@@ -67,7 +67,7 @@
         <section id="rates" class="py-16 px-4 max-w-5xl mx-auto space-y-8">
             <div class="text-center space-y-2">
                 <h3 class="text-xs font-bold text-pink-600 uppercase tracking-wider">Tuition Investment & Packages</h3>
-                <h4 class="text-2xl font-bold text-slate-900">Class Rates & 20-Session Advance Packages</h4>
+                <h4 class="text-2xl font-bold text-slate-900">Class Rates & Advance Packages</h4>
                 <p class="text-xs text-slate-500">We primarily accept sessions paid in advance for guaranteed continuous slot reservations.</p>
             </div>
             
@@ -192,9 +192,10 @@
 
                 <nav class="space-y-1.5 text-xs font-semibold">
                     <button onclick="switchTab('dashboard')" id="navDashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all"><i class="fa-solid fa-house w-4"></i><span>Dashboard</span></button>
+                    <button onclick="switchTab('assessment')" id="navAssessment" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-clipboard-question w-4"></i><span>Assessment Requests</span></button>
                     <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students & Schedule Plot</span></button>
                     <button onclick="switchTab('verify')" id="navVerify" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-check-to-slot w-4"></i><span>Verify Payments</span></button>
-                    <button onclick="switchTab('pricing')" id="navPricing" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-tags w-4"></i><span>Package & Pricing Manager</span></button>
+                    <button onclick="switchTab('pricing')" id="navPricing" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-tags w-4"></i><span>Package Manager</span></button>
                     <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payment Settings</span></button>
                     <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Recordings</span></button>
                 </nav>
@@ -248,6 +249,17 @@
                     </div>
                 </div>
 
+                <!-- ASSESSMENT REQUESTS TAB -->
+                <div id="tabAssessment" class="hidden space-y-6">
+                    <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                        <div class="border-b pb-3">
+                            <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-clipboard-question text-pink-600 mr-2"></i> Free Assessment Requests (1 Free per Student)</h3>
+                            <p class="text-[11px] text-slate-500">Review requested free assessment classes, chat/message the student, or plot their assessment schedule.</p>
+                        </div>
+                        <div id="adminAssessmentContainer" class="space-y-3 text-xs"></div>
+                    </div>
+                </div>
+
                 <!-- STUDENTS & SCHEDULE PLOT TAB -->
                 <div id="tabStudents" class="hidden space-y-6">
                     <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-6">
@@ -270,13 +282,13 @@
                     </div>
                 </div>
 
-                <!-- PACKAGE PRICING TAB (ADVANCED MANAGER) -->
+                <!-- PACKAGE PRICING TAB -->
                 <div id="tabPricing" class="hidden space-y-6">
                     <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-6">
                         <div class="border-b pb-3 flex justify-between items-center">
                             <div>
                                 <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-tags text-pink-600 mr-2"></i> Package & Pricing Manager</h3>
-                                <p class="text-[11px] text-slate-500">Create, edit, describe, or delete packages. Changes instantly update the public enrollment and student portal.</p>
+                                <p class="text-[11px] text-slate-500">Create, edit, describe, or delete packages.</p>
                             </div>
                             <div class="flex gap-2">
                                 <button onclick="openAddPackageModal()" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold text-xs"><i class="fa-solid fa-plus mr-1"></i> Add New Package</button>
@@ -313,6 +325,25 @@
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- PLOT ASSESSMENT SCHEDULE MODAL (ADMIN) -->
+    <div id="plotAssessmentModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-calendar-check text-pink-600 mr-2"></i> Schedule Free Assessment Class</h3>
+                <button onclick="closePlotAssessmentModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="submitPlotAssessment(event)" class="space-y-3">
+                <input type="hidden" id="assessRequestId">
+                <input type="hidden" id="assessStudentName">
+                <div><label class="block font-semibold mb-1">Assessment Date</label><input type="date" id="assessDate" required class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="assessSlot" required placeholder="e.g. 4:00 PM - 4:30 PM" class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Online Classroom / Zoom Meeting Link</label><input type="url" id="assessLink" required placeholder="https://zoom.us/j/..." class="w-full p-2.5 border rounded"></div>
+                <div><label class="block font-semibold mb-1">Teacher Notes / Instructions</label><textarea id="assessNotes" rows="2" placeholder="e.g. Please prepare pencil and paper." class="w-full p-2.5 border rounded"></textarea></div>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg shadow">Confirm Assessment Schedule & Notify Student</button>
+            </form>
         </div>
     </div>
 
@@ -428,6 +459,18 @@
                         <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
                     </div>
                     <div id="studentCalendarDaysGrid" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
+                </div>
+
+                <!-- FREE ASSESSMENT BOX -->
+                <div id="studentFreeAssessmentBox" class="bg-gradient-to-br from-pink-500 to-rose-600 text-white p-4 rounded-2xl shadow-md space-y-3 text-xs">
+                    <div class="flex items-center space-x-2 font-bold text-sm">
+                        <i class="fa-solid fa-gift"></i>
+                        <h4>1 Free Assessment Class</h4>
+                    </div>
+                    <p class="text-pink-100 text-[11px]">New students are entitled to 1 free assessment session with Teacher Ann!</p>
+                    <div id="freeAssessmentActionContainer">
+                        <!-- Loaded dynamically -->
+                    </div>
                 </div>
 
                 <div class="bg-white border border-pink-200 p-4 rounded-2xl shadow-sm space-y-2 text-xs">
@@ -675,14 +718,14 @@
         }
 
         function switchTab(tabId) {
-            ['tabDashboard', 'tabStudents', 'tabVerify', 'tabPricing', 'tabPayments', 'tabRecords'].forEach(t => {
+            ['tabDashboard', 'tabAssessment', 'tabStudents', 'tabVerify', 'tabPricing', 'tabPayments', 'tabRecords'].forEach(t => {
                 const el = document.getElementById(t);
                 if(el) el.classList.add('hidden');
             });
             const target = document.getElementById('tab' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
             if(target) target.classList.remove('hidden');
 
-            ['Dashboard', 'Students', 'Verify', 'Pricing', 'Payments', 'Records'].forEach(name => {
+            ['Dashboard', 'Assessment', 'Students', 'Verify', 'Pricing', 'Payments', 'Records'].forEach(name => {
                 const btn = document.getElementById('nav' + name);
                 if (btn) {
                     if (name.toLowerCase() === tabId) {
@@ -693,6 +736,7 @@
                 }
             });
 
+            if (tabId === 'assessment') loadAdminAssessmentTab();
             if (tabId === 'students') loadStudentsTab();
             if (tabId === 'verify') loadAdminVerifyPaymentsTab();
             if (tabId === 'pricing') loadAdminPricingTab();
@@ -829,10 +873,8 @@
             let pkgs = await getSavedPackages();
 
             if (editId) {
-                // Edit existing
                 pkgs = pkgs.map(p => p.id === editId ? { ...p, title, category, price, credits, description } : p);
             } else {
-                // Add new
                 const newId = 'pkg_' + Date.now();
                 pkgs.push({ id: newId, title, category, price, credits, description });
             }
@@ -975,6 +1017,7 @@
             
             await _supabase.from('students').delete().eq('id', studentId);
             await _supabase.from('sessions').delete().ilike('student_name', studentName);
+            await _supabase.from('assessment_requests').delete().ilike('student_name', studentName);
             
             alert(`Student ${studentName} removed successfully.`);
             loadStudentsTab();
@@ -1170,6 +1213,117 @@
             let todaysCount = allSessions.filter(s => s.date === todayStr && s.status !== 'Cancelled').length;
             document.getElementById('statClassesToday').textContent = todaysCount;
             document.getElementById('statMonthlyDue').textContent = '₱' + (allStudents.length * 5000).toLocaleString();
+        }
+
+        // ================= FREE ASSESSMENT FUNCTIONS =================
+        async function requestFreeAssessment() {
+            const { data: existing } = await _supabase.from('assessment_requests').select('*').ilike('student_name', currentStudentName);
+            if (existing && existing.length > 0) {
+                alert("You have already requested your 1 Free Assessment Class.");
+                return;
+            }
+
+            const { error } = await _supabase.from('assessment_requests').insert([{
+                student_name: currentStudentName,
+                status: 'Requested',
+                date: new Date().toLocaleDateString()
+            }]);
+
+            if (error) { alert("Error requesting assessment: " + error.message); return; }
+
+            alert("Free Assessment requested successfully! Teacher Ann has been notified and will review your request.");
+            loadStudentPortal(currentStudentName);
+        }
+
+        async function loadAdminAssessmentTab() {
+            const { data: requests } = await _supabase.from('assessment_requests').select('*').order('id', { ascending: false });
+            const container = document.getElementById('adminAssessmentContainer');
+            container.innerHTML = '';
+
+            if (requests && requests.length > 0) {
+                requests.forEach(req => {
+                    const isScheduled = req.status === 'Scheduled';
+                    container.innerHTML += `
+                        <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-2">
+                                <div>
+                                    <strong class="text-sm text-pink-700">${req.student_name}</strong> — <span class="font-bold text-slate-700">Free Assessment Request</span><br>
+                                    <span class="text-slate-500">Requested on: ${req.date || 'N/A'}</span>
+                                </div>
+                                <span class="px-3 py-1 rounded-full font-bold text-[11px] ${isScheduled ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                    Status: ${req.status || 'Requested'}
+                                </span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
+                                <div>
+                                    ${isScheduled ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : `<p class="text-slate-500 italic">Not scheduled yet.</p>`}
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick="openPlotAssessmentModal(${req.id}, '${req.student_name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm"><i class="fa-solid fa-calendar-days mr-1"></i> ${isScheduled ? 'Reschedule' : 'Plot Schedule & Link'}</button>
+                                    <button onclick="deleteAssessmentRequest(${req.id})" class="text-slate-400 hover:text-rose-600 px-2" title="Delete Request"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = `<p class="text-slate-500 italic">No free assessment requests yet.</p>`;
+            }
+        }
+
+        function openPlotAssessmentModal(id, studentName) {
+            document.getElementById('assessRequestId').value = id;
+            document.getElementById('assessStudentName').value = studentName;
+            document.getElementById('assessDate').value = '';
+            document.getElementById('assessSlot').value = '';
+            document.getElementById('assessLink').value = '';
+            document.getElementById('assessNotes').value = '';
+            document.getElementById('plotAssessmentModal').classList.remove('hidden');
+        }
+
+        function closePlotAssessmentModal() {
+            document.getElementById('plotAssessmentModal').classList.add('hidden');
+        }
+
+        async function submitPlotAssessment(e) {
+            e.preventDefault();
+            const id = document.getElementById('assessRequestId').value;
+            const studentName = document.getElementById('assessStudentName').value;
+            const scheduled_date = document.getElementById('assessDate').value;
+            const slot = document.getElementById('assessSlot').value.trim();
+            const meeting_link = document.getElementById('assessLink').value.trim();
+            const notes = document.getElementById('assessNotes').value.trim();
+
+            const { error } = await _supabase.from('assessment_requests').update({
+                status: 'Scheduled',
+                scheduled_date,
+                slot,
+                meeting_link,
+                notes
+            }).eq('id', id);
+
+            if (error) { alert("Error scheduling assessment: " + error.message); return; }
+
+            // Also add to sessions so student sees it on their schedule
+            await _supabase.from('sessions').insert([{
+                student_name: studentName,
+                subject: 'Free Assessment Class',
+                date: scheduled_date,
+                slot,
+                notes: notes || 'Free initial assessment session',
+                meeting_link,
+                status: 'Active'
+            }]);
+
+            alert(`Free Assessment scheduled successfully for ${studentName}!`);
+            closePlotAssessmentModal();
+            loadAdminAssessmentTab();
+        }
+
+        async function deleteAssessmentRequest(id) {
+            if (!confirm("Delete this request?")) return;
+            await _supabase.from('assessment_requests').delete().eq('id', id);
+            loadAdminAssessmentTab();
         }
 
         async function loadStudentsTab() {
@@ -1464,6 +1618,20 @@
             const { data: studentData } = await _supabase.from('students').select('*').ilike('name', name);
             if (studentData && studentData.length > 0) {
                 document.getElementById('studentCreditCount').textContent = studentData[0].credits || 0;
+            }
+
+            // Load Free Assessment button state
+            const { data: assessData } = await _supabase.from('assessment_requests').select('*').ilike('student_name', name);
+            const assessBox = document.getElementById('freeAssessmentActionContainer');
+            if (assessData && assessData.length > 0) {
+                const req = assessData[0];
+                if (req.status === 'Scheduled') {
+                    assessBox.innerHTML = `<p class="font-bold text-emerald-100 bg-emerald-700/60 p-2 rounded"><i class="fa-solid fa-check mr-1"></i> Assessment Scheduled on ${req.scheduled_date} (${req.slot})!<br><a href="${req.meeting_link}" target="_blank" class="underline text-white font-bold">Join Classroom Link</a></p>`;
+                } else {
+                    assessBox.innerHTML = `<p class="font-bold text-pink-100 bg-pink-700/50 p-2 rounded"><i class="fa-solid fa-clock mr-1"></i> Free Assessment requested. Waiting for Teacher Ann to plot schedule.</p>`;
+                }
+            } else {
+                assessBox.innerHTML = `<button onclick="requestFreeAssessment()" class="w-full bg-white hover:bg-pink-50 text-pink-700 font-bold py-2 rounded-lg shadow"><i class="fa-solid fa-paper-plane mr-1"></i> Request Free Assessment Now</button>`;
             }
 
             const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
