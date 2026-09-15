@@ -183,7 +183,7 @@
 
                 <nav class="space-y-1.5 text-xs font-semibold">
                     <button onclick="switchTab('dashboard')" id="navDashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all"><i class="fa-solid fa-house w-4"></i><span>Dashboard</span></button>
-                    <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students & Credits</span></button>
+                    <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students & Schedule Plot</span></button>
                     <button onclick="switchTab('verify')" id="navVerify" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-check-to-slot w-4"></i><span>Verify Payments</span></button>
                     <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payment Settings</span></button>
                     <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Recordings</span></button>
@@ -214,18 +214,21 @@
                 </div>
             </div>
 
-            <!-- STUDENTS & CREDITS MANAGER TAB -->
+            <!-- STUDENTS & SCHEDULE PLOT TAB -->
             <div id="tabStudents" class="hidden space-y-6">
                 <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Student Directory & Remaining Session Credits (Slots)</h3>
-                    <div id="studentsDirectoryContainer" class="space-y-3 text-xs"></div>
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-calendar-plus text-pink-600 mr-2"></i> Plot Student Schedule, Remaining Credits & Bulk Sessions (Up to 20 Sessions)</h3>
+                    <div id="studentsDirectoryContainer" class="space-y-4 text-xs"></div>
                 </div>
             </div>
 
-            <!-- VERIFY PAYMENTS TAB -->
+            <!-- VERIFY PAYMENTS TAB WITH SAVE & CLEAR -->
             <div id="tabVerify" class="hidden space-y-6">
                 <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-check-to-slot text-pink-600 mr-2"></i> Verify Uploaded Payment Receipts & Add Credits</h3>
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-check-to-slot text-pink-600 mr-2"></i> Verify Uploaded Payment Receipts & Save Locally</h3>
+                        <button onclick="clearPaymentHistory()" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold"><i class="fa-solid fa-trash mr-1"></i> Clear Verified History</button>
+                    </div>
                     <div id="adminVerifyPaymentsContainer" class="space-y-3 text-xs"></div>
                 </div>
             </div>
@@ -282,7 +285,6 @@
 
         <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 space-y-6">
             <div id="studentScheduleView" class="space-y-6 text-xs">
-                <!-- REMAINING SESSIONS LEFT (MANAGED BY TEACHER) -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm flex justify-between items-center">
                     <div>
                         <span class="text-slate-500 uppercase font-semibold text-[10px] block">Remaining Sessions Left</span>
@@ -292,7 +294,7 @@
                 </div>
 
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-slate-800 text-sm">Your Upcoming Class Schedule</h3>
+                    <h3 class="font-bold text-slate-800 text-sm">Your Upcoming Class Schedule & Classroom Links</h3>
                     <div id="studentPortalSessions" class="space-y-3"></div>
                 </div>
             </div>
@@ -334,7 +336,7 @@
         </main>
     </div>
 
-    <!-- CHECKOUT MODAL WITH DYNAMIC BANK / QR DETAILS -->
+    <!-- CHECKOUT MODAL -->
     <div id="checkoutModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-2">
@@ -642,16 +644,34 @@
             if (students && students.length > 0) {
                 students.forEach(s => {
                     container.innerHTML += `
-                        <div class="p-4 border rounded-xl bg-slate-50 flex flex-col sm:flex-row justify-between items-center gap-3">
-                            <div>
-                                <strong class="text-sm text-pink-700">${s.name}</strong><br>
-                                <span class="text-slate-500">Password: ${s.password} | Contact: ${s.email_or_mobile || 'N/A'}</span>
+                        <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-2">
+                                <div>
+                                    <strong class="text-sm text-pink-700">${s.name}</strong><br>
+                                    <span class="text-slate-500">Password: ${s.password} | Contact: ${s.email_or_mobile || 'N/A'}</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <label class="font-semibold">Remaining Slots:</label>
+                                    <input type="number" id="cred_${s.id}" value="${s.credits || 0}" class="w-16 p-1.5 border rounded text-center font-bold">
+                                    <button onclick="updateStudentCredits(${s.id}, '${s.name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm">Save</button>
+                                </div>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <label class="font-semibold">Remaining Slots (Credits):</label>
-                                <input type="number" id="cred_${s.id}" value="${s.credits || 0}" class="w-20 p-2 border rounded text-center font-bold">
-                                <button onclick="updateStudentCredits(${s.id}, '${s.name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-2 rounded font-bold shadow-sm">Update</button>
-                            </div>
+                            
+                            <!-- Plot Bulk Schedule Form -->
+                            <form onsubmit="plotBulkSchedule(event, '${s.name}')" class="space-y-2 pt-1">
+                                <p class="font-bold text-slate-800"><i class="fa-solid fa-calendar-days text-pink-600 mr-1"></i> Plot Bulk Schedule & Classroom Link</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                                    <div><label class="block font-semibold mb-1">Subject</label><input type="text" id="plot_subj_${s.id}" required value="Reading Program" class="w-full p-2 border rounded"></div>
+                                    <div><label class="block font-semibold mb-1">Start Date</label><input type="date" id="plot_start_${s.id}" required class="w-full p-2 border rounded"></div>
+                                    <div><label class="block font-semibold mb-1">Number of Sessions (e.g. 20)</label><input type="number" id="plot_count_${s.id}" required value="20" min="1" max="50" class="w-full p-2 border rounded"></div>
+                                    <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="plot_slot_${s.id}" required placeholder="3:00 PM - 4:00 PM" class="w-full p-2 border rounded"></div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <div><label class="block font-semibold mb-1">Teacher Notes / Instructions</label><input type="text" id="plot_notes_${s.id}" placeholder="e.g. Chapter 1 review" class="w-full p-2 border rounded"></div>
+                                    <div><label class="block font-semibold mb-1">Online Classroom Meeting Link (Zoom, Meet, etc.)</label><input type="url" id="plot_link_${s.id}" placeholder="https://zoom.us/j/..." class="w-full p-2 border rounded"></div>
+                                </div>
+                                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-lg">Plot Bulk Sessions</button>
+                            </form>
                         </div>`;
                 });
             } else {
@@ -664,6 +684,45 @@
             const { error } = await _supabase.from('students').update({ credits: newCredits }).eq('id', studentId);
             if (error) { alert("Error updating credits: " + error.message); return; }
             alert(`Remaining session slots updated successfully for ${studentName}!`);
+            loadStudentsTab();
+        }
+
+        async function plotBulkSchedule(e, studentName) {
+            e.preventDefault();
+            // Find student ID
+            const { data: stud } = await _supabase.from('students').select('*').ilike('name', studentName);
+            if (!stud || stud.length === 0) return;
+            const sId = stud[0].id;
+
+            const subject = document.getElementById(`plot_subj_${sId}`).value.trim();
+            const startDateStr = document.getElementById(`plot_start_${sId}`).value;
+            const count = parseInt(document.getElementById(`plot_count_${sId}`).value) || 1;
+            const slot = document.getElementById(`plot_slot_${sId}`).value.trim();
+            const notes = document.getElementById(`plot_notes_${sId}`).value.trim();
+            const meeting_link = document.getElementById(`plot_link_${sId}`).value.trim();
+
+            let currentDate = new Date(startDateStr);
+            let insertions = [];
+
+            for (let i = 0; i < count; i++) {
+                let dateFormatted = currentDate.toISOString().split('T')[0];
+                insertions.push({
+                    student_name: studentName,
+                    subject,
+                    date: dateFormatted,
+                    slot,
+                    notes,
+                    meeting_link,
+                    status: 'Active'
+                });
+                // advance 1 day for next session (or customize interval)
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            const { error } = await _supabase.from('sessions').insert(insertions);
+            if (error) { alert("Error plotting sessions: " + error.message); return; }
+
+            alert(`Successfully plotted ${count} sessions for ${studentName}!`);
             loadStudentsTab();
         }
 
@@ -681,15 +740,21 @@
                                     <strong class="text-sm text-pink-700">${p.student_name}</strong> — <span class="font-bold">${p.amount}</span><br>
                                     <span class="text-slate-500">Ref / TxID: ${p.ref} | Date: ${p.date}</span>
                                 </div>
-                                <div>
+                                <div class="flex items-center space-x-2">
                                     <span class="px-3 py-1 rounded-full font-bold text-[11px] ${isVerified ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
                                         Status: ${p.status || 'Pending'}
                                     </span>
+                                    <button onclick="deletePaymentRecord(${p.id})" class="text-slate-400 hover:text-rose-600 px-2" title="Delete Record"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                                 <div>
-                                    ${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank"><img src="${p.receipt_url}" class="w-24 h-24 object-cover border rounded shadow cursor-pointer hover:opacity-90"></a>` : '<span class="text-slate-400">No receipt uploaded</span>'}
+                                    ${p.receipt_url ? `
+                                        <div class="space-y-1">
+                                            <a href="${p.receipt_url}" target="_blank"><img src="${p.receipt_url}" class="w-24 h-24 object-cover border rounded shadow cursor-pointer hover:opacity-90"></a>
+                                            <a href="${p.receipt_url}" download="Receipt_${p.student_name}.png" class="block text-center text-[10px] bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-1 rounded"><i class="fa-solid fa-download mr-1"></i> Save Locally</a>
+                                        </div>
+                                    ` : '<span class="text-slate-400">No receipt uploaded</span>'}
                                 </div>
                                 <div class="text-right">
                                     ${!isVerified ? `<button onclick="verifyPaymentAndAddCredits(${p.id}, '${p.student_name}', ${p.credits || 0})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-check mr-1"></i> Verify Payment & Add ${p.credits || 0} Credits</button>` : '<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Verified & Added</span>'}
@@ -703,22 +768,31 @@
         }
 
         async function verifyPaymentAndAddCredits(paymentId, studentName, packageCredits) {
-            // Update payment status to verified
             const { error: payErr } = await _supabase.from('payment_history').update({ status: 'Verified' }).eq('id', paymentId);
             if (payErr) { alert("Error verifying payment: " + payErr.message); return; }
 
-            // Fetch student current credits
             const { data: studentData } = await _supabase.from('students').select('*').ilike('name', studentName);
             if (studentData && studentData.length > 0) {
                 const currentCredits = studentData[0].credits || 0;
                 const updatedCredits = currentCredits + packageCredits;
 
-                // Update student credits
                 const { error: studErr } = await _supabase.from('students').update({ credits: updatedCredits }).eq('id', studentData[0].id);
                 if (studErr) { alert("Error updating student credits: " + studErr.message); return; }
             }
 
             alert(`Payment verified successfully! Added ${packageCredits} session slots to ${studentName}.`);
+            loadAdminVerifyPaymentsTab();
+        }
+
+        async function deletePaymentRecord(id) {
+            if (!confirm("Are you sure you want to clear/delete this payment history entry?")) return;
+            await _supabase.from('payment_history').delete().eq('id', id);
+            loadAdminVerifyPaymentsTab();
+        }
+
+        async function clearPaymentHistory() {
+            if (!confirm("Clear all verified payment history records?")) return;
+            await _supabase.from('payment_history').delete().eq('status', 'Verified');
             loadAdminVerifyPaymentsTab();
         }
 
@@ -746,16 +820,16 @@
                                     <div><label class="block font-semibold mb-1">Teacher Notes</label><input type="text" id="note_${s.id}" value="${s.notes || ''}" class="w-full p-2 border rounded"></div>
                                     <div><label class="block font-semibold mb-1">Homework Assigned</label><input type="text" id="hw_${s.id}" value="${s.homework || ''}" class="w-full p-2 border rounded"></div>
                                 </div>
-                                <div>
-                                    <label class="block font-semibold mb-1">Lesson Recording URL (Zoom, YouTube, Google Drive, etc.)</label>
-                                    <input type="url" id="rec_${s.id}" value="${s.recording_url || ''}" placeholder="https://..." class="w-full p-2 border rounded">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <div><label class="block font-semibold mb-1">Classroom Meeting Link</label><input type="url" id="link_${s.id}" value="${s.meeting_link || ''}" placeholder="https://..." class="w-full p-2 border rounded"></div>
+                                    <div><label class="block font-semibold mb-1">Lesson Recording URL</label><input type="url" id="rec_${s.id}" value="${s.recording_url || ''}" placeholder="https://..." class="w-full p-2 border rounded"></div>
                                 </div>
-                                <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded font-bold shadow-sm">Save Notes & Recording</button>
+                                <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded font-bold shadow-sm">Save Notes, Link & Recording</button>
                             </form>
                         </div>`;
                 });
             } else {
-                container.innerHTML = `<p class="text-slate-500">No student sessions found to record notes for.</p>`;
+                container.innerHTML = `<p class="text-slate-500">No student sessions found.</p>`;
             }
         }
 
@@ -763,11 +837,12 @@
             e.preventDefault();
             const notes = document.getElementById(`note_${sessionId}`).value.trim();
             const homework = document.getElementById(`hw_${sessionId}`).value.trim();
+            const meeting_link = document.getElementById(`link_${sessionId}`).value.trim();
             const recording_url = document.getElementById(`rec_${sessionId}`).value.trim();
 
-            const { error } = await _supabase.from('sessions').update({ notes, homework, recording_url }).eq('id', sessionId);
+            const { error } = await _supabase.from('sessions').update({ notes, homework, meeting_link, recording_url }).eq('id', sessionId);
             if (error) { alert("Error saving record: " + error.message); return; }
-            alert("Lesson record & recording updated successfully!");
+            alert("Lesson record updated successfully!");
             loadAdminRecordsTab();
         }
 
@@ -777,24 +852,28 @@
                 document.getElementById('studentCreditCount').textContent = studentData[0].credits || 0;
             }
 
-            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name);
+            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
             const container = document.getElementById('studentPortalSessions');
             container.innerHTML = '';
             if (sessions && sessions.length > 0) {
                 sessions.forEach(s => {
                     const isCancelled = s.status === 'Cancelled';
                     container.innerHTML += `
-                        <div class="p-3 bg-slate-50 border rounded flex justify-between items-center">
+                        <div class="p-4 bg-slate-50 border rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <div>
-                                <strong>${s.subject}</strong> — Date: ${s.date} (${s.slot})<br>
+                                <strong class="text-sm text-pink-700">${s.subject}</strong> — Date: <strong>${s.date}</strong> (${s.slot})<br>
+                                <span class="text-slate-600"><strong>Notes:</strong> ${s.notes || 'None'}</span><br>
                                 <span class="text-[11px] ${isCancelled ? 'text-rose-600 font-bold' : 'text-emerald-700 font-semibold'}">
-                                    Status: ${s.status || 'Active'} ${isCancelled ? `(Reason: ${s.cancel_reason})` : ''}
+                                    Status: ${s.status || 'Active'}
                                 </span>
+                            </div>
+                            <div>
+                                ${s.meeting_link && !isCancelled ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join Classroom</a>` : ''}
                             </div>
                         </div>`;
                 });
             } else {
-                container.innerHTML = `<p class="text-slate-400">No scheduled sessions found.</p>`;
+                container.innerHTML = `<p class="text-slate-400">No scheduled sessions found yet.</p>`;
             }
         }
 
