@@ -1180,7 +1180,17 @@
             const ref = document.getElementById('chkRefNumber').value.trim();
             const receipt_url = document.getElementById('chkReceiptBase64').value;
 
-            const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, numeric_amount, credits, status: 'Pending', receipt_url, date: new Date().toLocaleDateString() }]);
+            const { error } = await _supabase.from('payment_history').insert([{ 
+                student_name: currentStudentName, 
+                ref, 
+                amount, 
+                numeric_amount, 
+                credits, 
+                status: 'Pending', 
+                receipt_url, 
+                date: new Date().toLocaleDateString() 
+            }]);
+
             if (error) { alert("Checkout error: " + error.message); return; }
 
             alert(`Payment submitted for ${packageName}! Teacher Ann will verify your receipt and update your remaining class.`);
@@ -1961,12 +1971,17 @@
 
         async function loadStudentPortal(name) {
             const { data: studentData } = await _supabase.from('students').select('*').ilike('name', name);
+            let credits = 0;
             if (studentData && studentData.length > 0) {
-                document.getElementById('studentCreditCount').textContent = studentData[0].credits || 0;
+                credits = studentData[0].credits || 0;
+                document.getElementById('studentCreditCount').textContent = credits;
             }
 
             const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
+            const { data: payments } = await _supabase.from('payment_history').select('*').ilike('student_name', name);
             
+            const hasPendingPayment = payments && payments.some(p => p.status === 'Pending');
+
             const { data: assessData } = await _supabase.from('assessment_requests').select('*').ilike('student_name', name);
             const assessBox = document.getElementById('freeAssessmentActionContainer');
             if (assessData && assessData.length > 0) {
@@ -2006,11 +2021,29 @@
 
             const container = document.getElementById('studentPortalSessions');
             container.innerHTML = '';
-            if (sessions && sessions.length > 0) {
-                sessions.forEach(s => {
-                    const isCancelled = s.status && s.status.includes('Cancelled');
-                    const isDone = s.status === 'Done';
-                    const isAbsent = s.status === 'Teacher Absent';
+
+            if (hasPendingPayment) {
+                container.innerHTML += `
+                    <div class="p-3 bg-amber-50 border border-amber-300 text-amber-900 rounded-xl flex items-center justify-between text-xs mb-3">
+                        <span><i class="fa-solid fa-clock-rotate-left mr-1.5 text-amber-600"></i> Payment receipt submitted! Status: <strong>Pending verification</strong> by Teacher Ann.</span>
+                        <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded font-bold text-[10px]">Pending</span>
+                    </div>
+                `;
+            }
+
+            const activeSessions = sessions ? sessions.filter(s => {
+                const isAssessment = s.subject && s.subject.toLowerCase().includes('assessment');
+                const isDone = s.status === 'Done';
+                const isCancelled = s.status && s.status.includes('Cancelled');
+                
+                if (isAssessment && (isDone || isCancelled || credits > 0 || hasPendingPayment)) {
+                    return false;
+                }
+                return !isDone && !isCancelled;
+            }) : [];
+
+            if (activeSessions.length > 0) {
+                activeSessions.forEach(s => {
                     const isAssessment = s.subject && s.subject.toLowerCase().includes('assessment');
 
                     container.innerHTML += `
@@ -2018,22 +2051,28 @@
                             <div>
                                 <strong class="text-sm text-pink-700">${s.subject}</strong> — Date: <strong>${s.date}</strong> (${s.slot})<br>
                                 <span class="text-slate-600"><strong>Notes:</strong> ${s.notes || 'None'}</span><br>
-                                <span class="text-[11px] font-bold ${isDone ? 'text-emerald-700' : isAbsent ? 'text-amber-700' : isCancelled ? 'text-rose-600' : 'text-slate-700'}">
-                                    Status: ${s.status || 'Active'}
+                                <span class="text-[11px] font-bold text-slate-700">
+                                    Status: ${hasPendingPayment ? 'Pending (Payment Verification)' : (s.status || 'Active')}
                                 </span>
                                 ${s.absence_reason ? `<br><span class="text-amber-800 font-semibold bg-amber-50 p-1 rounded block mt-1"><i class="fa-solid fa-comment mr-1"></i>Teacher Note: ${s.absence_reason}</span>` : ''}
-                                ${s.cancel_reason ? `<br><span class="text-rose-800 font-semibold bg-rose-50 p-1 rounded block mt-1"><i class="fa-solid fa-comment mr-1"></i>Your Cancel Reason: ${s.cancel_reason}</span>` : ''}
-                                ${isCancelled ? `<div class="mt-2 bg-amber-100 border border-amber-300 text-amber-900 p-2.5 rounded font-semibold space-y-1"><p><i class="fa-solid fa-headset mr-1"></i> Class link removed. You can chat support below to ask if another assessment or schedule is available.</p><button onclick="switchStudentTab('chat')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1 rounded font-bold shadow text-[10px]">Open Chat Support</button></div>` : ''}
                             </div>
                             <div class="flex items-center space-x-2">
-                                ${s.meeting_link && !isCancelled && !isDone && !isAbsent ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join</a>` : ''}
-                                ${isDone ? `<button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-3.5 py-2 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-tags mr-1.5"></i> Enroll Now (Buy Package)</button>` : ''}
-                                ${!isCancelled && !isDone ? `<button onclick="${isAssessment ? 'cancelStudentAssessment()' : `openStudentCancelModal(${s.id})`}" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded-lg font-bold shadow-sm"><i class="fa-solid fa-ban mr-1"></i> Cancel Class</button>` : ''}
+                                ${s.meeting_link ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join</a>` : ''}
+                                <button onclick="${isAssessment ? 'cancelStudentAssessment()' : `openStudentCancelModal(${s.id})`}" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded-lg font-bold shadow-sm"><i class="fa-solid fa-ban mr-1"></i> Cancel Class</button>
                             </div>
                         </div>`;
                 });
-            } else {
-                container.innerHTML = `<p class="text-slate-400">No scheduled sessions found yet.</p>`;
+            } else if (!hasPendingPayment) {
+                container.innerHTML += `
+                    <div class="p-6 bg-white border rounded-xl text-center space-y-3">
+                        <p class="text-slate-500 font-medium">No upcoming active classes scheduled right now.</p>
+                        ${credits === 0 ? `
+                            <button onclick="switchStudentTab('payment')" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2.5 rounded-xl font-bold shadow animate-pulse">
+                                <i class="fa-solid fa-tags mr-1.5"></i> Buy More Package Now! / Advance Book Now
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
             }
         }
 
@@ -2063,4 +2102,3 @@
     </script>
 </body>
 </html>
-```[cite: 1]
