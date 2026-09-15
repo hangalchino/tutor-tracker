@@ -650,6 +650,9 @@
         let adminCalendarDate = new Date();
         let studentCalendarDate = new Date();
 
+        let idleTimer = null;
+        const IDLE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+
         const defaultPackages = [
             { id: 'pkg_1', title: 'Reading Program (20 Sessions)', category: 'Reading', price: 5000, credits: 20, description: 'Engaging reading lessons designed to boost vocabulary and comprehension.' },
             { id: 'pkg_2', title: 'English Program (20 Sessions)', category: 'English', price: 10000, credits: 20, description: 'Comprehensive English grammar, writing, and communication tutorials.' },
@@ -675,7 +678,51 @@
             loadPublicRatesAndDropdown();
             document.getElementById('adminTimezoneLabel').textContent = userTimezone;
             document.getElementById('studentTimezoneDisplay').textContent = userTimezone;
+
+            // Check existing login session from localStorage
+            checkPersistedSession();
+            initIdleTimeoutListener();
         });
+
+        // ================= SESSION PERSISTENCE & IDLE TIMEOUT =================
+        function checkPersistedSession() {
+            const savedRole = localStorage.getItem('lwta_role');
+            const savedName = localStorage.getItem('lwta_name');
+
+            if (savedRole === 'admin') {
+                document.getElementById('publicLandingPage').classList.add('hidden');
+                document.getElementById('adminAppContainer').classList.remove('hidden');
+                loadAdminData();
+            } else if (savedRole === 'student' && savedName) {
+                currentStudentName = savedName;
+                document.getElementById('publicLandingPage').classList.add('hidden');
+                document.getElementById('studentAppContainer').classList.remove('hidden');
+                document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${currentStudentName}!`;
+                loadStudentPortal(currentStudentName);
+            }
+        }
+
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            // Only run timer if logged in (admin or student container is active)
+            const isAdminActive = !document.getElementById('adminAppContainer').classList.contains('hidden');
+            const isStudentActive = !document.getElementById('studentAppContainer').classList.contains('hidden');
+
+            if (isAdminActive || isStudentActive) {
+                idleTimer = setTimeout(() => {
+                    alert("You have been logged out due to 30 minutes of inactivity.");
+                    if (isAdminActive) adminLogout();
+                    if (isStudentActive) studentLogout();
+                }, IDLE_TIMEOUT_MS);
+            }
+        }
+
+        function initIdleTimeoutListener() {
+            ['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll'].forEach(evt => {
+                window.addEventListener(evt, resetIdleTimer, { passive: true });
+            });
+            resetIdleTimer();
+        }
 
         function nextMotivation(target) {
             const randomQuote = motivations[Math.floor(Math.random() * motivations.length)];
@@ -1172,14 +1219,29 @@
             const { error } = await _supabase.auth.signInWithPassword({ email, password });
             if (error) { alert("Admin login failed: " + error.message); return; }
             
+            // Save admin session state
+            localStorage.setItem('lwta_role', 'admin');
+            localStorage.removeItem('lwta_name');
+
             closeAdminLoginModal();
             document.getElementById('publicLandingPage').classList.add('hidden');
             document.getElementById('adminAppContainer').classList.remove('hidden');
             loadAdminData();
+            resetIdleTimer();
         }
 
-        function adminLogout() { location.reload(); }
-        function studentLogout() { location.reload(); }
+        function adminLogout() { 
+            localStorage.removeItem('lwta_role');
+            localStorage.removeItem('lwta_name');
+            location.reload(); 
+        }
+
+        function studentLogout() { 
+            localStorage.removeItem('lwta_role');
+            localStorage.removeItem('lwta_name');
+            location.reload(); 
+        }
+
         function scrollToEnroll() { document.getElementById('enroll').scrollIntoView({ behavior: 'smooth' }); }
         function openStudentLoginModal() { document.getElementById('studentLoginModal').classList.remove('hidden'); }
         function closeStudentLoginModal() { document.getElementById('studentLoginModal').classList.add('hidden'); }
@@ -1233,11 +1295,17 @@
             }
 
             currentStudentName = data[0].name;
+
+            // Save student session state
+            localStorage.setItem('lwta_role', 'student');
+            localStorage.setItem('lwta_name', currentStudentName);
+
             closeStudentLoginModal();
             document.getElementById('publicLandingPage').classList.add('hidden');
             document.getElementById('studentAppContainer').classList.remove('hidden');
             document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${currentStudentName} (Parent: ${data[0].parent || 'N/A'})!`;
             loadStudentPortal(currentStudentName);
+            resetIdleTimer();
         }
 
         async function loadAdminData() {
@@ -1258,7 +1326,6 @@
             let totalVerifiedRevenue = 0;
             allPayments.forEach(p => {
                 if (p.status === 'Verified') {
-                    // Use numeric_amount if available, else parse from string amount
                     let amt = parseFloat(p.numeric_amount);
                     if (isNaN(amt) && p.amount) {
                         amt = parseFloat(p.amount.replace(/[^0-9.]/g, '')) || 0;
@@ -1317,7 +1384,6 @@
             const container = document.getElementById('adminChatContainer');
             container.innerHTML = '';
 
-            // Group by student
             let studentGroups = {};
             if (msgs) {
                 msgs.forEach(m => {
@@ -1386,20 +1452,48 @@
         // ================= FREE ASSESSMENT FUNCTIONS =================
         async function requestFreeAssessment() {
             const { data: existing } = await _supabase.from('assessment_requests').select('*').ilike('student_name', currentStudentName);
-            if (existing && existing.length > 0) {
+            if (existing && existing.length > 0 && existing[0].status !== 'Cancelled') {
                 alert("You have already claimed your 1 Free Assessment Class.");
                 return;
             }
 
-            const { error } = await _supabase.from('assessment_requests').insert([{
-                student_name: currentStudentName,
-                status: 'Requested',
-                date: new Date().toLocaleDateString()
-            }]);
-
-            if (error) { alert("Error requesting assessment: " + error.message); return; }
+            if (existing && existing.length > 0 && existing[0].status === 'Cancelled') {
+                await _supabase.from('assessment_requests').update({
+                    status: 'Requested',
+                    scheduled_date: null,
+                    slot: null,
+                    meeting_link: null,
+                    notes: null,
+                    date: new Date().toLocaleDateString()
+                }).eq('id', existing[0].id);
+            } else {
+                await _supabase.from('assessment_requests').insert([{
+                    student_name: currentStudentName,
+                    status: 'Requested',
+                    date: new Date().toLocaleDateString()
+                }]);
+            }
 
             alert("Free Assessment requested successfully! Teacher Ann has been notified.");
+            loadStudentPortal(currentStudentName);
+        }
+
+        async function cancelStudentAssessment() {
+            if (!confirm("Are you sure you want to cancel your Free Assessment? The classroom link will be removed.")) return;
+            
+            // Update assessment request status
+            await _supabase.from('assessment_requests').update({
+                status: 'Cancelled',
+                meeting_link: ''
+            }).ilike('student_name', currentStudentName);
+
+            // Update corresponding session status and remove meeting link
+            await _supabase.from('sessions').update({
+                status: 'Cancelled by Student',
+                meeting_link: ''
+            }).ilike('student_name', currentStudentName).ilike('subject', '%Assessment%');
+
+            alert("Assessment cancelled successfully. Classroom link removed.");
             loadStudentPortal(currentStudentName);
         }
 
@@ -1411,6 +1505,7 @@
             if (requests && requests.length > 0) {
                 requests.forEach(req => {
                     const isScheduled = req.status === 'Scheduled';
+                    const isCancelled = req.status === 'Cancelled';
                     container.innerHTML += `
                         <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-2">
@@ -1418,17 +1513,17 @@
                                     <strong class="text-sm text-pink-700">${req.student_name}</strong> — <span class="font-bold text-slate-700">Free Assessment Request</span><br>
                                     <span class="text-slate-500">Requested on: ${req.date || 'N/A'}</span>
                                 </div>
-                                <span class="px-3 py-1 rounded-full font-bold text-[11px] ${isScheduled ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                <span class="px-3 py-1 rounded-full font-bold text-[11px] ${isScheduled ? 'bg-emerald-100 text-emerald-800' : isCancelled ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}">
                                     Status: ${req.status || 'Requested'}
                                 </span>
                             </div>
                             <div class="flex flex-col sm:flex-row justify-between items-center gap-2">
                                 <div>
-                                    ${isScheduled ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><strong>Teacher Message:</strong> ${req.notes || 'None'} <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : `<p class="text-slate-500 italic">Not scheduled yet. Click plot schedule below.</p>`}
+                                    ${isScheduled ? `<p class="text-emerald-700 font-semibold"><i class="fa-solid fa-calendar-check mr-1"></i> Scheduled on ${req.scheduled_date} (${req.slot}) <br><strong>Teacher Message:</strong> ${req.notes || 'None'} <br><a href="${req.meeting_link}" target="_blank" class="text-indigo-600 underline">${req.meeting_link}</a></p>` : isCancelled ? `<p class="text-rose-600 italic">Assessment cancelled by student. Link removed.</p>` : `<p class="text-slate-500 italic">Not scheduled yet. Click plot schedule below.</p>`}
                                 </div>
                                 <div class="flex gap-2">
                                     <button onclick="openPlotAssessmentModal(${req.id}, '${req.student_name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded font-bold shadow-sm"><i class="fa-solid fa-calendar-days mr-1"></i> ${isScheduled ? 'Reschedule' : 'Plot Schedule & Link'}</button>
-                                    <button onclick="deleteAssessmentRequest(${req.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold shadow-sm" title="Delete/Cancel Request"><i class="fa-solid fa-trash mr-1"></i> Cancel</button>
+                                    <button onclick="deleteAssessmentRequest(${req.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded font-bold shadow-sm" title="Delete Request"><i class="fa-solid fa-trash mr-1"></i> Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -1472,16 +1567,27 @@
 
             if (error) { alert("Error scheduling assessment: " + error.message); return; }
 
-            // Also add to sessions so student sees it on their schedule
-            await _supabase.from('sessions').insert([{
-                student_name: studentName,
-                subject: 'Free Assessment Class',
-                date: scheduled_date,
-                slot,
-                notes: notes || 'Free initial assessment session',
-                meeting_link,
-                status: 'Active'
-            }]);
+            // Also add/update session so student sees it on their schedule
+            const { data: existingSess } = await _supabase.from('sessions').select('*').ilike('student_name', studentName).ilike('subject', '%Assessment%');
+            if (existingSess && existingSess.length > 0) {
+                await _supabase.from('sessions').update({
+                    date: scheduled_date,
+                    slot,
+                    notes: notes || 'Free initial assessment session',
+                    meeting_link,
+                    status: 'Active'
+                }).eq('id', existingSess[0].id);
+            } else {
+                await _supabase.from('sessions').insert([{
+                    student_name: studentName,
+                    subject: 'Free Assessment Class',
+                    date: scheduled_date,
+                    slot,
+                    notes: notes || 'Free initial assessment session',
+                    meeting_link,
+                    status: 'Active'
+                }]);
+            }
 
             alert(`Free Assessment scheduled successfully for ${studentName}!`);
             closePlotAssessmentModal();
@@ -1489,7 +1595,7 @@
         }
 
         async function deleteAssessmentRequest(id) {
-            if (!confirm("Are you sure you want to cancel/delete this assessment request?")) return;
+            if (!confirm("Are you sure you want to delete this assessment request?")) return;
             await _supabase.from('assessment_requests').delete().eq('id', id);
             loadAdminAssessmentTab();
         }
@@ -1791,13 +1897,27 @@
                 document.getElementById('studentCreditCount').textContent = studentData[0].credits || 0;
             }
 
-            // Load Free Assessment button state (claimed / requested or not)
+            // Load Free Assessment state
             const { data: assessData } = await _supabase.from('assessment_requests').select('*').ilike('student_name', name);
             const assessBox = document.getElementById('freeAssessmentActionContainer');
             if (assessData && assessData.length > 0) {
                 const req = assessData[0];
                 if (req.status === 'Scheduled') {
-                    assessBox.innerHTML = `<p class="font-bold text-emerald-100 bg-emerald-700/60 p-2 rounded"><i class="fa-solid fa-check mr-1"></i> Assessment Scheduled on ${req.scheduled_date} (${req.slot})!<br><strong>Teacher Message:</strong> ${req.notes || 'None'}<br><a href="${req.meeting_link}" target="_blank" class="underline text-white font-bold">Join Classroom Link</a></p>`;
+                    assessBox.innerHTML = `
+                        <div class="bg-emerald-800/80 p-2.5 rounded-lg space-y-2">
+                            <p class="font-bold text-emerald-100"><i class="fa-solid fa-check mr-1"></i> Assessment Scheduled on ${req.scheduled_date} (${req.slot})!<br><strong>Teacher Message:</strong> ${req.notes || 'None'}</p>
+                            <div class="flex flex-col gap-1.5 pt-1">
+                                <a href="${req.meeting_link}" target="_blank" class="bg-white text-emerald-800 font-bold py-1.5 px-3 rounded text-center shadow hover:bg-emerald-50"><i class="fa-solid fa-video mr-1"></i> Join Classroom Link</a>
+                                <button onclick="cancelStudentAssessment()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-1.5 px-3 rounded text-center shadow"><i class="fa-solid fa-ban mr-1"></i> Cancel Assessment</button>
+                            </div>
+                        </div>`;
+                } else if (req.status === 'Cancelled') {
+                    assessBox.innerHTML = `
+                        <div class="bg-rose-800/80 p-2.5 rounded-lg space-y-2">
+                            <p class="font-bold text-rose-100"><i class="fa-solid fa-ban mr-1"></i> Assessment Cancelled. Classroom link removed.</p>
+                            <p class="text-[11px] text-pink-100">You can chat support below to ask if another assessment or schedule is available.</p>
+                            <button onclick="switchStudentTab('chat')" class="w-full bg-white text-pink-700 font-bold py-1.5 rounded shadow hover:bg-pink-50"><i class="fa-solid fa-headset mr-1"></i> Open Chat Support</button>
+                        </div>`;
                 } else {
                     assessBox.innerHTML = `<p class="font-bold text-pink-100 bg-pink-700/50 p-2 rounded"><i class="fa-solid fa-clock mr-1"></i> Free Assessment requested & claimed! Waiting for Teacher Ann to plot schedule & message.</p>`;
                 }
@@ -1813,6 +1933,7 @@
                     const isCancelled = s.status && s.status.includes('Cancelled');
                     const isDone = s.status === 'Done';
                     const isAbsent = s.status === 'Teacher Absent';
+                    const isAssessment = s.subject && s.subject.toLowerCase().includes('assessment');
 
                     container.innerHTML += `
                         <div class="p-4 bg-slate-50 border rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -1828,7 +1949,7 @@
                             </div>
                             <div class="flex items-center space-x-2">
                                 ${s.meeting_link && !isCancelled && !isDone && !isAbsent ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join</a>` : ''}
-                                ${!isCancelled && !isDone ? `<button onclick="openStudentCancelModal(${s.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded-lg font-bold shadow-sm"><i class="fa-solid fa-ban mr-1"></i> Cancel Class</button>` : ''}
+                                ${!isCancelled && !isDone ? `<button onclick="${isAssessment ? 'cancelStudentAssessment()' : `openStudentCancelModal(${s.id})`}" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded-lg font-bold shadow-sm"><i class="fa-solid fa-ban mr-1"></i> Cancel Class</button>` : ''}
                             </div>
                         </div>`;
                 });
