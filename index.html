@@ -183,8 +183,8 @@
 
                 <nav class="space-y-1.5 text-xs font-semibold">
                     <button onclick="switchTab('dashboard')" id="navDashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all"><i class="fa-solid fa-house w-4"></i><span>Dashboard</span></button>
-                    <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students</span></button>
-                    <button onclick="switchTab('schedule')" id="navSchedule" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-calendar-days w-4"></i><span>Schedule</span></button>
+                    <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students & Credits</span></button>
+                    <button onclick="switchTab('verify')" id="navVerify" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-check-to-slot w-4"></i><span>Verify Payments</span></button>
                     <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payment Settings</span></button>
                     <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records & Recordings</span></button>
                 </nav>
@@ -214,17 +214,19 @@
                 </div>
             </div>
 
+            <!-- STUDENTS & CREDITS MANAGER TAB -->
             <div id="tabStudents" class="hidden space-y-6">
                 <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Student Directory & Remaining Credits</h3>
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Student Directory & Remaining Session Credits (Slots)</h3>
                     <div id="studentsDirectoryContainer" class="space-y-3 text-xs"></div>
                 </div>
             </div>
 
-            <div id="tabSchedule" class="hidden space-y-6">
+            <!-- VERIFY PAYMENTS TAB -->
+            <div id="tabVerify" class="hidden space-y-6">
                 <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
-                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3">Class Schedule Manager</h3>
-                    <div id="scheduleContainer" class="space-y-3 text-xs"></div>
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-check-to-slot text-pink-600 mr-2"></i> Verify Uploaded Payment Receipts & Add Credits</h3>
+                    <div id="adminVerifyPaymentsContainer" class="space-y-3 text-xs"></div>
                 </div>
             </div>
 
@@ -270,7 +272,7 @@
                     </div>
                 </div>
                 <div class="flex bg-pink-700/60 p-1 rounded-lg text-xs gap-1">
-                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all">Schedule & Calendar</button>
+                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all">Schedule</button>
                     <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Previous Lessons & Recordings</button>
                     <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Buy Packages</button>
                 </div>
@@ -280,6 +282,7 @@
 
         <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 space-y-6">
             <div id="studentScheduleView" class="space-y-6 text-xs">
+                <!-- REMAINING SESSIONS LEFT (MANAGED BY TEACHER) -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm flex justify-between items-center">
                     <div>
                         <span class="text-slate-500 uppercase font-semibold text-[10px] block">Remaining Sessions Left</span>
@@ -310,20 +313,20 @@
                             <h4 class="font-bold text-pink-900">Starter Pack</h4>
                             <p class="text-lg font-extrabold text-pink-700">₱1,000</p>
                             <p class="text-[11px] text-slate-500">4 Session Credits</p>
-                            <button onclick="openCheckoutModal('Starter Pack (4 Sessions)', 1000)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="openCheckoutModal('Starter Pack (4 Sessions)', 1000, 4)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                         <div class="border-2 border-pink-600 rounded-xl p-4 bg-pink-50 space-y-2 text-center shadow-sm">
                             <span class="bg-pink-600 text-white text-[9px] px-2 py-0.5 rounded-full uppercase font-bold">Popular</span>
                             <h4 class="font-bold text-pink-900">Monthly Bundle</h4>
                             <p class="text-lg font-extrabold text-pink-700">₱2,500</p>
                             <p class="text-[11px] text-slate-500">10 Session Credits</p>
-                            <button onclick="openCheckoutModal('Monthly Bundle (10 Sessions)', 2500)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="openCheckoutModal('Monthly Bundle (10 Sessions)', 2500, 10)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                         <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
                             <h4 class="font-bold text-pink-900">Intensive Pack</h4>
                             <p class="text-lg font-extrabold text-pink-700">₱5,000</p>
                             <p class="text-[11px] text-slate-500">20 Session Credits</p>
-                            <button onclick="openCheckoutModal('Intensive Pack (20 Sessions)', 5000)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="openCheckoutModal('Intensive Pack (20 Sessions)', 5000, 20)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                     </div>
                 </div>
@@ -331,25 +334,7 @@
         </main>
     </div>
 
-    <!-- CANCELLATION MODAL -->
-    <div id="cancelModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <div class="flex justify-between items-center border-b pb-2">
-                <h3 class="font-bold text-slate-800 text-sm">Cancel Class & Provide Reason</h3>
-                <button onclick="closeCancelModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form onsubmit="submitClassCancellation(event)" class="space-y-3">
-                <input type="hidden" id="cancelSessionId">
-                <div>
-                    <label class="block font-semibold mb-1">Reason for Cancellation</label>
-                    <textarea id="cancelReason" required rows="3" placeholder="Please enter your reason..." class="w-full p-2.5 border rounded"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-lg">Confirm Cancellation (Restore 1 Credit)</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- CHECKOUT MODAL WITH CLICKABLE ZOOMABLE QR CODE -->
+    <!-- CHECKOUT MODAL WITH DYNAMIC BANK / QR DETAILS -->
     <div id="checkoutModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4 text-xs max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b pb-2">
@@ -369,11 +354,12 @@
             <form onsubmit="submitCheckoutPayment(event)" class="space-y-3 border-t pt-3">
                 <input type="hidden" id="chkPackageName">
                 <input type="hidden" id="chkPackageAmount">
+                <input type="hidden" id="chkPackageCredits">
                 <div><label class="block font-semibold mb-1">Reference Number / Transaction ID</label><input type="text" id="chkRefNumber" required class="w-full p-2 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Upload Receipt Screenshot</label><input type="file" id="chkReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewCheckoutReceipt(event)"></div>
                 <input type="hidden" id="chkReceiptBase64">
                 <div id="chkPreviewBox"></div>
-                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg">Submit Payment Proof</button>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg">Submit Payment Proof for Verification</button>
             </form>
         </div>
     </div>
@@ -413,14 +399,14 @@
         }
 
         function switchTab(tabId) {
-            ['tabDashboard', 'tabStudents', 'tabSchedule', 'tabPayments', 'tabRecords'].forEach(t => {
+            ['tabDashboard', 'tabStudents', 'tabVerify', 'tabPayments', 'tabRecords'].forEach(t => {
                 const el = document.getElementById(t);
                 if(el) el.classList.add('hidden');
             });
             const target = document.getElementById('tab' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
             if(target) target.classList.remove('hidden');
 
-            ['Dashboard', 'Students', 'Schedule', 'Payments', 'Records'].forEach(name => {
+            ['Dashboard', 'Students', 'Verify', 'Payments', 'Records'].forEach(name => {
                 const btn = document.getElementById('nav' + name);
                 if (btn) {
                     if (name.toLowerCase() === tabId) {
@@ -432,7 +418,7 @@
             });
 
             if (tabId === 'students') loadStudentsTab();
-            if (tabId === 'schedule') loadScheduleTab();
+            if (tabId === 'verify') loadAdminVerifyPaymentsTab();
             if (tabId === 'payments') loadAdminPaymentConfigForm();
             if (tabId === 'records') loadAdminRecordsTab();
         }
@@ -446,11 +432,12 @@
             else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
         }
 
-        async function openCheckoutModal(packageName, amount) {
+        async function openCheckoutModal(packageName, amount, credits) {
             document.getElementById('checkoutPackageTitle').textContent = packageName;
             document.getElementById('checkoutPackagePrice').textContent = `₱${amount.toLocaleString()}`;
             document.getElementById('chkPackageName').value = packageName;
             document.getElementById('chkPackageAmount').value = `₱${amount.toLocaleString()} (${packageName})`;
+            document.getElementById('chkPackageCredits').value = credits;
             document.getElementById('chkRefNumber').value = '';
             document.getElementById('chkReceiptFile').value = '';
             document.getElementById('chkReceiptBase64').value = '';
@@ -541,36 +528,16 @@
             e.preventDefault();
             const packageName = document.getElementById('chkPackageName').value;
             const amount = document.getElementById('chkPackageAmount').value;
+            const credits = parseInt(document.getElementById('chkPackageCredits').value) || 0;
             const ref = document.getElementById('chkRefNumber').value.trim();
             const receipt_url = document.getElementById('chkReceiptBase64').value;
 
-            const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, receipt_url, date: new Date().toLocaleDateString() }]);
+            const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, credits, status: 'Pending', receipt_url, date: new Date().toLocaleDateString() }]);
             if (error) { alert("Checkout error: " + error.message); return; }
 
-            alert(`Payment submitted for ${packageName}! Teacher Ann will verify your receipt.`);
+            alert(`Payment submitted for ${packageName}! Teacher Ann will verify your receipt and update your remaining slots.`);
             closeCheckoutModal();
             switchStudentTab('schedule');
-            loadStudentPortal(currentStudentName);
-        }
-
-        function openCancelModal(sessionId) {
-            document.getElementById('cancelSessionId').value = sessionId;
-            document.getElementById('cancelReason').value = '';
-            document.getElementById('cancelModal').classList.remove('hidden');
-        }
-
-        function closeCancelModal() { document.getElementById('cancelModal').classList.add('hidden'); }
-
-        async function submitClassCancellation(e) {
-            e.preventDefault();
-            const sessionId = document.getElementById('cancelSessionId').value;
-            const reason = document.getElementById('cancelReason').value.trim();
-
-            const { error } = await _supabase.from('sessions').update({ status: 'Cancelled', cancel_reason: reason }).eq('id', sessionId);
-            if (error) { alert("Error cancelling class: " + error.message); return; }
-
-            alert("Class cancelled successfully. Your session credit has been restored.");
-            closeCancelModal();
             loadStudentPortal(currentStudentName);
         }
 
@@ -624,7 +591,7 @@
             const password = document.getElementById('enrollPassword').value.trim();
             const subject = document.getElementById('enrollSubject').value;
 
-            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile, password, notes: `Program: ${subject}` }]);
+            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile, password, credits: 0, notes: `Program: ${subject}` }]);
             if (error) { alert("Enrollment error: " + error.message); return; }
             alert("Enrollment successful! You can now sign in.");
             document.getElementById('enrollStudentName').value = '';
@@ -668,12 +635,91 @@
             document.getElementById('statMonthlyDue').textContent = '₱' + (allStudents.length * 2500).toLocaleString();
         }
 
-        function loadStudentsTab() {
+        async function loadStudentsTab() {
+            const { data: students } = await _supabase.from('students').select('*');
             const container = document.getElementById('studentsDirectoryContainer');
             container.innerHTML = '';
-            allStudents.forEach(s => {
-                container.innerHTML += `<div class="p-3 border rounded bg-slate-50"><strong>${s.name}</strong> (Pass: ${s.password})</div>`;
-            });
+            if (students && students.length > 0) {
+                students.forEach(s => {
+                    container.innerHTML += `
+                        <div class="p-4 border rounded-xl bg-slate-50 flex flex-col sm:flex-row justify-between items-center gap-3">
+                            <div>
+                                <strong class="text-sm text-pink-700">${s.name}</strong><br>
+                                <span class="text-slate-500">Password: ${s.password} | Contact: ${s.email_or_mobile || 'N/A'}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <label class="font-semibold">Remaining Slots (Credits):</label>
+                                <input type="number" id="cred_${s.id}" value="${s.credits || 0}" class="w-20 p-2 border rounded text-center font-bold">
+                                <button onclick="updateStudentCredits(${s.id}, '${s.name}')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-2 rounded font-bold shadow-sm">Update</button>
+                            </div>
+                        </div>`;
+                });
+            } else {
+                container.innerHTML = `<p class="text-slate-500">No students registered yet.</p>`;
+            }
+        }
+
+        async function updateStudentCredits(studentId, studentName) {
+            const newCredits = parseInt(document.getElementById(`cred_${studentId}`).value) || 0;
+            const { error } = await _supabase.from('students').update({ credits: newCredits }).eq('id', studentId);
+            if (error) { alert("Error updating credits: " + error.message); return; }
+            alert(`Remaining session slots updated successfully for ${studentName}!`);
+            loadStudentsTab();
+        }
+
+        async function loadAdminVerifyPaymentsTab() {
+            const { data: payments } = await _supabase.from('payment_history').select('*').order('id', { ascending: false });
+            const container = document.getElementById('adminVerifyPaymentsContainer');
+            container.innerHTML = '';
+            if (payments && payments.length > 0) {
+                payments.forEach(p => {
+                    const isVerified = p.status === 'Verified';
+                    container.innerHTML += `
+                        <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-2">
+                                <div>
+                                    <strong class="text-sm text-pink-700">${p.student_name}</strong> — <span class="font-bold">${p.amount}</span><br>
+                                    <span class="text-slate-500">Ref / TxID: ${p.ref} | Date: ${p.date}</span>
+                                </div>
+                                <div>
+                                    <span class="px-3 py-1 rounded-full font-bold text-[11px] ${isVerified ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                                        Status: ${p.status || 'Pending'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                                <div>
+                                    ${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank"><img src="${p.receipt_url}" class="w-24 h-24 object-cover border rounded shadow cursor-pointer hover:opacity-90"></a>` : '<span class="text-slate-400">No receipt uploaded</span>'}
+                                </div>
+                                <div class="text-right">
+                                    ${!isVerified ? `<button onclick="verifyPaymentAndAddCredits(${p.id}, '${p.student_name}', ${p.credits || 0})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-check mr-1"></i> Verify Payment & Add ${p.credits || 0} Credits</button>` : '<span class="text-emerald-700 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> Verified & Added</span>'}
+                                </div>
+                            </div>
+                        </div>`;
+                });
+            } else {
+                container.innerHTML = `<p class="text-slate-500">No payment proofs submitted yet.</p>`;
+            }
+        }
+
+        async function verifyPaymentAndAddCredits(paymentId, studentName, packageCredits) {
+            // Update payment status to verified
+            const { error: payErr } = await _supabase.from('payment_history').update({ status: 'Verified' }).eq('id', paymentId);
+            if (payErr) { alert("Error verifying payment: " + payErr.message); return; }
+
+            // Fetch student current credits
+            const { data: studentData } = await _supabase.from('students').select('*').ilike('name', studentName);
+            if (studentData && studentData.length > 0) {
+                const currentCredits = studentData[0].credits || 0;
+                const updatedCredits = currentCredits + packageCredits;
+
+                // Update student credits
+                const { error: studErr } = await _supabase.from('students').update({ credits: updatedCredits }).eq('id', studentData[0].id);
+                if (studErr) { alert("Error updating student credits: " + studErr.message); return; }
+            }
+
+            alert(`Payment verified successfully! Added ${packageCredits} session slots to ${studentName}.`);
+            loadAdminVerifyPaymentsTab();
         }
 
         function loadScheduleTab() {
@@ -726,14 +772,12 @@
         }
 
         async function loadStudentPortal(name) {
-            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name);
-            const { data: payments } = await _supabase.from('payment_history').select('*').ilike('student_name', name);
-            
-            let totalCredits = (payments ? payments.length : 0) * 5;
-            let activeBookings = sessions ? sessions.filter(s => s.status !== 'Cancelled').length : 0;
-            let remaining = totalCredits - activeBookings;
-            document.getElementById('studentCreditCount').textContent = remaining >= 0 ? remaining : 0;
+            const { data: studentData } = await _supabase.from('students').select('*').ilike('name', name);
+            if (studentData && studentData.length > 0) {
+                document.getElementById('studentCreditCount').textContent = studentData[0].credits || 0;
+            }
 
+            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name);
             const container = document.getElementById('studentPortalSessions');
             container.innerHTML = '';
             if (sessions && sessions.length > 0) {
@@ -747,13 +791,10 @@
                                     Status: ${s.status || 'Active'} ${isCancelled ? `(Reason: ${s.cancel_reason})` : ''}
                                 </span>
                             </div>
-                            <div>
-                                ${!isCancelled ? `<button onclick="openCancelModal(${s.id})" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1 rounded font-bold">Cancel Class</button>` : ''}
-                            </div>
                         </div>`;
                 });
             } else {
-                container.innerHTML = `<p class="text-slate-400">No sessions booked yet.</p>`;
+                container.innerHTML = `<p class="text-slate-400">No scheduled sessions found.</p>`;
             }
         }
 
