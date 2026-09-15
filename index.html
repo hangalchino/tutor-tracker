@@ -194,6 +194,7 @@
                     <button onclick="switchTab('dashboard')" id="navDashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all"><i class="fa-solid fa-house w-4"></i><span>Dashboard</span></button>
                     <button onclick="switchTab('assessment')" id="navAssessment" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-clipboard-question w-4"></i><span>Assessment Requests</span></button>
                     <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students & Schedule Plot</span></button>
+                    <button onclick="switchTab('chat')" id="navChat" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-headset w-4"></i><span>Chat Support Inbox</span></button>
                     <button onclick="switchTab('verify')" id="navVerify" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-check-to-slot w-4"></i><span>Verify Payments</span></button>
                     <button onclick="switchTab('pricing')" id="navPricing" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-tags w-4"></i><span>Package Manager</span></button>
                     <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payment Settings</span></button>
@@ -244,7 +245,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                             <div class="p-4 bg-pink-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Students</p><p id="statTotalStudents" class="text-lg font-bold text-pink-700">0</p></div>
                             <div class="p-4 bg-purple-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Today's Classes</p><p id="statClassesToday" class="text-lg font-bold text-purple-700">0</p></div>
-                            <div class="p-4 bg-emerald-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Revenue</p><p id="statMonthlyDue" class="text-lg font-bold text-emerald-700">₱0</p></div>
+                            <div class="p-4 bg-emerald-50 border rounded-xl"><p class="text-slate-500 uppercase font-semibold">Total Verified Revenue</p><p id="statMonthlyDue" class="text-lg font-bold text-emerald-700">₱0</p></div>
                         </div>
                     </div>
                 </div>
@@ -268,6 +269,17 @@
                             <button onclick="openAddStudentModal()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-bold shadow"><i class="fa-solid fa-user-plus mr-1.5"></i> Add New Student</button>
                         </div>
                         <div id="studentsDirectoryContainer" class="space-y-4 text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- CHAT SUPPORT INBOX TAB (ADMIN) -->
+                <div id="tabChat" class="hidden space-y-6">
+                    <div class="bg-white border rounded-2xl p-6 shadow-sm space-y-4">
+                        <div class="border-b pb-3">
+                            <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-headset text-pink-600 mr-2"></i> Chat Support Inbox (Student Messages)</h3>
+                            <p class="text-[11px] text-slate-500">Respond to student inquiries regarding assessments, reschedules, or general questions.</p>
+                        </div>
+                        <div id="adminChatContainer" class="space-y-4 text-xs"></div>
                     </div>
                 </div>
 
@@ -438,7 +450,8 @@
                 </div>
                 <div class="flex bg-pink-700/60 p-1 rounded-lg text-xs gap-1">
                     <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all">Schedule</button>
-                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Previous Lessons & Recordings</button>
+                    <button onclick="switchStudentTab('chat')" id="stdNavChat" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Chat Support</button>
+                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Previous Lessons</button>
                     <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Buy Packages</button>
                 </div>
                 <button onclick="studentLogout()" class="bg-pink-700 hover:bg-pink-800 text-pink-100 px-3 py-1.5 rounded-lg text-xs font-bold">Exit</button>
@@ -494,6 +507,27 @@
                     <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
                         <h3 class="font-bold text-slate-800 text-sm">Your Upcoming Class Schedule & Classroom Links</h3>
                         <div id="studentPortalSessions" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <!-- CHAT SUPPORT VIEW (STUDENT) -->
+                <div id="studentChatView" class="hidden space-y-4 text-xs">
+                    <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4 flex flex-col h-[500px]">
+                        <div class="border-b pb-3 flex justify-between items-center">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-headset text-pink-600 mr-2"></i> Chat Support / Message Teacher Ann</h3>
+                                <p class="text-[11px] text-slate-500">Ask questions, request another assessment schedule after cancellation, or inquire about lessons.</p>
+                            </div>
+                        </div>
+                        
+                        <div id="studentChatMessages" class="flex-grow overflow-y-auto space-y-3 bg-pink-50/40 p-4 rounded-xl border">
+                            <!-- Messages loaded dynamically -->
+                        </div>
+
+                        <form onsubmit="sendStudentChatMessage(event)" class="flex gap-2 pt-2 border-t">
+                            <input type="text" id="studentChatInput" required placeholder="Type your message to Teacher Ann..." class="flex-grow p-2.5 border rounded-lg">
+                            <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2.5 rounded-lg font-bold shadow"><i class="fa-solid fa-paper-plane mr-1"></i> Send</button>
+                        </form>
                     </div>
                 </div>
 
@@ -585,6 +619,7 @@
             <form onsubmit="submitCheckoutPayment(event)" class="space-y-3 border-t pt-3">
                 <input type="hidden" id="chkPackageName">
                 <input type="hidden" id="chkPackageAmount">
+                <input type="hidden" id="chkPackageNumericAmount">
                 <input type="hidden" id="chkPackageCredits">
                 <div><label class="block font-semibold mb-1">Reference Number / Transaction ID</label><input type="text" id="chkRefNumber" required class="w-full p-2 border rounded"></div>
                 <div><label class="block font-semibold mb-1">Upload Receipt Screenshot</label><input type="file" id="chkReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewCheckoutReceipt(event)"></div>
@@ -718,14 +753,14 @@
         }
 
         function switchTab(tabId) {
-            ['tabDashboard', 'tabAssessment', 'tabStudents', 'tabVerify', 'tabPricing', 'tabPayments', 'tabRecords'].forEach(t => {
+            ['tabDashboard', 'tabAssessment', 'tabStudents', 'tabChat', 'tabVerify', 'tabPricing', 'tabPayments', 'tabRecords'].forEach(t => {
                 const el = document.getElementById(t);
                 if(el) el.classList.add('hidden');
             });
             const target = document.getElementById('tab' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
             if(target) target.classList.remove('hidden');
 
-            ['Dashboard', 'Assessment', 'Students', 'Verify', 'Pricing', 'Payments', 'Records'].forEach(name => {
+            ['Dashboard', 'Assessment', 'Students', 'Chat', 'Verify', 'Pricing', 'Payments', 'Records'].forEach(name => {
                 const btn = document.getElementById('nav' + name);
                 if (btn) {
                     if (name.toLowerCase() === tabId) {
@@ -736,8 +771,10 @@
                 }
             });
 
+            if (tabId === 'dashboard') loadAdminData();
             if (tabId === 'assessment') loadAdminAssessmentTab();
             if (tabId === 'students') loadStudentsTab();
+            if (tabId === 'chat') loadAdminChatTab();
             if (tabId === 'verify') loadAdminVerifyPaymentsTab();
             if (tabId === 'pricing') loadAdminPricingTab();
             if (tabId === 'payments') loadAdminPaymentConfigForm();
@@ -745,10 +782,11 @@
         }
 
         function switchStudentTab(tab) {
-            ['studentScheduleView', 'studentHistoryView', 'studentPaymentView'].forEach(t => document.getElementById(t).classList.add('hidden'));
-            ['stdNavSchedule', 'stdNavHistory', 'stdNavPayment'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all");
+            ['studentScheduleView', 'studentChatView', 'studentHistoryView', 'studentPaymentView'].forEach(t => document.getElementById(t).classList.add('hidden'));
+            ['stdNavSchedule', 'stdNavChat', 'stdNavHistory', 'stdNavPayment'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all");
 
             if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentPortal(currentStudentName); }
+            else if (tab === 'chat') { document.getElementById('studentChatView').classList.remove('hidden'); document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentChatMessages(currentStudentName); }
             else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentRecordings(currentStudentName); }
             else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentPackagesGrid(); }
         }
@@ -952,6 +990,7 @@
             document.getElementById('checkoutPackagePrice').textContent = `₱${amount.toLocaleString()}`;
             document.getElementById('chkPackageName').value = packageName;
             document.getElementById('chkPackageAmount').value = `₱${amount.toLocaleString()} (${packageName})`;
+            document.getElementById('chkPackageNumericAmount').value = amount;
             document.getElementById('chkPackageCredits').value = credits;
             document.getElementById('chkRefNumber').value = '';
             document.getElementById('chkReceiptFile').value = '';
@@ -1018,6 +1057,7 @@
             await _supabase.from('students').delete().eq('id', studentId);
             await _supabase.from('sessions').delete().ilike('student_name', studentName);
             await _supabase.from('assessment_requests').delete().ilike('student_name', studentName);
+            await _supabase.from('chat_messages').delete().ilike('student_name', studentName);
             
             alert(`Student ${studentName} removed successfully.`);
             loadStudentsTab();
@@ -1090,11 +1130,12 @@
             e.preventDefault();
             const packageName = document.getElementById('chkPackageName').value;
             const amount = document.getElementById('chkPackageAmount').value;
+            const numeric_amount = parseFloat(document.getElementById('chkPackageNumericAmount').value) || 0;
             const credits = parseInt(document.getElementById('chkPackageCredits').value) || 0;
             const ref = document.getElementById('chkRefNumber').value.trim();
             const receipt_url = document.getElementById('chkReceiptBase64').value;
 
-            const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, credits, status: 'Pending', receipt_url, date: new Date().toLocaleDateString() }]);
+            const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, numeric_amount, credits, status: 'Pending', receipt_url, date: new Date().toLocaleDateString() }]);
             if (error) { alert("Checkout error: " + error.message); return; }
 
             alert(`Payment submitted for ${packageName}! Teacher Ann will verify your receipt and update your remaining class.`);
@@ -1212,7 +1253,134 @@
             const todayStr = new Date().toISOString().split('T')[0];
             let todaysCount = allSessions.filter(s => s.date === todayStr && s.status !== 'Cancelled').length;
             document.getElementById('statClassesToday').textContent = todaysCount;
-            document.getElementById('statMonthlyDue').textContent = '₱' + (allStudents.length * 5000).toLocaleString();
+
+            // Calculate total verified revenue only (ignoring assessment and pending payments)
+            let totalVerifiedRevenue = 0;
+            allPayments.forEach(p => {
+                if (p.status === 'Verified') {
+                    // Use numeric_amount if available, else parse from string amount
+                    let amt = parseFloat(p.numeric_amount);
+                    if (isNaN(amt) && p.amount) {
+                        amt = parseFloat(p.amount.replace(/[^0-9.]/g, '')) || 0;
+                    }
+                    totalVerifiedRevenue += amt;
+                }
+            });
+            document.getElementById('statMonthlyDue').textContent = '₱' + totalVerifiedRevenue.toLocaleString();
+        }
+
+        // ================= CHAT SUPPORT FUNCTIONS =================
+        async function loadStudentChatMessages(name) {
+            const { data: msgs } = await _supabase.from('chat_messages').select('*').ilike('student_name', name).order('id', { ascending: true });
+            const container = document.getElementById('studentChatMessages');
+            container.innerHTML = '';
+
+            if (msgs && msgs.length > 0) {
+                msgs.forEach(m => {
+                    const isTeacher = m.sender === 'teacher';
+                    container.innerHTML += `
+                        <div class="flex ${isTeacher ? 'justify-start' : 'justify-end'}">
+                            <div class="max-w-[75%] p-3 rounded-xl ${isTeacher ? 'bg-white border text-slate-800' : 'bg-pink-600 text-white shadow-sm'}">
+                                <p class="text-[10px] font-bold opacity-80 mb-0.5">${isTeacher ? 'Teacher Ann' : 'You'}</p>
+                                <p class="text-xs whitespace-pre-line">${m.message}</p>
+                                <span class="text-[9px] opacity-70 block text-right mt-1">${m.date || ''}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.scrollTop = container.scrollHeight;
+            } else {
+                container.innerHTML = `<p class="text-slate-400 italic text-center py-6">No chat messages yet. Send a message to Teacher Ann below!</p>`;
+            }
+        }
+
+        async function sendStudentChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('studentChatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const { error } = await _supabase.from('chat_messages').insert([{
+                student_name: currentStudentName,
+                sender: 'student',
+                message,
+                date: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            }]);
+
+            if (error) { alert("Error sending message: " + error.message); return; }
+            input.value = '';
+            loadStudentChatMessages(currentStudentName);
+        }
+
+        async function loadAdminChatTab() {
+            const { data: msgs } = await _supabase.from('chat_messages').select('*').order('id', { ascending: false });
+            const container = document.getElementById('adminChatContainer');
+            container.innerHTML = '';
+
+            // Group by student
+            let studentGroups = {};
+            if (msgs) {
+                msgs.forEach(m => {
+                    if (!studentGroups[m.student_name]) studentGroups[m.student_name] = [];
+                    studentGroups[m.student_name].push(m);
+                });
+            }
+
+            if (Object.keys(studentGroups).length > 0) {
+                for (let studentName in studentGroups) {
+                    let historyHtml = '';
+                    studentGroups[studentName].slice().reverse().forEach(m => {
+                        const isTeacher = m.sender === 'teacher';
+                        historyHtml += `
+                            <div class="p-2.5 rounded-lg ${isTeacher ? 'bg-pink-50 border border-pink-200 text-right ml-8' : 'bg-white border mr-8'}">
+                                <strong class="text-[10px] uppercase text-pink-700">${isTeacher ? 'Teacher Ann' : studentName}</strong>
+                                <p class="text-xs text-slate-800">${m.message}</p>
+                                <span class="text-[9px] text-slate-400">${m.date || ''}</span>
+                            </div>
+                        `;
+                    });
+
+                    container.innerHTML += `
+                        <div class="p-4 border rounded-xl bg-slate-50 space-y-3">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <strong class="text-sm text-pink-700"><i class="fa-solid fa-user-graduate mr-1"></i> ${studentName}</strong>
+                                <button onclick="deleteStudentChat('${studentName}')" class="text-slate-400 hover:text-rose-600 text-xs"><i class="fa-solid fa-trash mr-1"></i> Clear Chat</button>
+                            </div>
+                            <div class="space-y-2 max-h-48 overflow-y-auto p-2 bg-white rounded border">${historyHtml}</div>
+                            <form onsubmit="sendAdminReply(event, '${studentName}')" class="flex gap-2 pt-1">
+                                <input type="text" id="admin_reply_${studentName}" required placeholder="Reply to ${studentName}..." class="flex-grow p-2 border rounded">
+                                <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded font-bold shadow-sm">Reply</button>
+                            </form>
+                        </div>
+                    `;
+                }
+            } else {
+                container.innerHTML = `<p class="text-slate-500 italic">No chat messages from students yet.</p>`;
+            }
+        }
+
+        async function sendAdminReply(e, studentName) {
+            e.preventDefault();
+            const input = document.getElementById(`admin_reply_${studentName}`);
+            const message = input.value.trim();
+            if (!message) return;
+
+            const { error } = await _supabase.from('chat_messages').insert([{
+                student_name: studentName,
+                sender: 'teacher',
+                message,
+                date: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            }]);
+
+            if (error) { alert("Error sending reply: " + error.message); return; }
+            input.value = '';
+            loadAdminChatTab();
+        }
+
+        async function deleteStudentChat(studentName) {
+            if (!confirm(`Clear chat history for ${studentName}?`)) return;
+            await _supabase.from('chat_messages').delete().ilike('student_name', studentName);
+            loadAdminChatTab();
         }
 
         // ================= FREE ASSESSMENT FUNCTIONS =================
@@ -1449,10 +1617,10 @@
             const sessionId = document.getElementById('cancelSessionId').value;
             const reason = document.getElementById('cancelReason').value.trim();
 
-            const { error } = await _supabase.from('sessions').update({ status: 'Cancelled by Student', cancel_reason: reason }).eq('id', sessionId);
+            const { error } = await _supabase.from('sessions').update({ status: 'Cancelled by Student', cancel_reason: reason, meeting_link: '' }).eq('id', sessionId);
             if (error) { alert("Error cancelling session: " + error.message); return; }
 
-            alert("Class cancellation submitted successfully. Teacher Ann can now read your reason.");
+            alert("Class cancellation submitted successfully. The classroom link has been removed.");
             closeStudentCancelModal();
             loadStudentPortal(currentStudentName);
         }
@@ -1558,18 +1726,21 @@
 
             alert(`Payment verified successfully! Added ${packageCredits} classes to ${studentName}.`);
             loadAdminVerifyPaymentsTab();
+            loadAdminData();
         }
 
         async function deletePaymentRecord(id) {
             if (!confirm("Are you sure you want to clear/delete this payment history entry?")) return;
             await _supabase.from('payment_history').delete().eq('id', id);
             loadAdminVerifyPaymentsTab();
+            loadAdminData();
         }
 
         async function clearPaymentHistory() {
             if (!confirm("Clear all verified payment history records?")) return;
             await _supabase.from('payment_history').delete().eq('status', 'Verified');
             loadAdminVerifyPaymentsTab();
+            loadAdminData();
         }
 
         async function loadAdminRecordsTab() {
@@ -1653,7 +1824,7 @@
                                 </span>
                                 ${s.absence_reason ? `<br><span class="text-amber-800 font-semibold bg-amber-50 p-1 rounded block mt-1"><i class="fa-solid fa-comment mr-1"></i>Teacher Note: ${s.absence_reason}</span>` : ''}
                                 ${s.cancel_reason ? `<br><span class="text-rose-800 font-semibold bg-rose-50 p-1 rounded block mt-1"><i class="fa-solid fa-comment mr-1"></i>Your Cancel Reason: ${s.cancel_reason}</span>` : ''}
-                                ${isCancelled && s.subject.includes('Assessment') ? `<div class="mt-2 bg-amber-100 border border-amber-300 text-amber-900 p-2 rounded font-semibold"><i class="fa-solid fa-headset mr-1"></i> Assessment cancelled. Please chat support/Teacher Ann to ask if there is another assessment available.</div>` : ''}
+                                ${isCancelled ? `<div class="mt-2 bg-amber-100 border border-amber-300 text-amber-900 p-2.5 rounded font-semibold space-y-1"><p><i class="fa-solid fa-headset mr-1"></i> Class link removed. You can chat support below to ask if another assessment or schedule is available.</p><button onclick="switchStudentTab('chat')" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1 rounded font-bold shadow text-[10px]">Open Chat Support</button></div>` : ''}
                             </div>
                             <div class="flex items-center space-x-2">
                                 ${s.meeting_link && !isCancelled && !isDone && !isAbsent ? `<a href="${s.meeting_link}" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-bold shadow inline-flex items-center"><i class="fa-solid fa-video mr-1.5"></i> Join</a>` : ''}
