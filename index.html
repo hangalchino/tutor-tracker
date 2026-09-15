@@ -31,14 +31,9 @@
     <div id="publicLandingPage" class="flex flex-col min-h-screen">
         <header class="bg-white border-b sticky top-0 z-40 shadow-sm">
             <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl overflow-hidden shadow border border-pink-200">
-                        <img src="TEACHER.jpg" alt="Logo" class="w-full h-full object-cover">
-                    </div>
-                    <div>
-                        <h1 class="text-base font-bold text-slate-900">Learn with Teacher Ann</h1>
-                        <p class="text-[10px] text-slate-500">Reading &bull; English &bull; Math &bull; Filipino</p>
-                    </div>
+                <div>
+                    <h1 class="text-base font-bold text-slate-900">Learn with Teacher Ann</h1>
+                    <p class="text-[10px] text-slate-500">Reading &bull; English &bull; Math &bull; Filipino</p>
                 </div>
                 <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
                     <a href="#home" class="hover:text-pink-600 transition-colors">Home</a>
@@ -497,31 +492,49 @@
                 </div>
             </div>
 
-            <!-- TAB 3: PAYMENTS -->
+            <!-- TAB 3: PAYMENTS & BUNDLES & RECEIPT UPLOAD -->
             <div id="studentPaymentView" class="hidden space-y-6 text-xs">
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h2 class="text-sm font-bold text-slate-800">Purchase Session Bundles Automatically</h2>
+                    <h2 class="text-sm font-bold text-slate-800">Select Session Package to Buy</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
                             <h3 class="font-bold text-pink-900">Starter Pack</h3>
                             <p class="text-lg font-extrabold text-pink-700">₱1,000</p>
                             <p class="text-[11px] text-slate-500">4 Session Credits</p>
-                            <button onclick="autoPurchaseBundle('Starter Pack (4 Sessions)', 1000, 4)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="selectPackageToBuy('Starter Pack (4 Sessions)', 1000)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                         <div class="border-2 border-pink-600 rounded-xl p-4 bg-pink-50 space-y-2 text-center shadow-sm">
                             <span class="bg-pink-600 text-white text-[9px] px-2 py-0.5 rounded-full uppercase font-bold">Popular</span>
                             <h3 class="font-bold text-pink-900">Monthly Bundle</h3>
                             <p class="text-lg font-extrabold text-pink-700">₱2,500</p>
                             <p class="text-[11px] text-slate-500">10 Session Credits</p>
-                            <button onclick="autoPurchaseBundle('Monthly Bundle (10 Sessions)', 2500, 10)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="selectPackageToBuy('Monthly Bundle (10 Sessions)', 2500)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                         <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
                             <h3 class="font-bold text-pink-900">Intensive Pack</h3>
                             <p class="text-lg font-extrabold text-pink-700">₱5,000</p>
                             <p class="text-[11px] text-slate-500">20 Session Credits</p>
-                            <button onclick="autoPurchaseBundle('Intensive Pack (20 Sessions)', 5000, 20)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="selectPackageToBuy('Intensive Pack (20 Sessions)', 5000)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                     </div>
+                </div>
+
+                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                    <h2 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-money-bill-transfer text-pink-600 mr-2"></i> Tuition Payment Info & QR Code</h2>
+                    <div id="studentPaymentInfo" class="text-slate-600 space-y-2">Loading payment details...</div>
+                </div>
+
+                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                    <h2 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-receipt text-pink-600 mr-2"></i> Submit Payment Reference & Upload Receipt</h2>
+                    <form onsubmit="submitPaymentProof(event)" class="space-y-3">
+                        <div><label class="block font-semibold mb-1">Reference Number / Transaction ID</label><input type="text" id="payRefNumber" required placeholder="e.g., TXN-987654" class="w-full p-2 border rounded"></div>
+                        <div><label class="block font-semibold mb-1">Amount & Selected Package</label><input type="text" id="payAmount" required placeholder="e.g., PHP 2,500 for Monthly Bundle" class="w-full p-2 border rounded"></div>
+                        <div><label class="block font-semibold mb-1">Upload Receipt Screenshot</label><input type="file" id="payReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewReceiptUpload(event)"></div>
+                        <input type="hidden" id="payReceiptUrl">
+                        <div id="receiptPreviewContainer"></div>
+                        <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2.5 rounded">Submit Payment Proof & Receipt</button>
+                    </form>
+                    <div id="studentPaymentHistoryList" class="mt-4 pt-4 border-t space-y-2"></div>
                 </div>
             </div>
         </main>
@@ -594,7 +607,24 @@
 
             if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentPortal(currentStudentName); }
             else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
-            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
+            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentPaymentInfo(); }
+        }
+
+        function selectPackageToBuy(packageName, amount) {
+            switchStudentTab('payment');
+            document.getElementById('payAmount').value = `₱${amount} (${packageName})`;
+            alert(`You selected the ${packageName}. Please review payment details below and upload your receipt!`);
+        }
+
+        function previewReceiptUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('payReceiptUrl').value = e.target.result;
+                document.getElementById('receiptPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover border rounded mt-1">`;
+            };
+            reader.readAsDataURL(file);
         }
 
         function uploadTeacherSidebarPhoto(event) {
@@ -863,22 +893,45 @@
             }
         }
 
-        async function autoPurchaseBundle(packageName, amount, credits) {
-            const ref = 'AUTO-' + Math.floor(100000 + Math.random() * 900000);
-            await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount: `₱${amount} (${packageName})`, date: new Date().toLocaleDateString() }]);
-            alert(`Successfully purchased ${packageName}! ${credits} credits added.`);
-            loadStudentPortal(currentStudentName);
-            switchStudentTab('schedule');
+        async function loadStudentPaymentInfo() {
+            const { data } = await _supabase.from('payment_config').select('*');
+            const container = document.getElementById('studentPaymentInfo');
+            if (data && data.length > 0) {
+                container.innerHTML = `
+                    <p><strong>Bank / Wallet Details:</strong> ${data[0].paymaya || 'N/A'}</p>
+                    <p><strong>Instructions:</strong> ${data[0].instructions || 'Please transfer the exact amount and upload your receipt below.'}</p>
+                    ${data[0].qr_url ? `<img src="${data[0].qr_url}" class="w-32 h-32 object-contain border rounded mt-2 bg-white">` : ''}
+                `;
+            } else {
+                container.innerHTML = `<p>Please transfer payment to Teacher Ann's account and submit your receipt reference below.</p>`;
+            }
+
+            const { data: hist } = await _supabase.from('payment_history').select('*').ilike('student_name', currentStudentName);
+            const histContainer = document.getElementById('studentPaymentHistoryList');
+            if (hist && hist.length > 0) {
+                histContainer.innerHTML = `<h4 class="font-bold text-slate-800">Your Submitted Payment Proofs:</h4>`;
+                hist.forEach(h => {
+                    histContainer.innerHTML += `<div class="p-2 bg-slate-50 border rounded text-[11px]">Ref: <strong>${h.ref}</strong> | Amount: ${h.amount} | Date: ${h.date}</div>`;
+                });
+            } else {
+                histContainer.innerHTML = `<p class="text-slate-400">No payment proofs submitted yet.</p>`;
+            }
         }
 
-        async function studentBookSession(e) {
+        async function submitPaymentProof(e) {
             e.preventDefault();
-            const subject = document.getElementById('bookSubject').value;
-            const date = document.getElementById('bookDate').value;
-            const slot = document.getElementById('bookSlot').value.trim();
-            await _supabase.from('sessions').insert([{ student_name: currentStudentName, subject, date, slot }]);
-            alert("Lesson booked successfully!");
-            document.getElementById('bookSlot').value = '';
+            const ref = document.getElementById('payRefNumber').value.trim();
+            const amount = document.getElementById('payAmount').value.trim();
+            const receipt_url = document.getElementById('payReceiptUrl').value.trim();
+
+            const { error } = await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, receipt_url, date: new Date().toLocaleDateString() }]);
+            if (error) { alert("Error submitting payment: " + error.message); return; }
+
+            alert("Payment proof & receipt uploaded successfully! Teacher Ann will verify your session credits shortly.");
+            document.getElementById('payRefNumber').value = '';
+            document.getElementById('payReceiptUrl').value = '';
+            document.getElementById('receiptPreviewContainer').innerHTML = '';
+            loadStudentPaymentInfo();
             loadStudentPortal(currentStudentName);
         }
     </script>
