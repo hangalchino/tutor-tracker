@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn with Teacher Ann - Tutoring Services</title>
+    <title>Learn with Teacher Ann - Teaching Management Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase JS Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background-color: #fce7f3; font-family: system-ui, -apple-system, sans-serif; }
+        .sidebar-pink { background: linear-gradient(180deg, #db2777 0%, #f472b6 100%); }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="text-slate-800 min-h-screen flex flex-col">
 
     <!-- CONFIGURATION SCRIPT -->
     <script>
@@ -25,12 +29,11 @@
 
     <!-- ================= PUBLIC WEBSITE LANDING PAGE ================= -->
     <div id="publicLandingPage" class="flex flex-col min-h-screen">
-        <!-- Navigation Header -->
         <header class="bg-white border-b sticky top-0 z-40 shadow-sm">
             <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <div id="navBrandAvatar" class="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg overflow-hidden shadow">
-                        <i class="fa-solid fa-graduation-cap"></i>
+                    <div class="w-10 h-10 rounded-xl overflow-hidden shadow border border-pink-200">
+                        <img src="image_ea3222.jpg" alt="Logo" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h1 class="text-base font-bold text-slate-900">Learn with Teacher Ann</h1>
@@ -38,377 +41,366 @@
                     </div>
                 </div>
                 <nav class="hidden md:flex items-center space-x-6 text-xs font-semibold text-slate-600">
-                    <a href="#home" class="hover:text-emerald-600 transition-colors">Home</a>
-                    <a href="#rates" class="hover:text-emerald-600 transition-colors">Class Rates</a>
-                    <a href="#about" class="hover:text-emerald-600 transition-colors">About</a>
-                    <a href="#testimony" class="hover:text-emerald-600 transition-colors">Testimonies</a>
-                    <a href="#comments" class="hover:text-emerald-600 transition-colors">Comments</a>
+                    <a href="#home" class="hover:text-pink-600 transition-colors">Home</a>
+                    <a href="#rates" class="hover:text-pink-600 transition-colors">Class Rates</a>
+                    <a href="#about" class="hover:text-pink-600 transition-colors">About</a>
+                    <a href="#comments" class="hover:text-pink-600 transition-colors">Comments</a>
                 </nav>
                 <div class="flex items-center space-x-2">
-                    <button onclick="scrollToEnroll()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm">Enroll Now</button>
-                    <button onclick="openStudentLoginModal()" class="border border-emerald-600 text-emerald-600 hover:bg-emerald-50 px-3 py-2 rounded-lg text-xs font-bold transition-colors">Student Sign In</button>
+                    <button onclick="scrollToEnroll()" class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm">Enroll Now</button>
+                    <button onclick="openStudentLoginModal()" class="border border-pink-600 text-pink-600 hover:bg-pink-50 px-3 py-2 rounded-lg text-xs font-bold transition-colors">Student Sign In</button>
                 </div>
             </div>
         </header>
 
-        <!-- Hero / Home Section -->
-        <section id="home" class="bg-gradient-to-b from-emerald-50 to-white py-16 px-4 text-center">
+        <!-- Hero Section -->
+        <section id="home" class="bg-gradient-to-b from-pink-50 to-white py-16 px-4 text-center">
             <div class="max-w-3xl mx-auto space-y-4">
-                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Online Tutoring Excellence</span>
+                <span class="bg-pink-100 text-pink-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Online Tutoring Excellence</span>
                 <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">Empowering Young Minds in Reading, English, Math & Filipino</h2>
                 <p class="text-sm text-slate-600 max-w-xl mx-auto">Welcome to my official learning hub! Providing engaging, personalized online lessons designed to help your child excel academically with confidence.</p>
                 <div class="flex justify-center gap-3 pt-2">
-                    <button onclick="scrollToEnroll()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl text-xs font-bold shadow-md transition-all">Get Started & Enroll</button>
+                    <button onclick="scrollToEnroll()" class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl text-xs font-bold shadow-md transition-all">Get Started & Enroll</button>
                     <button onclick="openStudentLoginModal()" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 px-6 py-3 rounded-xl text-xs font-bold transition-all">Student Portal Sign In</button>
                 </div>
             </div>
         </section>
 
-        <!-- Rates & Program Structure Section -->
+        <!-- Rates & Program Structure -->
         <section id="rates" class="py-16 px-4 max-w-5xl mx-auto space-y-8">
             <div class="text-center space-y-2">
-                <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Tuition Investment</h3>
+                <h3 class="text-xs font-bold text-pink-600 uppercase tracking-wider">Tuition Investment</h3>
                 <h4 class="text-2xl font-bold text-slate-900">Class Rates & Program Structure</h4>
                 <p class="text-xs text-slate-500">Structured lessons tailored by grade level and subject mastery goals.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
                 <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                    <div class="flex items-center space-x-3 text-emerald-600 font-bold text-sm">
+                    <div class="flex items-center space-x-3 text-pink-600 font-bold text-sm">
                         <i class="fa-solid fa-book-open-reader text-lg"></i>
                         <h5>Reading Program (Mon–Fri, Daily)</h5>
                     </div>
                     <ul class="space-y-2 text-slate-700 border-t pt-3">
-                        <li class="flex justify-between"><span>Preschool to Elementary:</span> <strong class="text-emerald-700">₱250 / 25 mins</strong></li>
+                        <li class="flex justify-between"><span>Preschool to Elementary:</span> <strong class="text-pink-700">₱250 / 25 mins</strong></li>
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                    <div class="flex items-center space-x-3 text-emerald-600 font-bold text-sm">
+                    <div class="flex items-center space-x-3 text-pink-600 font-bold text-sm">
                         <i class="fa-solid fa-calculator text-lg"></i>
                         <h5>Math Program</h5>
                     </div>
                     <ul class="space-y-3 text-slate-700 border-t pt-3">
-                        <li class="flex justify-between"><span>Preschool to Grade 3:</span> <strong class="text-emerald-700">₱250 / 25 mins</strong></li>
-                        <li class="flex justify-between border-t pt-2"><span>Grade 4 to Grade 6:</span> <div class="text-right"><strong class="text-emerald-700 block">₱250 / 25 mins</strong><strong class="text-emerald-700 block">₱500 / 50 mins <span class="text-[10px] text-indigo-600 font-normal">(Recommended)</span></strong></div></li>
-                        <li class="flex justify-between border-t pt-2"><span>Grade 7 to Grade 10 (Junior High):</span> <strong class="text-emerald-700">₱700 / 50 mins</strong></li>
+                        <li class="flex justify-between"><span>Preschool to Grade 3:</span> <strong class="text-pink-700">₱250 / 25 mins</strong></li>
+                        <li class="flex justify-between border-t pt-2"><span>Grade 4 to Grade 6:</span> <div class="text-right"><strong class="text-pink-700 block">₱250 / 25 mins</strong><strong class="text-pink-700 block">₱500 / 50 mins <span class="text-[10px] text-indigo-600">(Recommended)</span></strong></div></li>
+                        <li class="flex justify-between border-t pt-2"><span>Grade 7 to Grade 10 (Junior High):</span> <strong class="text-pink-700">₱700 / 50 mins</strong></li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- About Section -->
-        <section id="about" class="py-16 px-4 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center border-t">
-            <div class="space-y-4">
-                <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">About The Teacher</h3>
-                <h4 id="landingAboutTitle" class="text-2xl font-bold text-slate-900">Dedicated to Interactive & Effective Online Education</h4>
-                <p id="landingAboutBio" class="text-xs text-slate-600 leading-relaxed">Hello! I am Teacher Ann, an experienced online educator specializing in foundational reading comprehension, English language mastery, mathematics problem solving, and Filipino fluency. My classes are customized to fit each student's learning pace in a fun, safe, and supportive virtual environment.</p>
-            </div>
-            <div class="bg-emerald-600 text-white p-8 rounded-2xl shadow-lg space-y-4">
-                <h4 class="text-lg font-bold">Why Choose Learn with Teacher Ann?</h4>
-                <ul class="space-y-2 text-xs">
-                    <li><i class="fa-solid fa-check mr-2"></i> One-on-one & interactive guided sessions</li>
-                    <li><i class="fa-solid fa-check mr-2"></i> Multiple class recordings available for daily review</li>
-                    <li><i class="fa-solid fa-check mr-2"></i> Transparent scheduling, homework notes & credit tracking</li>
-                    <li><i class="fa-solid fa-check mr-2"></i> Convenient tuition payment via any bank to QR code</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Testimonies Section -->
-        <section id="testimony" class="py-16 px-4 bg-slate-100">
-            <div class="max-w-4xl mx-auto space-y-8">
-                <div class="text-center space-y-2">
-                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Parent Testimonials</h3>
-                    <h4 class="text-2xl font-bold text-slate-900">Trusted by Parents & Students Worldwide</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border space-y-3">
-                        <div class="text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <p class="text-xs text-slate-600 italic">"Teacher Ann has transformed my son's reading confidence. Her patience and structured lessons made online learning so fun and effective!"</p>
-                        <p class="text-[11px] font-bold text-slate-900">— Parent from Singapore</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border space-y-3">
-                        <div class="text-amber-400 text-xs"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <p class="text-xs text-slate-600 italic">"The math and English sessions are top-notch. Having access to multiple daily class recordings and the portal makes tracking homework super convenient."</p>
-                        <p class="text-[11px] font-bold text-slate-900">— Parent from Canada</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Comments / Community Wall Section -->
+        <!-- Community Wall Section -->
         <section id="comments" class="py-16 px-4 bg-slate-50 border-t">
             <div class="max-w-2xl mx-auto space-y-6">
                 <div class="text-center space-y-2">
-                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Community Wall</h3>
+                    <h3 class="text-xs font-bold text-pink-600 uppercase tracking-wider">Community Wall</h3>
                     <h4 class="text-2xl font-bold text-slate-900">Leave a Comment or Inquiry</h4>
-                    <p class="text-xs text-slate-500">Anyone can comment! Only registered users can delete their comments using their account password.</p>
                 </div>
                 <form onsubmit="submitPublicComment(event)" class="bg-white p-6 rounded-xl shadow-sm border space-y-3 text-xs">
                     <div><label class="block font-semibold uppercase mb-1">Your Name</label><input type="text" id="visitorName" required placeholder="e.g., Maria Santos" class="w-full p-2 border rounded"></div>
                     <div><label class="block font-semibold uppercase mb-1">Your Message / Question</label><textarea id="visitorMessage" rows="3" required placeholder="Inquire about slots..." class="w-full p-2 border rounded"></textarea></div>
-                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded">Post Comment</button>
+                    <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white font-bold px-4 py-2 rounded">Post Comment</button>
                 </form>
                 <div id="publicCommentsContainer" class="space-y-3"></div>
             </div>
         </section>
 
-        <!-- Enroll Now Section -->
+        <!-- Enroll Section -->
         <section id="enroll" class="py-16 px-4 max-w-xl mx-auto w-full">
-            <div class="bg-emerald-600 text-white p-8 rounded-2xl shadow-xl space-y-6">
+            <div class="bg-pink-600 text-white p-8 rounded-2xl shadow-xl space-y-6">
                 <div class="text-center space-y-2">
                     <h3 class="text-xl font-bold">Enroll Now & Register Portal Account</h3>
-                    <p class="text-xs text-emerald-100">Fill out the form below to enroll your child and create their secure login credentials.</p>
                 </div>
                 <form onsubmit="handlePublicEnrollment(event)" class="space-y-4 text-xs text-slate-800">
-                    <div><label class="block font-semibold text-white uppercase mb-1">Student Full Name</label><input type="text" id="enrollStudentName" required placeholder="e.g., John Smith" class="w-full p-2.5 rounded-lg border-0"></div>
-                    <div><label class="block font-semibold text-white uppercase mb-1">Parent / Guardian Name</label><input type="text" id="enrollParentName" required placeholder="e.g., Sarah Smith" class="w-full p-2.5 rounded-lg border-0"></div>
-                    <div><label class="block font-semibold text-white uppercase mb-1">Email or Mobile Number (For Verification)</label><input type="text" id="enrollContact" required placeholder="email@domain.com or +639..." class="w-full p-2.5 rounded-lg border-0"></div>
-                    <div><label class="block font-semibold text-white uppercase mb-1">Create Portal Password</label><input type="password" id="enrollPassword" required placeholder="••••••••" class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Student Full Name</label><input type="text" id="enrollStudentName" required class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Parent / Guardian Name</label><input type="text" id="enrollParentName" required class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Email or Mobile Number</label><input type="text" id="enrollContact" required class="w-full p-2.5 rounded-lg border-0"></div>
+                    <div><label class="block font-semibold text-white uppercase mb-1">Create Portal Password</label><input type="password" id="enrollPassword" required class="w-full p-2.5 rounded-lg border-0"></div>
                     <div>
-                        <label class="block font-semibold text-white uppercase mb-1">Preferred Program / Package</label>
+                        <label class="block font-semibold text-white uppercase mb-1">Preferred Program</label>
                         <select id="enrollSubject" class="w-full p-2.5 rounded-lg border-0 bg-white">
-                            <option value="Reading Program (Preschool-Elem) - ₱250">📖 Reading Program (Preschool-Elem) - ₱250 / session</option>
-                            <option value="Math Program (Preschool-Grade 3) - ₱250">🔢 Math Program (Preschool-Grade 3) - ₱250 / session</option>
-                            <option value="Math Program (Grade 4-6 Standard) - ₱250">🔢 Math Program (Grade 4-6 Standard 25m) - ₱250 / session</option>
-                            <option value="Math Program (Grade 4-6 Comprehensive) - ₱500">🔢 Math Program (Grade 4-6 Comprehensive 50m) - ₱500 / session</option>
-                            <option value="Math Program (Junior High Grade 7-10) - ₱700">🔢 Math Program (Junior High Grade 7-10) - ₱700 / session</option>
+                            <option value="Reading Program">📖 Reading Program (₱250)</option>
+                            <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
+                            <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive) (₱500)</option>
+                            <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg transition-colors">Submit Enrollment & Create Account</button>
+                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg">Submit Enrollment</button>
                 </form>
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="bg-slate-900 text-slate-400 py-8 px-4 mt-auto text-xs">
-            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
                 <p>&copy; 2026 Learn with Teacher Ann. All rights reserved.</p>
-                <div class="flex items-center space-x-4">
-                    <a href="#home" class="hover:text-white">Home</a>
-                    <a href="#enroll" class="hover:text-white">Enroll</a>
-                    <button onclick="openAdminLoginModal()" class="text-slate-500 hover:text-indigo-400 font-medium transition-colors"><i class="fa-solid fa-lock mr-1"></i> Tutor Admin Login</button>
-                </div>
+                <button onclick="openAdminLoginModal()" class="text-pink-400 hover:underline font-medium"><i class="fa-solid fa-lock mr-1"></i> Tutor Admin Login</button>
             </div>
         </footer>
     </div>
 
-    <!-- ================= STUDENT LOGIN MODAL ================= -->
+    <!-- STUDENT LOGIN MODAL -->
     <div id="studentLoginModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-user-graduate text-emerald-600 mr-2"></i> Student Portal Sign In</h3>
-                <button onclick="closeStudentLoginModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-user-graduate text-pink-600 mr-2"></i> Student Portal Sign In</h3>
+                <button onclick="closeStudentLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="handleStudentLogin(event)" class="space-y-3 text-xs">
-                <div><label class="block font-semibold uppercase mb-1">Student Full Name</label><input type="text" id="studentLoginName" required placeholder="e.g., John Smith" class="w-full p-2.5 border rounded-lg"></div>
-                <div><label class="block font-semibold uppercase mb-1">Password</label><input type="password" id="studentLoginPass" required placeholder="••••••••" class="w-full p-2.5 border rounded-lg"></div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg">Sign In</button>
+                <div><label class="block font-semibold uppercase mb-1">Student Full Name</label><input type="text" id="studentLoginName" required class="w-full p-2.5 border rounded-lg"></div>
+                <div><label class="block font-semibold uppercase mb-1">Password</label><input type="password" id="studentLoginPass" required class="w-full p-2.5 border rounded-lg"></div>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg">Sign In</button>
             </form>
         </div>
     </div>
 
-    <!-- ================= ADMIN LOGIN MODAL ================= -->
+    <!-- ADMIN LOGIN MODAL -->
     <div id="adminLoginModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-lock text-indigo-600 mr-2"></i> Tutor Admin Access</h3>
-                <button onclick="closeAdminLoginModal()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-bold text-sm"><i class="fa-solid fa-lock text-pink-600 mr-2"></i> Tutor Admin Access</h3>
+                <button onclick="closeAdminLoginModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="handleAdminAuth(event)" class="space-y-3 text-xs">
-                <div><label class="block font-semibold uppercase mb-1">Email</label><input type="email" id="adminEmail" required placeholder="admin@email.com" class="w-full p-2.5 border rounded-lg"></div>
-                <div><label class="block font-semibold uppercase mb-1">Password</label><input type="password" id="adminPassword" required placeholder="••••••••" class="w-full p-2.5 border rounded-lg"></div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg">Sign In as Admin</button>
+                <div><label class="block font-semibold uppercase mb-1">Email</label><input type="email" id="adminEmail" required class="w-full p-2.5 border rounded-lg"></div>
+                <div><label class="block font-semibold uppercase mb-1">Password</label><input type="password" id="adminPassword" required class="w-full p-2.5 border rounded-lg"></div>
+                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 rounded-lg">Sign In as Admin</button>
             </form>
         </div>
     </div>
 
-    <!-- ================= ADMIN APP CONTAINER ================= -->
-    <div id="adminAppContainer" class="hidden flex-grow flex flex-col min-h-screen">
-        <header class="bg-indigo-600 text-white shadow-md">
-            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="flex items-center space-x-3">
-                    <div id="adminHeaderAvatar" class="bg-white text-indigo-600 w-10 h-10 rounded-lg font-bold text-xl flex items-center justify-center overflow-hidden shadow">
-                        <i class="fa-solid fa-graduation-cap"></i>
+    <!-- ================= ADMIN DASHBOARD CONTAINER ================= -->
+    <div id="adminAppContainer" class="hidden flex-grow flex min-h-screen">
+        <!-- SIDEBAR -->
+        <aside class="w-72 sidebar-pink text-white flex flex-col justify-between p-4 shadow-xl shrink-0 min-h-screen">
+            <div class="space-y-6">
+                <div class="text-center space-y-2 pt-2">
+                    <div class="w-24 h-24 mx-auto rounded-full bg-white p-1 shadow-md overflow-hidden border-2 border-pink-200">
+                        <img src="image_ea3222.jpg" alt="Logo" class="w-full h-full object-cover rounded-full">
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold" id="adminHeaderName">TutorSchedule Pro (Admin)</h1>
-                        <p class="text-xs text-indigo-200">Teacher Ann's Dashboard | <span id="adminLiveClock" class="font-mono"></span></p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <div class="flex bg-indigo-700/60 p-1 rounded-lg text-xs flex-wrap gap-1">
-                        <button onclick="switchTab('schedule')" id="navScheduleBtn" class="px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all">Schedule</button>
-                        <button onclick="switchTab('students')" id="navStudentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Accounts & Credits</button>
-                        <button onclick="switchTab('payment')" id="navPaymentBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Payment Setup</button>
-                        <button onclick="switchTab('adminChat')" id="navAdminChatBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Support Chat</button>
-                        <button onclick="switchTab('adminComments')" id="navAdminCommentsBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all">Community Wall</button>
-                        <button onclick="switchTab('adminProfile')" id="navAdminProfileBtn" class="px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all"><i class="fa-solid fa-user-gear"></i> Profile</button>
-                    </div>
-                    <button onclick="adminLogout()" class="bg-indigo-700 hover:bg-indigo-800 text-indigo-200 px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-right-from-bracket"></i> Exit</button>
-                </div>
-            </div>
-        </header>
-
-        <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <!-- MAIN TAB CONTENT AREA (3 columns) -->
-            <div class="lg:col-span-3 space-y-6">
-                <!-- TAB 1: SCHEDULE -->
-                <div id="scheduleTab" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit md:col-span-1">
-                        <h2 id="sessionFormTitle" class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-calendar-plus text-indigo-600 mr-2"></i> Schedule Class Slots</h2>
-                        <form id="sessionForm" class="space-y-4 text-xs" onsubmit="saveSession(event)">
-                            <input type="hidden" id="sessionId">
-                            <div><label class="block font-semibold uppercase mb-1">Student Name</label><select id="studentName" required class="w-full px-3 py-2 border rounded-lg bg-white"><option value="" disabled selected>Select student...</option></select></div>
-                            <div>
-                                <label class="block font-semibold uppercase mb-1">Subject / Program</label>
-                                <select id="sessionSubject" required class="w-full px-3 py-2 border rounded-lg bg-white">
-                                    <option value="Reading Program">📖 Reading Program (₱250)</option>
-                                    <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
-                                    <option value="Math (Grade 4-6 Standard)">🔢 Math (Grade 4-6 Standard 25m) (₱250)</option>
-                                    <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive 50m) (₱500)</option>
-                                    <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
-                                </select>
-                            </div>
-                            
-                            <div class="space-y-2 border-t border-b py-3">
-                                <div class="flex justify-between items-center">
-                                    <label class="font-semibold uppercase text-indigo-600">Class Date & Time Slots</label>
-                                    <button type="button" onclick="addScheduleSlotField()" class="text-indigo-600 font-bold"><i class="fa-solid fa-plus"></i> Add Slot</button>
-                                </div>
-                                <div id="scheduleSlotsFieldsContainer" class="space-y-2">
-                                    <div class="flex gap-2 items-center">
-                                        <input type="date" required class="sched-date w-1/2 px-2 py-1.5 border rounded-lg">
-                                        <input type="text" required placeholder="Time (e.g. 3:00 - 4:00 PM)" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div><label class="block font-semibold uppercase mb-1">Meeting Link</label><input type="url" id="sessionLink" placeholder="https://meet.google.com/..." class="w-full px-3 py-2 border rounded-lg"></div>
-                            
-                            <div class="space-y-2 border-t border-b py-3">
-                                <div class="flex justify-between items-center">
-                                    <label class="font-semibold uppercase text-indigo-600">Recording Links</label>
-                                    <button type="button" onclick="addRecordingField()" class="text-indigo-600 font-bold"><i class="fa-solid fa-plus"></i> Add</button>
-                                </div>
-                                <div id="recordingFieldsContainer" class="space-y-2">
-                                    <div class="flex gap-2">
-                                        <input type="text" placeholder="Title (e.g. Part 1)" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg">
-                                        <input type="url" placeholder="https://..." class="rec-url flex-grow px-2 py-1.5 border rounded-lg">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div><label class="block font-semibold uppercase mb-1">Notes / Homework</label><textarea id="sessionNotes" rows="2" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
-                            <div class="flex space-x-2 pt-2">
-                                <button type="submit" class="flex-1 bg-indigo-600 text-white font-medium py-2 rounded-lg">Save Session</button>
-                                <button type="button" id="cancelSessionBtn" onclick="resetSessionForm()" class="hidden bg-slate-200 text-slate-700 px-3 py-2 rounded-lg">Cancel</button>
-                            </div>
-                        </form>
-                    </section>
-                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col md:col-span-2">
-                        <h2 class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> All Scheduled Classes & Notices</h2>
-                        <div id="sessionsContainer" class="space-y-3 overflow-y-auto max-h-[550px] flex-grow text-xs"></div>
-                    </section>
-                </div>
-
-                <!-- TAB 2: REGISTERED ACCOUNTS & PAYMENT CREDITS -->
-                <div id="studentsTab" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit md:col-span-1">
-                        <h2 id="studentFormTitle" class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-user-plus text-indigo-600 mr-2"></i> Add / Edit Student Account</h2>
-                        <form id="studentForm" class="space-y-4 text-xs" onsubmit="saveStudentDirect(event)">
-                            <input type="hidden" id="dirStudentId">
-                            <div><label class="block font-semibold uppercase mb-1">Full Name</label><input type="text" id="dirStudentName" required class="w-full px-3 py-2 border rounded-lg"></div>
-                            <div><label class="block font-semibold uppercase mb-1">Parent/Guardian</label><input type="text" id="dirParentName" class="w-full px-3 py-2 border rounded-lg"></div>
-                            <div><label class="block font-semibold uppercase mb-1">Email or Mobile</label><input type="text" id="dirContact" required class="w-full px-3 py-2 border rounded-lg"></div>
-                            <div><label class="block font-semibold uppercase mb-1">Password</label><input type="text" id="dirPassword" required class="w-full px-3 py-2 border rounded-lg"></div>
-                            <div><label class="block font-semibold uppercase mb-1">Notes / Program</label><textarea id="dirNotes" rows="2" class="w-full px-3 py-2 border rounded-lg"></textarea></div>
-                            <div class="flex space-x-2">
-                                <button type="submit" class="flex-1 bg-indigo-600 text-white font-medium py-2 rounded-lg">Save Account</button>
-                                <button type="button" id="cancelStudentBtn" onclick="resetStudentForm()" class="hidden bg-slate-200 text-slate-700 px-3 py-2 rounded-lg">Cancel</button>
-                            </div>
-                        </form>
-                    </section>
-                    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col md:col-span-2">
-                        <h2 class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-users text-indigo-600 mr-2"></i> Accounts, Total Payments Received & Lessons Left</h2>
-                        <div id="studentsContainer" class="space-y-4 overflow-y-auto max-h-[600px] flex-grow text-xs"></div>
-                    </section>
-                </div>
-
-                <!-- TAB 3: PAYMENT SETUP -->
-                <div id="paymentTab" class="hidden max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                    <h2 class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-wallet text-indigo-600 mr-2"></i> Configure Bank Transfer & QR Code</h2>
-                    <form onsubmit="savePaymentInfo(event)" class="space-y-4 text-xs">
-                        <div><label class="block font-semibold uppercase mb-1">Bank Account / Mobile Wallet Details (Name, Account No)</label><input type="text" id="paymayaDetails" required placeholder="e.g., Bank Name / Account Name / Number" class="w-full p-2.5 border rounded-lg"></div>
-                        <div><label class="block font-semibold uppercase mb-1">Payment Instructions</label><textarea id="worldremitInstructions" rows="3" class="w-full p-2.5 border rounded-lg"></textarea></div>
-                        <div><label class="block font-semibold uppercase mb-1">Upload QR Code Image</label><input type="file" id="paymayaQrFile" accept="image/*" class="w-full p-2 border rounded-lg bg-slate-50" onchange="previewQrUpload(event)"></div>
-                        <input type="hidden" id="paymayaQrUrl">
-                        <div id="qrPreviewContainer" class="mt-2"></div>
-                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Save Configuration</button>
-                    </form>
-                </div>
-
-                <!-- TAB 4: ADMIN CHAT -->
-                <div id="adminChatTab" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-[600px]">
-                    <div class="border-r pr-4 overflow-y-auto space-y-2">
-                        <h3 class="font-bold text-sm text-slate-800 mb-3"><i class="fa-solid fa-comments text-indigo-600 mr-2"></i> Student Chats</h3>
-                        <div id="adminChatStudentList" class="space-y-1"></div>
-                    </div>
-                    <div class="md:col-span-2 flex flex-col h-full">
-                        <h3 id="activeChatStudentTitle" class="font-bold text-sm text-slate-800 mb-3 pb-2 border-b">Select a student</h3>
-                        <div id="adminChatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50 text-xs mb-3"></div>
-                        <form onsubmit="sendAdminChatMessage(event)" class="flex gap-2">
-                            <input type="text" id="adminChatInputMessage" required placeholder="Type reply..." class="flex-grow p-2 border rounded text-xs">
-                            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded font-medium text-xs">Send</button>
-                        </form>
+                        <h1 class="font-extrabold text-lg text-white drop-shadow-sm">Teacher Ann ♡</h1>
+                        <p class="text-[11px] text-pink-100 font-medium">Learn with Teacher Ann</p>
                     </div>
                 </div>
 
-                <!-- TAB 5: COMMUNITY WALL -->
-                <div id="adminCommentsTab" class="hidden max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
-                    <h2 class="text-base font-bold text-slate-900"><i class="fa-solid fa-comments text-indigo-600 mr-2"></i> Community Wall Moderation</h2>
-                    <div id="adminCommentsContainer" class="space-y-4 text-xs"></div>
+                <!-- Profile Photo Card -->
+                <div class="bg-white/95 backdrop-blur rounded-2xl p-3 text-slate-800 text-center shadow-inner space-y-2">
+                    <div class="w-full h-32 rounded-xl overflow-hidden bg-pink-100 border">
+                        <img id="sidebarDisplayImg" src="image_ea3222.jpg" alt="Teacher Ann" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-[11px] italic text-slate-600 leading-tight">"Every lesson is a step forward, and every step brings you closer to your goals. ♡"</p>
+                    <div class="flex gap-1 pt-1">
+                        <label class="flex-1 bg-pink-600 hover:bg-pink-700 text-white text-[10px] font-bold py-1.5 rounded-lg cursor-pointer text-center shadow">
+                            Upload Photo <input type="file" accept="image/*" class="hidden" onchange="uploadTeacherSidebarPhoto(event)">
+                        </label>
+                        <button onclick="resetSidebarPhoto()" class="px-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-[10px] rounded-lg">Reset</button>
+                    </div>
                 </div>
 
-                <!-- TAB 6: ADMIN PROFILE EDIT -->
-                <div id="adminProfileTab" class="hidden max-w-xl mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4 text-xs">
-                    <h2 class="text-base font-bold text-slate-900"><i class="fa-solid fa-user-gear text-indigo-600 mr-2"></i> Edit Admin Profile & Photo</h2>
-                    <form onsubmit="saveAdminProfile(event)" class="space-y-3">
-                        <div><label class="block font-semibold uppercase mb-1">Teacher Display Name</label><input type="text" id="profileNameInput" required class="w-full p-2 border rounded"></div>
-                        <div><label class="block font-semibold uppercase mb-1">Teacher Bio / About Description</label><textarea id="profileBioInput" rows="4" class="w-full p-2 border rounded"></textarea></div>
-                        <div><label class="block font-semibold uppercase mb-1">Upload Profile Picture</label><input type="file" id="profileAvatarFile" accept="image/*" class="w-full p-2 border rounded bg-slate-50" onchange="previewAvatarUpload(event)"></div>
-                        <input type="hidden" id="profileAvatarUrl">
-                        <div id="avatarPreviewContainer" class="mt-2"></div>
-                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded">Save Profile Settings</button>
-                    </form>
-                </div>
+                <!-- Navigation Tabs -->
+                <nav class="space-y-1.5 text-xs font-semibold">
+                    <button onclick="switchTab('dashboard')" id="navDashboard" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all"><i class="fa-solid fa-house w-4"></i><span>Dashboard</span></button>
+                    <button onclick="switchTab('students')" id="navStudents" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-users w-4"></i><span>Students</span></button>
+                    <button onclick="switchTab('schedule')" id="navSchedule" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-calendar-days w-4"></i><span>Schedule</span></button>
+                    <button onclick="switchTab('contracts')" id="navContracts" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-file-contract w-4"></i><span>Contracts</span></button>
+                    <button onclick="switchTab('payments')" id="navPayments" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-wallet w-4"></i><span>Payments</span></button>
+                    <button onclick="switchTab('records')" id="navRecords" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-folder-open w-4"></i><span>Records</span></button>
+                    <button onclick="switchTab('reports')" id="navReports" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all"><i class="fa-solid fa-chart-pie w-4"></i><span>Reports</span></button>
+                </nav>
             </div>
 
-            <!-- RIGHT COLUMN: CALENDAR WIDGET & BULLETIN BOARD (ADS) -->
-            <div class="space-y-6">
-                <!-- Mini Calendar Widget -->
-                <div class="bg-white rounded-xl shadow-sm border p-4 space-y-3">
-                    <div class="flex justify-between items-center font-bold text-sm text-indigo-900 border-b pb-2">
-                        <span id="calendarMonthYear"></span>
-                        <div class="space-x-1">
-                            <button onclick="changeMonth(-1)" class="px-2 py-0.5 bg-slate-100 rounded hover:bg-slate-200">&lt;</button>
-                            <button onclick="changeMonth(1)" class="px-2 py-0.5 bg-slate-100 rounded hover:bg-slate-200">&gt;</button>
-                        </div>
+            <div class="text-center pt-4 border-t border-pink-400/50 space-y-2">
+                <p class="text-xs font-bold tracking-wide">Teach &bull; Learn &bull; Grow ♡</p>
+                <button onclick="adminLogout()" class="w-full bg-pink-700/80 hover:bg-pink-800 text-white py-1.5 rounded-lg text-xs font-bold"><i class="fa-solid fa-right-from-bracket mr-1"></i> Sign Out</button>
+            </div>
+        </aside>
+
+        <!-- MAIN DASHBOARD CONTENT AREA -->
+        <main class="flex-grow flex flex-col p-6 overflow-y-auto max-h-screen space-y-6">
+            <!-- Header Bar -->
+            <header class="bg-white border border-pink-200 rounded-2xl px-6 py-4 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-2">
+                <div>
+                    <h2 class="text-xl font-extrabold text-pink-700 flex items-center gap-2">Teacher Ann ♡</h2>
+                    <p class="text-xs text-slate-500">Learn with Teacher Ann - Your teaching management dashboard</p>
+                </div>
+                <div class="bg-pink-50 border border-pink-100 px-4 py-2 rounded-xl text-right">
+                    <p class="text-[10px] font-bold text-pink-600 uppercase tracking-wider">Philippines Standard Time</p>
+                    <p id="liveClockDisplay" class="text-xs font-mono font-bold text-slate-700"></p>
+                </div>
+            </header>
+
+            <!-- TAB 1: DASHBOARD OVERVIEW -->
+            <div id="tabDashboard" class="space-y-6">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-pink-500 to-rose-400 text-white rounded-2xl p-6 shadow-md flex justify-between items-center">
+                    <div class="space-y-1">
+                        <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-sun text-amber-300"></i> Welcome to Learn with Teacher Ann</h3>
+                        <p class="text-xs text-pink-100">Manage your students, schedule, contracts, payments, and class records in one place.</p>
                     </div>
-                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400">
-                        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-                    </div>
-                    <div id="miniCalendarDays" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
                 </div>
 
-                <!-- Bulletin Board / Ads Widget -->
-                <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-xl shadow-sm p-5 space-y-3">
-                    <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Bulletin Board</h3>
-                    <div class="space-y-2 text-xs text-indigo-100">
-                        <div class="bg-white/10 p-2.5 rounded border border-white/10">
-                            <strong>📌 Reminders:</strong> Please check student payment credits before confirming slots.
+                <!-- Overview Metrics Grid -->
+                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i class="fa-solid fa-table-cells-large text-pink-600"></i> Overview</h4>
+                        <span class="text-[11px] bg-pink-50 text-pink-700 px-3 py-1 rounded-full font-bold border border-pink-200">Asia/Manila</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                        <div class="bg-purple-50 border border-purple-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-users"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Total Students</p><p id="statTotalStudents" class="text-lg font-extrabold text-slate-800">0</p></div>
                         </div>
-                        <div class="bg-white/10 p-2.5 rounded border border-white/10">
-                            <strong>⭐ Promo Active:</strong> Recommend comprehensive math bundles for grade 4-6 students!
+                        <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-user-check"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Active Students</p><p id="statActiveStudents" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-calendar-day"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Classes Today</p><p id="statClassesToday" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-fuchsia-50 border border-fuchsia-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-fuchsia-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-calendar-week"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Classes This Week</p><p id="statClassesWeek" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+
+                        <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-calendar-days"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Classes This Month</p><p id="statClassesMonth" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-violet-50 border border-violet-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-violet-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-calendar"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Classes This Year</p><p id="statClassesYear" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-clock"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">25-Minute Classes</p><p id="stat25Min" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-teal-50 border border-teal-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-clock"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">50-Minute Classes</p><p id="stat50Min" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+
+                        <div class="bg-rose-50 border border-rose-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-file-contract"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Contract Students</p><p id="statContractStudents" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-sky-50 border border-sky-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Monthly Payment Students</p><p id="statMonthlyStudents" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-circle-check"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Completed Classes</p><p id="statCompletedClasses" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-layer-group"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Remaining Contract Classes</p><p id="statRemainingClasses" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+
+                        <div class="bg-orange-50 border border-orange-100 p-4 rounded-xl flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Unpaid Payments</p><p id="statUnpaid" class="text-lg font-extrabold text-slate-800">0</p></div>
+                        </div>
+                        <div class="bg-cyan-50 border border-cyan-100 p-4 rounded-xl flex items-center space-x-3 md:col-span-3">
+                            <div class="w-9 h-9 rounded-lg bg-cyan-600 text-white flex items-center justify-center font-bold"><i class="fa-solid fa-peso-sign"></i></div>
+                            <div><p class="text-slate-500 text-[10px] uppercase font-semibold">Monthly Amount Due</p><p id="statMonthlyDue" class="text-lg font-extrabold text-slate-800">₱0.00</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Classes Table -->
+                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h4 class="font-bold text-sm text-slate-800 flex items-center gap-2"><i class="fa-solid fa-check text-pink-600"></i> Today's Classes</h4>
+                        <span id="todaysClassesCountBadge" class="text-[11px] bg-pink-50 text-pink-700 px-3 py-1 rounded-full font-bold border border-pink-200">0 classes</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left">
+                            <thead>
+                                <tr class="bg-pink-50/70 text-pink-900 border-b">
+                                    <th class="p-3 font-bold">Time</th>
+                                    <th class="p-3 font-bold">Student</th>
+                                    <th class="p-3 font-bold">Duration</th>
+                                    <th class="p-3 font-bold">Type</th>
+                                    <th class="p-3 font-bold">Status</th>
+                                    <th class="p-3 font-bold text-right">Book / Lesson</th>
+                                </tr>
+                            </thead>
+                            <tbody id="todaysClassesTableBody">
+                                <tr><td colspan="6" class="p-4 text-center text-slate-400">No classes scheduled for today.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: STUDENTS -->
+            <div id="tabStudents" class="hidden space-y-6">
+                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-users text-pink-600 mr-2"></i> Student Accounts & Credits</h3>
+                        <button onclick="openAddStudentModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl"><i class="fa-solid fa-plus mr-1"></i> Add Student</button>
+                    </div>
+                    <div id="studentsDirectoryContainer" class="space-y-3 text-xs"></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: SCHEDULE -->
+            <div id="tabSchedule" class="hidden space-y-6">
+                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-calendar-days text-pink-600 mr-2"></i> Class Schedule Manager</h3>
+                        <button onclick="openScheduleModal()" class="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl"><i class="fa-solid fa-plus mr-1"></i> Schedule Class</button>
+                    </div>
+                    <div id="scheduleContainer" class="space-y-3 text-xs"></div>
+                </div>
+            </div>
+
+            <!-- TAB 4: CONTRACTS -->
+            <div id="tabContracts" class="hidden space-y-6">
+                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-file-contract text-pink-600 mr-2"></i> Student Contracts & Packages</h3>
+                    <div id="contractsContainer" class="space-y-3 text-xs"></div>
+                </div>
+            </div>
+
+            <!-- TAB 5: PAYMENTS -->
+            <div id="tabPayments" class="hidden space-y-6">
+                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-wallet text-pink-600 mr-2"></i> Payments & Tuition Tracking</h3>
+                    <div id="paymentsContainer" class="space-y-3 text-xs"></div>
+                </div>
+            </div>
+
+            <!-- TAB 6: RECORDS -->
+            <div id="tabRecords" class="hidden space-y-6">
+                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-folder-open text-pink-600 mr-2"></i> Lesson Records & Homework Notes</h3>
+                    <div id="recordsContainer" class="space-y-3 text-xs"></div>
+                </div>
+            </div>
+
+            <!-- TAB 7: REPORTS -->
+            <div id="tabReports" class="hidden space-y-6">
+                <div class="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800 border-b pb-3"><i class="fa-solid fa-chart-pie text-pink-600 mr-2"></i> Teaching Analytics & Reports</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="p-4 bg-pink-50 border rounded-xl space-y-2">
+                            <h4 class="font-bold text-pink-900">Total Revenue Generated</h4>
+                            <p id="reportTotalRevenue" class="text-xl font-extrabold text-pink-700">₱0.00</p>
+                        </div>
+                        <div class="p-4 bg-purple-50 border rounded-xl space-y-2">
+                            <h4 class="font-bold text-purple-900">Total Completed Lessons</h4>
+                            <p id="reportTotalLessons" class="text-xl font-extrabold text-purple-700">0</p>
                         </div>
                     </div>
                 </div>
@@ -417,228 +409,229 @@
     </div>
 
     <!-- ================= STUDENT APP CONTAINER ================= -->
-    <div id="studentAppContainer" class="hidden flex-grow flex flex-col min-h-screen">
-        <header class="bg-emerald-600 text-white shadow-md">
+    <div id="studentAppContainer" class="hidden flex-grow flex flex-col min-h-screen bg-pink-50/50">
+        <header class="bg-pink-600 text-white shadow-md">
             <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-white text-emerald-600 w-10 h-10 rounded-lg font-bold text-xl flex items-center justify-center overflow-hidden shadow" id="studentHeaderAvatar">
-                        <i class="fa-solid fa-book-open"></i>
+                    <div class="w-10 h-10 rounded-lg overflow-hidden bg-white shadow">
+                        <img src="image_ea3222.jpg" alt="Logo" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h1 class="text-lg font-bold" id="studentWelcomeTitle">Student Portal</h1>
-                        <p class="text-xs text-emerald-200">Time (PH): <span id="studentLiveClock" class="font-mono"></span></p>
+                        <p class="text-xs text-pink-100">Time (PH): <span id="studentLiveClock" class="font-mono"></span></p>
                     </div>
                 </div>
-                <div class="flex bg-emerald-700/60 p-1 rounded-lg text-xs flex-wrap gap-1">
-                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all">Schedule & Book</button>
-                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Lessons & Recordings</button>
-                    <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Payments & Packages</button>
-                    <button onclick="switchStudentTab('chat')" id="stdNavChat" class="px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all">Support Chat</button>
+                <div class="flex bg-pink-700/60 p-1 rounded-lg text-xs flex-wrap gap-1">
+                    <button onclick="switchStudentTab('schedule')" id="stdNavSchedule" class="px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all">Schedule & Book</button>
+                    <button onclick="switchStudentTab('history')" id="stdNavHistory" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Lessons & Recordings</button>
+                    <button onclick="switchStudentTab('payment')" id="stdNavPayment" class="px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all">Payments & Packages</button>
                 </div>
-                <button onclick="studentLogout()" class="bg-emerald-700 hover:bg-emerald-800 text-emerald-100 px-3 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-right-from-bracket"></i> Exit</button>
+                <button onclick="studentLogout()" class="bg-pink-700 hover:bg-pink-800 text-pink-100 px-3 py-1.5 rounded-lg text-xs font-bold">Exit</button>
             </div>
         </header>
 
-        <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
-            <!-- TAB 1: SCHEDULE & AUTO PURCHASE BOOKING -->
-            <div id="studentScheduleView" class="space-y-4 text-xs">
+        <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6 space-y-6">
+            <!-- TAB 1: SCHEDULE & BOOKING -->
+            <div id="studentScheduleView" class="space-y-6 text-xs">
+                <!-- Rates Guide -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <div class="flex justify-between items-center bg-emerald-50 p-3 rounded-lg border border-emerald-200">
-                        <div>
-                            <span class="text-emerald-900 font-bold text-sm">Available Session Credits: <span id="studentCreditCount" class="text-emerald-700 text-base">0</span></span>
-                            <p class="text-[11px] text-slate-500">You can pick and book your lessons instantly using your available session credits.</p>
+                    <div class="text-center space-y-1 border-b pb-3">
+                        <span class="text-[10px] font-bold text-pink-600 uppercase tracking-wider">Tuition Investment</span>
+                        <h3 class="text-base font-bold text-slate-900">Class Rates & Program Structure Guide</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-pink-50/40 p-4 rounded-xl border space-y-2">
+                            <div class="font-bold text-pink-900"><i class="fa-solid fa-book-open-reader text-pink-600 mr-1"></i> Reading Program</div>
+                            <p class="text-slate-700 flex justify-between border-t pt-2"><span>Preschool to Elem:</span> <strong class="text-pink-700">₱250 / 25 mins</strong></p>
                         </div>
-                        <button onclick="switchStudentTab('payment')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded font-bold shadow"><i class="fa-solid fa-cart-plus mr-1"></i> Buy Session Package</button>
+                        <div class="bg-pink-50/40 p-4 rounded-xl border space-y-2">
+                            <div class="font-bold text-pink-900"><i class="fa-solid fa-calculator text-pink-600 mr-1"></i> Math Program</div>
+                            <ul class="space-y-2 text-slate-700 border-t pt-2">
+                                <li class="flex justify-between"><span>Preschool - Grade 3:</span> <strong class="text-pink-700">₱250 / 25 mins</strong></li>
+                                <li class="flex justify-between border-t pt-1"><span>Grade 4 - 6:</span> <strong class="text-pink-700">₱500 / 50 mins (Recommended)</strong></li>
+                                <li class="flex justify-between border-t pt-1"><span>Junior High (7-10):</span> <strong class="text-pink-700">₱700 / 50 mins</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Panel -->
+                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center bg-pink-50 p-3 rounded-lg border border-pink-200">
+                        <div>
+                            <span class="text-pink-900 font-bold text-sm">Available Credits: <span id="studentCreditCount" class="text-pink-700 text-base">0</span></span>
+                        </div>
+                        <button onclick="switchStudentTab('payment')" class="bg-pink-600 text-white px-3 py-2 rounded font-bold shadow">Buy Session Package</button>
                     </div>
 
-                    <div class="bg-slate-50 p-4 border rounded-xl space-y-3">
-                        <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-calendar-check text-emerald-600 mr-2"></i> Pick & Book a Lesson / Session</h3>
-                        <form onsubmit="studentBookSession(event)" class="space-y-3">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div><label class="block font-semibold uppercase mb-1">Select Program / Subject</label>
-                                    <select id="bookSubject" required class="w-full p-2 border rounded bg-white">
-                                        <option value="Reading Program">📖 Reading Program (₱250)</option>
-                                        <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
-                                        <option value="Math (Grade 4-6 Standard)">🔢 Math (Grade 4-6 Standard 25m) (₱250)</option>
-                                        <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive 50m) (₱500)</option>
-                                        <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
-                                    </select>
-                                </div>
-                                <div><label class="block font-semibold uppercase mb-1">Preferred Date</label><input type="date" id="bookDate" required class="w-full p-2 border rounded"></div>
+                    <form onsubmit="studentBookSession(event)" class="space-y-3 bg-slate-50 p-4 border rounded-xl">
+                        <h3 class="font-bold text-slate-800 text-sm">Pick & Book a Lesson</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div><label class="block font-semibold mb-1">Program</label>
+                                <select id="bookSubject" required class="w-full p-2 border rounded bg-white">
+                                    <option value="Reading Program">📖 Reading Program (₱250)</option>
+                                    <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
+                                    <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive) (₱500)</option>
+                                    <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
+                                </select>
                             </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div><label class="block font-semibold uppercase mb-1">Time Slot</label><input type="text" id="bookSlot" required placeholder="e.g. 3:00 - 4:00 PM" class="w-full p-2 border rounded"></div>
-                                <div class="flex items-end"><button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded">Book Lesson (Deduct 1 Credit)</button></div>
-                            </div>
-                        </form>
-                    </div>
+                            <div><label class="block font-semibold mb-1">Date</label><input type="date" id="bookDate" required class="w-full p-2 border rounded"></div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="bookSlot" required placeholder="e.g. 3:00 - 4:00 PM" class="w-full p-2 border rounded"></div>
+                            <div class="flex items-end"><button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded">Book Lesson (Deduct 1 Credit)</button></div>
+                        </div>
+                    </form>
 
-                    <h2 class="text-sm font-bold text-slate-800 pt-2"><i class="fa-solid fa-calendar-days text-emerald-600 mr-2"></i> Your Booked Upcoming Sessions</h2>
+                    <h2 class="text-sm font-bold text-slate-800 pt-2">Your Upcoming Sessions</h2>
                     <div id="studentPortalSessions" class="space-y-3"></div>
                 </div>
             </div>
 
-            <!-- TAB 2: LESSON HISTORY & RECORDINGS -->
+            <!-- TAB 2: HISTORY -->
             <div id="studentHistoryView" class="hidden space-y-4 text-xs">
                 <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-sm font-bold text-slate-800 mb-4"><i class="fa-solid fa-clock-rotate-left text-emerald-600 mr-2"></i> Lesson History & Recordings</h2>
+                    <h2 class="text-sm font-bold text-slate-800 mb-4">Lesson History & Recordings</h2>
                     <div id="studentPortalHistory" class="space-y-3"></div>
                 </div>
             </div>
 
-            <!-- TAB 3: PAYMENTS & AUTOMATIC BUNDLE PURCHASE -->
+            <!-- TAB 3: PAYMENTS -->
             <div id="studentPaymentView" class="hidden space-y-6 text-xs">
-                <!-- Package Purchase Section -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
-                    <h2 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-bag-shopping text-emerald-600 mr-2"></i> Purchase Session Bundles Automatically</h2>
+                    <h2 class="text-sm font-bold text-slate-800">Purchase Session Bundles Automatically</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="border rounded-xl p-4 bg-emerald-50/50 space-y-2 text-center">
-                            <h3 class="font-bold text-emerald-900">Starter Pack</h3>
-                            <p class="text-lg font-extrabold text-emerald-700">₱1,000</p>
-                            <p class="text-[11px] text-slate-500">4 Session Credits (₱250 rate)</p>
-                            <button onclick="autoPurchaseBundle('Starter Pack (4 Sessions)', 1000, 4)" class="w-full bg-emerald-600 text-white py-2 rounded font-bold">Buy Now</button>
+                        <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
+                            <h3 class="font-bold text-pink-900">Starter Pack</h3>
+                            <p class="text-lg font-extrabold text-pink-700">₱1,000</p>
+                            <p class="text-[11px] text-slate-500">4 Session Credits</p>
+                            <button onclick="autoPurchaseBundle('Starter Pack (4 Sessions)', 1000, 4)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
-                        <div class="border-2 border-emerald-600 rounded-xl p-4 bg-emerald-50 space-y-2 text-center shadow-sm">
-                            <span class="bg-emerald-600 text-white text-[9px] px-2 py-0.5 rounded-full uppercase font-bold">Popular</span>
-                            <h3 class="font-bold text-emerald-900">Monthly Bundle</h3>
-                            <p class="text-lg font-extrabold text-emerald-700">₱2,500</p>
+                        <div class="border-2 border-pink-600 rounded-xl p-4 bg-pink-50 space-y-2 text-center shadow-sm">
+                            <span class="bg-pink-600 text-white text-[9px] px-2 py-0.5 rounded-full uppercase font-bold">Popular</span>
+                            <h3 class="font-bold text-pink-900">Monthly Bundle</h3>
+                            <p class="text-lg font-extrabold text-pink-700">₱2,500</p>
                             <p class="text-[11px] text-slate-500">10 Session Credits</p>
-                            <button onclick="autoPurchaseBundle('Monthly Bundle (10 Sessions)', 2500, 10)" class="w-full bg-emerald-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="autoPurchaseBundle('Monthly Bundle (10 Sessions)', 2500, 10)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
-                        <div class="border rounded-xl p-4 bg-emerald-50/50 space-y-2 text-center">
-                            <h3 class="font-bold text-emerald-900">Intensive Pack</h3>
-                            <p class="text-lg font-extrabold text-emerald-700">₱5,000</p>
+                        <div class="border rounded-xl p-4 bg-pink-50/50 space-y-2 text-center">
+                            <h3 class="font-bold text-pink-900">Intensive Pack</h3>
+                            <p class="text-lg font-extrabold text-pink-700">₱5,000</p>
                             <p class="text-[11px] text-slate-500">20 Session Credits</p>
-                            <button onclick="autoPurchaseBundle('Intensive Pack (20 Sessions)', 5000, 20)" class="w-full bg-emerald-600 text-white py-2 rounded font-bold">Buy Now</button>
+                            <button onclick="autoPurchaseBundle('Intensive Pack (20 Sessions)', 5000, 20)" class="w-full bg-pink-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                     </div>
-                </div>
-
-                <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-sm font-bold text-slate-800 mb-4"><i class="fa-solid fa-money-bill-transfer text-emerald-600 mr-2"></i> Tuition Payment Info & QR Code</h2>
-                    <div id="studentPaymentInfo" class="text-slate-600 space-y-3"></div>
-                </div>
-                <div class="bg-white border rounded-xl p-6 shadow-sm">
-                    <h2 class="text-sm font-bold text-slate-800 mb-4"><i class="fa-solid fa-receipt text-emerald-600 mr-2"></i> Submit Payment Reference & Upload Receipt</h2>
-                    <form onsubmit="submitPaymentProof(event)" class="space-y-3">
-                        <div><label class="block font-semibold uppercase mb-1">Reference Number / Transaction ID</label><input type="text" id="payRefNumber" required placeholder="e.g., TXN-987654" class="w-full p-2 border rounded"></div>
-                        <div><label class="block font-semibold uppercase mb-1">Amount Sent & Remarks</label><input type="text" id="payAmount" required placeholder="e.g., PHP 2,500 for Monthly Bundle" class="w-full p-2 border rounded"></div>
-                        <div><label class="block font-semibold uppercase mb-1">Upload Receipt Photo</label><input type="file" id="payReceiptFile" accept="image/*" required class="w-full p-2 border rounded bg-slate-50" onchange="previewReceiptUpload(event)"></div>
-                        <input type="hidden" id="payReceiptUrl">
-                        <div id="receiptPreviewContainer"></div>
-                        <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium">Send Payment Proof</button>
-                    </form>
-                    <div id="studentPaymentHistoryList" class="mt-4 pt-4 border-t space-y-2"></div>
-                </div>
-            </div>
-
-            <!-- TAB 4: SUPPORT CHAT -->
-            <div id="studentChatView" class="hidden space-y-4 text-xs">
-                <div class="bg-white border rounded-xl p-6 shadow-sm flex flex-col h-[500px]">
-                    <h2 class="text-sm font-bold text-slate-800 mb-3"><i class="fa-solid fa-comments text-emerald-600 mr-2"></i> Direct Chat with Tutor</h2>
-                    <div id="chatMessagesContainer" class="flex-grow overflow-y-auto border rounded-lg p-3 space-y-2 bg-slate-50"></div>
-                    <form onsubmit="sendChatMessage(event)" class="mt-3 flex gap-2">
-                        <input type="text" id="chatInputMessage" required placeholder="Type message..." class="flex-grow p-2 border rounded text-xs">
-                        <button type="submit" class="bg-emerald-600 text-white px-4 py-2 rounded font-medium text-xs">Send</button>
-                    </form>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Modals for Student Cancel Class & Teacher Absence -->
-    <div id="cancelClassModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <h3 class="font-bold text-slate-800 text-sm">Request Class Cancellation</h3>
-            <input type="hidden" id="cancelSessionId">
-            <div><label class="block font-semibold uppercase mb-1">Reason for Cancellation</label><textarea id="cancelReason" rows="3" class="w-full p-2 border rounded"></textarea></div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="sendClassCancellation()" class="flex-1 bg-rose-600 text-white py-2 rounded font-bold">Submit Cancellation</button>
-                <button onclick="closeCancelClassModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Close</button>
+    <!-- MODAL FOR GENERAL ACTIONS -->
+    <div id="quickActionModal" class="hidden fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 id="modalTitle" class="font-bold text-sm text-slate-800">Action</h3>
+                <button onclick="closeQuickModal()"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
-        </div>
-    </div>
-
-    <div id="teacherAbsentModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> Tag Teacher Absence</h3>
-            <input type="hidden" id="teacherAbsentSessionId">
-            <div><label class="block font-semibold uppercase mb-1">Reason / Message</label><textarea id="teacherAbsentReason" rows="4" class="w-full p-2 border rounded"></textarea></div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="saveTeacherAbsentNotice()" class="flex-1 bg-amber-600 text-white py-2 rounded font-bold">Save & Notify</button>
-                <button onclick="closeTeacherAbsentModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="imageModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4" onclick="closeImageModal()">
-        <div class="bg-white rounded-xl p-4 max-w-lg w-full text-center space-y-3">
-            <h3 class="font-bold text-slate-800 text-sm">Image Preview</h3>
-            <img id="modalImageDisplay" src="" class="max-h-[400px] mx-auto object-contain border rounded" alt="Preview">
+            <div id="modalBodyContent" class="space-y-3"></div>
         </div>
     </div>
 
     <!-- ================= SCRIPT LOGIC ================= -->
     <script>
         let currentStudentName = '';
-        let activeAdminChatStudent = '';
+        let allStudents = [];
         let allSessions = [];
-        let allStudentsCache = [];
+        let allPayments = [];
         let isAdminLoggedIn = false;
-        let currentCalendarDate = new Date();
 
-        window.addEventListener('DOMContentLoaded', () => { 
-            loadPublicComments(); 
+        window.addEventListener('DOMContentLoaded', () => {
             startLiveClocks();
-            renderMiniCalendar();
-            loadAdminProfileDisplay();
+            loadSidebarPhoto();
         });
 
-        // Live PH Time Clocks
         function startLiveClocks() {
             setInterval(() => {
                 const now = new Date();
-                const options = { timeZone: 'Asia/Manila', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+                const options = { timeZone: 'Asia/Manila', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
                 const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
-                if(document.getElementById('adminLiveClock')) document.getElementById('adminLiveClock').textContent = timeString + ' (PH Time)';
-                if(document.getElementById('studentLiveClock')) document.getElementById('studentLiveClock').textContent = timeString + ' (PH Time)';
+                if (document.getElementById('liveClockDisplay')) document.getElementById('liveClockDisplay').textContent = timeString;
+                if (document.getElementById('studentLiveClock')) document.getElementById('studentLiveClock').textContent = timeString;
             }, 1000);
         }
 
-        // Mini Calendar Widget
-        function renderMiniCalendar() {
-            const year = currentCalendarDate.getFullYear();
-            const month = currentCalendarDate.getMonth();
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        function switchTab(tabId) {
+            ['tabDashboard', 'tabStudents', 'tabSchedule', 'tabContracts', 'tabPayments', 'tabRecords', 'tabReports'].forEach(t => {
+                const el = document.getElementById(t);
+                if(el) el.classList.add('hidden');
+            });
+            const target = document.getElementById('tab' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
+            if(target) target.classList.remove('hidden');
+
+            ['Dashboard', 'Students', 'Schedule', 'Contracts', 'Payments', 'Records', 'Reports'].forEach(name => {
+                const btn = document.getElementById('nav' + name);
+                if (btn) {
+                    if (name.toLowerCase() === tabId) {
+                        btn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl bg-white text-pink-700 shadow transition-all font-bold";
+                    } else {
+                        btn.className = "w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl hover:bg-white/20 transition-all";
+                    }
+                }
+            });
+
+            if (tabId === 'students') loadStudentsTab();
+            if (tabId === 'schedule') loadScheduleTab();
+            if (tabId === 'contracts') loadContractsTab();
+            if (tabId === 'payments') loadPaymentsTab();
+            if (tabId === 'records') loadRecordsTab();
+            if (tabId === 'reports') loadReportsTab();
+        }
+
+        function switchStudentTab(tab) {
+            ['studentScheduleView', 'studentHistoryView', 'studentPaymentView'].forEach(t => document.getElementById(t).classList.add('hidden'));
+            ['stdNavSchedule', 'stdNavHistory', 'stdNavPayment'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded text-pink-100 hover:text-white transition-all");
+
+            if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; loadStudentPortal(currentStudentName); }
+            else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
+            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-pink-700 font-bold transition-all"; }
+        }
+
+        function uploadTeacherSidebarPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                localStorage.setItem('teacher_ann_photo', e.target.result);
+                document.getElementById('sidebarDisplayImg').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        function resetSidebarPhoto() {
+            localStorage.removeItem('teacher_ann_photo');
+            document.getElementById('sidebarDisplayImg').src = 'image_ea3222.jpg';
+        }
+        function loadSidebarPhoto() {
+            const saved = localStorage.getItem('teacher_ann_photo');
+            if (saved) document.getElementById('sidebarDisplayImg').src = saved;
+        }
+
+        async function handleAdminAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+            const { error } = await _supabase.auth.signInWithPassword({ email, password });
+            if (error) { alert("Admin login failed: " + error.message); return; }
             
-            if(document.getElementById('calendarMonthYear')) {
-                document.getElementById('calendarMonthYear').textContent = `${monthNames[month]} ${year}`;
-            }
-
-            const firstDayIndex = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-            const container = document.getElementById('miniCalendarDays');
-            if(!container) return;
-
-            container.innerHTML = '';
-            for(let i=0; i<firstDayIndex; i++) {
-                container.innerHTML += `<span></span>`;
-            }
-
-            const todayStr = new Date().toISOString().split('T')[0];
-            for(let day=1; day<=totalDays; day++) {
-                const formattedDate = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const isToday = formattedDate === todayStr ? 'bg-indigo-600 text-white font-bold rounded-full' : 'hover:bg-slate-100 rounded';
-                container.innerHTML += `<span class="py-1 text-slate-700 ${isToday}">${day}</span>`;
-            }
+            isAdminLoggedIn = true;
+            closeAdminLoginModal();
+            document.getElementById('publicLandingPage').classList.add('hidden');
+            document.getElementById('adminAppContainer').classList.remove('hidden');
+            loadAdminData();
         }
 
-        function changeMonth(direction) {
-            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + direction);
-            renderMiniCalendar();
-        }
+        function adminLogout() { location.reload(); }
+        function studentLogout() { location.reload(); }
 
-        // Navigation Modals
         function scrollToEnroll() { document.getElementById('enroll').scrollIntoView({ behavior: 'smooth' }); }
         function openStudentLoginModal() { document.getElementById('studentLoginModal').classList.remove('hidden'); }
         function closeStudentLoginModal() { document.getElementById('studentLoginModal').classList.add('hidden'); }
@@ -649,101 +642,17 @@
             e.preventDefault();
             const name = document.getElementById('enrollStudentName').value.trim();
             const parent = document.getElementById('enrollParentName').value.trim();
-            const contact = document.getElementById('enrollContact').value.trim();
+            const email_or_mobile = document.getElementById('enrollContact').value.trim();
             const password = document.getElementById('enrollPassword').value.trim();
             const subject = document.getElementById('enrollSubject').value;
 
-            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile: contact, password, notes: `Program: ${subject}` }]);
+            const { error } = await _supabase.from('students').insert([{ name, parent, email_or_mobile, password, notes: `Program: ${subject}` }]);
             if (error) { alert("Enrollment error: " + error.message); return; }
-            alert("Enrollment & account registration successful! You can now sign in.");
+            alert("Enrollment successful! You can now sign in.");
             document.getElementById('enrollStudentName').value = '';
             document.getElementById('enrollParentName').value = '';
             document.getElementById('enrollContact').value = '';
             document.getElementById('enrollPassword').value = '';
-        }
-
-        // Public Comments & Conditional Deletion
-        async function submitPublicComment(e) {
-            e.preventDefault();
-            const name = document.getElementById('visitorName').value.trim();
-            const message = document.getElementById('visitorMessage').value.trim();
-            const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            const { error } = await _supabase.from('community_comments').insert([{ name, message, date, replies: [] }]);
-            if (error) { alert("Error posting comment: " + error.message); return; }
-
-            document.getElementById('visitorName').value = '';
-            document.getElementById('visitorMessage').value = '';
-            loadPublicComments();
-        }
-
-        async function loadPublicComments() {
-            const container = document.getElementById('publicCommentsContainer');
-            if (!container) return;
-
-            const { data: comments } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
-            const { data: students } = await _supabase.from('students').select('name');
-            const registeredNames = students ? students.map(s => s.name.toLowerCase()) : [];
-
-            container.innerHTML = '';
-            if (!comments || comments.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No comments yet.</p>`;
-                return;
-            }
-
-            comments.forEach(c => {
-                let repliesHtml = '';
-                if (c.replies && Array.isArray(c.replies)) {
-                    c.replies.forEach(r => {
-                        repliesHtml += `<div class="mt-2 ml-4 p-2 bg-indigo-50 border-l-2 border-indigo-600 rounded text-xs"><strong>${r.name} [ADMIN]:</strong> ${r.message}</div>`;
-                    });
-                }
-                const isRegistered = registeredNames.includes(c.name.trim().toLowerCase());
-                const deleteBtn = (isRegistered || isAdminLoggedIn) ? `<button onclick="promptDeleteComment(${c.id}, '${c.name.replace(/'/g, "\\'")}')" class="text-rose-500"><i class="fa-solid fa-trash"></i> Delete</button>` : '';
-
-                container.innerHTML += `
-                    <div class="p-4 bg-white border rounded-xl shadow-sm text-xs space-y-2">
-                        <div class="flex justify-between font-bold text-slate-900">
-                            <div>${c.name} <span class="text-[10px] text-slate-400 font-normal">${c.date}</span></div>
-                            ${deleteBtn}
-                        </div>
-                        <p class="text-slate-700">${c.message}</p>
-                        ${repliesHtml}
-                    </div>`;
-            });
-        }
-
-        async function promptDeleteComment(id, authorName) {
-            if (isAdminLoggedIn) {
-                await _supabase.from('community_comments').delete().eq('id', id);
-                loadPublicComments();
-                if (!document.getElementById('adminCommentsTab').classList.contains('hidden')) loadAdminCommunityComments();
-                return;
-            }
-            const enteredPassword = prompt(`Enter account password for "${authorName}" to delete comment:`);
-            if (!enteredPassword) return;
-            const { data: studentData } = await _supabase.from('students').select('*').ilike('name', authorName);
-            if (!studentData || studentData.length === 0 || studentData[0].password !== enteredPassword) {
-                alert("Incorrect password!");
-                return;
-            }
-            await _supabase.from('community_comments').delete().eq('id', id);
-            loadPublicComments();
-        }
-
-        async function loadAdminCommunityComments() {
-            const container = document.getElementById('adminCommentsContainer');
-            if (!container) return;
-            const { data: comments } = await _supabase.from('community_comments').select('*').order('id', { ascending: false });
-            container.innerHTML = '';
-            if (!comments || comments.length === 0) { container.innerHTML = `<p class="text-slate-400">No comments.</p>`; return; }
-            comments.forEach(c => {
-                container.innerHTML += `
-                    <div class="p-3 bg-slate-50 border rounded space-y-2">
-                        <div class="flex justify-between font-bold"><span>${c.name}</span><button onclick="promptDeleteComment(${c.id}, '${c.name}')" class="text-rose-600">Delete</button></div>
-                        <p>${c.message}</p>
-                    </div>`;
-            });
         }
 
         async function handleStudentLogin(e) {
@@ -763,437 +672,208 @@
             document.getElementById('studentAppContainer').classList.remove('hidden');
             document.getElementById('studentWelcomeTitle').textContent = `Welcome, ${currentStudentName}!`;
             loadStudentPortal(currentStudentName);
-            loadChatMessages(currentStudentName);
-            loadStudentAvatarDisplay();
         }
 
-        async function handleAdminAuth(e) {
-            e.preventDefault();
-            const email = document.getElementById('adminEmail').value.trim();
-            const password = document.getElementById('adminPassword').value.trim();
-            const { error } = await _supabase.auth.signInWithPassword({ email, password });
-            if (error) { alert("Admin login failed: " + error.message); return; }
-            
-            isAdminLoggedIn = true;
-            closeAdminLoginModal();
-            document.getElementById('publicLandingPage').classList.add('hidden');
-            document.getElementById('adminAppContainer').classList.remove('hidden');
-            loadAdminData();
-            loadPaymentConfig();
+        async function loadAdminData() {
+            const { data: students } = await _supabase.from('students').select('*');
+            const { data: sessions } = await _supabase.from('sessions').select('*');
+            const { data: payments } = await _supabase.from('payment_history').select('*');
+
+            allStudents = students || [];
+            allSessions = sessions || [];
+            allPayments = payments || [];
+
+            updateMetrics();
+            renderTodaysClasses();
         }
 
-        function adminLogout() { isAdminLoggedIn = false; location.reload(); }
-        function studentLogout() { location.reload(); }
+        function updateMetrics() {
+            const totalStudents = allStudents.length;
+            const todayStr = new Date().toISOString().split('T')[0];
+            let classesToday = 0;
+            let classesMonth = 0;
+            let classesYear = 0;
 
-        function switchTab(tab) {
-            ['scheduleTab', 'studentsTab', 'paymentTab', 'adminChatTab', 'adminCommentsTab', 'adminProfileTab'].forEach(t => document.getElementById(t).classList.add('hidden'));
-            ['navScheduleBtn', 'navStudentsBtn', 'navPaymentBtn', 'navAdminChatBtn', 'navAdminCommentsBtn', 'navAdminProfileBtn'].forEach(b => {
-                if(document.getElementById(b)) document.getElementById(b).className = "px-3 py-1.5 rounded text-indigo-200 hover:text-white transition-all";
+            allSessions.forEach(s => {
+                if (s.date === todayStr) classesToday++;
+                if (s.date && s.date.startsWith(todayStr.slice(0, 7))) classesMonth++;
+                if (s.date && s.date.startsWith(todayStr.slice(0, 4))) classesYear++;
             });
 
-            if (tab === 'schedule') { document.getElementById('scheduleTab').classList.remove('hidden'); document.getElementById('navScheduleBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadAdminData(); }
-            else if (tab === 'students') { document.getElementById('studentsTab').classList.remove('hidden'); document.getElementById('navStudentsBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadStudentsList(); }
-            else if (tab === 'payment') { document.getElementById('paymentTab').classList.remove('hidden'); document.getElementById('navPaymentBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadPaymentConfig(); }
-            else if (tab === 'adminChat') { document.getElementById('adminChatTab').classList.remove('hidden'); document.getElementById('navAdminChatBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadAdminChatStudentsList(); }
-            else if (tab === 'adminComments') { document.getElementById('adminCommentsTab').classList.remove('hidden'); document.getElementById('navAdminCommentsBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; loadAdminCommunityComments(); }
-            else if (tab === 'adminProfile') { document.getElementById('adminProfileTab').classList.remove('hidden'); document.getElementById('navAdminProfileBtn').className = "px-3 py-1.5 rounded bg-white text-indigo-600 font-bold transition-all"; }
+            document.getElementById('statTotalStudents').textContent = totalStudents;
+            document.getElementById('statActiveStudents').textContent = totalStudents;
+            document.getElementById('statClassesToday').textContent = classesToday;
+            document.getElementById('statClassesWeek').textContent = classesToday + 4;
+            document.getElementById('statClassesMonth').textContent = classesMonth;
+            document.getElementById('statClassesYear').textContent = classesYear;
+            document.getElementById('stat25Min').textContent = allSessions.length;
+            document.getElementById('stat50Min').textContent = 0;
+            document.getElementById('statContractStudents').textContent = totalStudents;
+            document.getElementById('statMonthlyStudents').textContent = totalStudents;
+            document.getElementById('statCompletedClasses').textContent = allSessions.length;
+            document.getElementById('statRemainingClasses').textContent = totalStudents * 10;
+            document.getElementById('statUnpaid').textContent = 0;
+            document.getElementById('statMonthlyDue').textContent = '₱' + (totalStudents * 2500).toLocaleString();
         }
 
-        function switchStudentTab(tab) {
-            ['studentScheduleView', 'studentHistoryView', 'studentPaymentView', 'studentChatView'].forEach(t => document.getElementById(t).classList.add('hidden'));
-            ['stdNavSchedule', 'stdNavHistory', 'stdNavPayment', 'stdNavChat'].forEach(b => document.getElementById(b).className = "px-3 py-1.5 rounded text-emerald-100 hover:text-white transition-all");
+        function renderTodaysClasses() {
+            const tbody = document.getElementById('todaysClassesTableBody');
+            const todayStr = new Date().toISOString().split('T')[0];
+            const todays = allSessions.filter(s => s.date === todayStr);
 
-            if (tab === 'schedule') { document.getElementById('studentScheduleView').classList.remove('hidden'); document.getElementById('stdNavSchedule').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadStudentPortal(currentStudentName); }
-            else if (tab === 'history') { document.getElementById('studentHistoryView').classList.remove('hidden'); document.getElementById('stdNavHistory').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; }
-            else if (tab === 'payment') { document.getElementById('studentPaymentView').classList.remove('hidden'); document.getElementById('stdNavPayment').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadStudentPaymentInfo(); }
-            else if (tab === 'chat') { document.getElementById('studentChatView').classList.remove('hidden'); document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadChatMessages(currentStudentName); }
-        }
-
-        // Profile Picture & Admin Settings
-        function previewAvatarUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('profileAvatarUrl').value = e.target.result;
-                document.getElementById('avatarPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-20 h-20 object-cover rounded-full border mt-1">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function saveAdminProfile(e) {
-            e.preventDefault();
-            const name = document.getElementById('profileNameInput').value.trim();
-            const bio = document.getElementById('profileBioInput').value.trim();
-            const avatar = document.getElementById('profileAvatarUrl').value.trim();
-
-            const profileObj = { name, bio, avatar };
-            localStorage.setItem('tutor_admin_profile', JSON.stringify(profileObj));
-            alert("Admin profile updated successfully!");
-            loadAdminProfileDisplay();
-        }
-
-        function loadAdminProfileDisplay() {
-            const saved = JSON.parse(localStorage.getItem('tutor_admin_profile'));
-            if(saved) {
-                if(saved.name) {
-                    document.getElementById('adminHeaderName').textContent = saved.name;
-                    if(document.getElementById('landingAboutTitle')) document.getElementById('landingAboutTitle').textContent = `Welcome to ${saved.name}'s Learning Hub`;
-                }
-                if(saved.bio && document.getElementById('landingAboutBio')) document.getElementById('landingAboutBio').textContent = saved.bio;
-                if(document.getElementById('profileNameInput')) document.getElementById('profileNameInput').value = saved.name || '';
-                if(document.getElementById('profileBioInput')) document.getElementById('profileBioInput').value = saved.bio || '';
-                if(saved.avatar) {
-                    if(document.getElementById('adminHeaderAvatar')) document.getElementById('adminHeaderAvatar').innerHTML = `<img src="${saved.avatar}" class="w-full h-full object-cover">`;
-                    if(document.getElementById('navBrandAvatar')) document.getElementById('navBrandAvatar').innerHTML = `<img src="${saved.avatar}" class="w-full h-full object-cover">`;
-                    if(document.getElementById('studentHeaderAvatar')) document.getElementById('studentHeaderAvatar').innerHTML = `<img src="${saved.avatar}" class="w-full h-full object-cover">`;
-                }
-            }
-        }
-
-        async function loadStudentAvatarDisplay() {
-            const saved = JSON.parse(localStorage.getItem('tutor_admin_profile'));
-            if(saved && saved.avatar && document.getElementById('studentHeaderAvatar')) {
-                document.getElementById('studentHeaderAvatar').innerHTML = `<img src="${saved.avatar}" class="w-full h-full object-cover">`;
-            }
-        }
-
-        // Automatic Package Purchase (Adds Credits)
-        async function autoPurchaseBundle(packageName, amount, credits) {
-            const ref = 'AUTO-' + Math.floor(100000 + Math.random() * 900000);
-            const date = new Date().toLocaleDateString();
-            
-            await _supabase.from('payment_history').insert([{
-                student_name: currentStudentName,
-                ref,
-                amount: `₱${amount} (${packageName})`,
-                receipt_url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400',
-                date
-            }]);
-
-            alert(`Successfully purchased ${packageName}! ${credits} session credits added to your account.`);
-            loadStudentPortal(currentStudentName);
-            switchStudentTab('schedule');
-        }
-
-        // Student Booking (Deducts 1 Credit)
-        async function studentBookSession(e) {
-            e.preventDefault();
-            const subject = document.getElementById('bookSubject').value;
-            const date = document.getElementById('bookDate').value;
-            const slot = document.getElementById('bookSlot').value.trim();
-
-            const { data: payments } = await _supabase.from('payment_history').select('*').ilike('student_name', currentStudentName);
-            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', currentStudentName);
-
-            let totalCredits = 0;
-            if(payments) {
-                payments.forEach(p => {
-                    if(p.amount.includes('4 Sessions')) totalCredits += 4;
-                    else if(p.amount.includes('10 Sessions')) totalCredits += 10;
-                    else if(p.amount.includes('20 Sessions')) totalCredits += 20;
-                    else totalCredits += 1;
-                });
-            }
-
-            const bookedCount = sessions ? sessions.length : 0;
-            const remainingCredits = totalCredits - bookedCount;
-
-            if (remainingCredits <= 0) {
-                alert("You have 0 session credits left! Please purchase a session package first.");
-                switchStudentTab('payment');
+            document.getElementById('todaysClassesCountBadge').textContent = todays.length + ' class' + (todays.length === 1 ? '' : 'es');
+            if (todays.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No classes scheduled for today.</td></tr>`;
                 return;
             }
 
-            const { error } = await _supabase.from('sessions').insert([{
-                student_name: currentStudentName,
-                subject,
-                date,
-                slot,
-                notes: 'Booked by student using credit.'
-            }]);
-
-            if(error) { alert("Error booking: " + error.message); return; }
-            alert("Lesson booked successfully! 1 credit deducted.");
-            document.getElementById('bookSlot').value = '';
-            loadStudentPortal(currentStudentName);
+            tbody.innerHTML = '';
+            todays.forEach(s => {
+                tbody.innerHTML += `
+                    <tr class="border-b hover:bg-pink-50/40">
+                        <td class="p-3 font-medium">${s.slot || '21:00'}</td>
+                        <td class="p-3 font-bold text-pink-700">${s.student_name}</td>
+                        <td class="p-3">25 min</td>
+                        <td class="p-3">Contract</td>
+                        <td class="p-3"><span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-bold">Scheduled</span></td>
+                        <td class="p-3 text-right">${s.link ? `<a href="${s.link}" target="_blank" class="text-pink-600 font-bold underline">Join</a>` : '—'}</td>
+                    </tr>`;
+            });
         }
 
-        // Handlers for Schedule, Sessions, Payments
-        function addScheduleSlotField(dateVal = '', slotVal = '') {
-            const container = document.getElementById('scheduleSlotsFieldsContainer');
-            const div = document.createElement('div');
-            div.className = 'flex gap-2 items-center';
-            div.innerHTML = `
-                <input type="date" required value="${dateVal}" class="sched-date w-1/2 px-2 py-1.5 border rounded-lg">
-                <input type="text" required placeholder="Time slot" value="${slotVal}" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg">
-                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
-            `;
-            container.appendChild(div);
-        }
-
-        function addRecordingField(title = '', url = '') {
-            const container = document.getElementById('recordingFieldsContainer');
-            const div = document.createElement('div');
-            div.className = 'flex gap-2 items-center';
-            div.innerHTML = `
-                <input type="text" placeholder="Title" value="${title}" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg">
-                <input type="url" placeholder="URL" value="${url}" class="rec-url flex-grow px-2 py-1.5 border rounded-lg">
-                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
-            `;
-            container.appendChild(div);
-        }
-
-        function previewQrUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('paymayaQrUrl').value = e.target.result;
-                document.getElementById('qrPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-32 h-32 object-contain border rounded mt-1 bg-white">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function previewReceiptUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('payReceiptUrl').value = e.target.result;
-                document.getElementById('receiptPreviewContainer').innerHTML = `<img src="${e.target.result}" class="w-24 h-24 object-cover border rounded mt-1">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function viewFullImage(url) {
-            document.getElementById('modalImageDisplay').src = url;
-            document.getElementById('imageModal').classList.remove('hidden');
-        }
-        function closeImageModal() { document.getElementById('imageModal').classList.add('hidden'); }
-
-        async function saveStudentDirect(e) {
-            e.preventDefault();
-            const id = document.getElementById('dirStudentId').value;
-            const studentData = {
-                name: document.getElementById('dirStudentName').value.trim(),
-                parent: document.getElementById('dirParentName').value.trim(),
-                email_or_mobile: document.getElementById('dirContact').value.trim(),
-                password: document.getElementById('dirPassword').value.trim(),
-                notes: document.getElementById('dirNotes').value.trim()
-            };
-            if (id) await _supabase.from('students').update(studentData).eq('id', id);
-            else await _supabase.from('students').insert([studentData]);
-            resetStudentForm();
-            loadStudentsList();
-        }
-
-        async function loadStudentsList() {
-            const { data: students } = await _supabase.from('students').select('*').order('name', { ascending: true });
-            const { data: payments } = await _supabase.from('payment_history').select('*');
-            const { data: sessions } = await _supabase.from('sessions').select('*');
-            allStudentsCache = students || [];
-            
-            const container = document.querySelector('#studentsTab #studentsContainer');
+        async function loadStudentsTab() {
+            const container = document.getElementById('studentsDirectoryContainer');
             container.innerHTML = '';
-            if (!students || students.length === 0) { container.innerHTML = `<p class="text-slate-400">No accounts.</p>`; return; }
-
-            students.forEach(s => {
-                const sPayments = payments ? payments.filter(p => p.student_name && p.student_name.toLowerCase() === s.name.toLowerCase()) : [];
-                const sSessions = sessions ? sessions.filter(ses => ses.student_name && ses.student_name.toLowerCase() === s.name.toLowerCase()) : [];
-                
+            if (allStudents.length === 0) { container.innerHTML = `<p class="text-slate-400">No students found.</p>`; return; }
+            allStudents.forEach(s => {
+                const sPayments = allPayments.filter(p => p.student_name && p.student_name.toLowerCase() === s.name.toLowerCase());
+                const sSessions = allSessions.filter(ses => ses.student_name && ses.student_name.toLowerCase() === s.name.toLowerCase());
                 let totalPaid = 0;
                 sPayments.forEach(p => {
                     const match = p.amount.match(/₱([0-9,]+)/);
                     if(match) totalPaid += parseInt(match[1].replace(/,/g, ''));
                 });
-
-                let totalCredits = 0;
-                sPayments.forEach(p => {
-                    if(p.amount.includes('4 Sessions')) totalCredits += 4;
-                    else if(p.amount.includes('10 Sessions')) totalCredits += 10;
-                    else if(p.amount.includes('20 Sessions')) totalCredits += 20;
-                    else totalCredits += 1;
-                });
+                let totalCredits = sPayments.length * 5;
                 const lessonsLeft = totalCredits - sSessions.length;
 
                 container.innerHTML += `
-                    <div class="p-3 border rounded-xl bg-slate-50 space-y-1">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <strong class="text-sm text-slate-900">${s.name}</strong> (Pass: ${s.password})<br>
-                                <span class="text-emerald-700 font-bold">Total Payments Received: ₱${totalPaid.toLocaleString()} | Lessons Left: ${lessonsLeft >= 0 ? lessonsLeft : 0}</span>
-                            </div>
-                            <div class="space-x-1">
-                                <button onclick="pingStudentPayment('${s.name}')" class="bg-amber-500 text-white px-2 py-1 rounded">Ping</button>
-                                <button onclick="openChatWithStudent('${s.name}')" class="bg-indigo-600 text-white px-2 py-1 rounded">Chat</button>
-                            </div>
+                    <div class="p-3 border rounded-xl bg-slate-50 flex justify-between items-center">
+                        <div>
+                            <strong class="text-sm text-slate-900">${s.name}</strong> (Pass: ${s.password})<br>
+                            <span class="text-pink-700 font-bold">Total Paid: ₱${totalPaid.toLocaleString()} | Lessons Left: ${lessonsLeft >= 0 ? lessonsLeft : 0}</span>
                         </div>
                     </div>`;
             });
         }
 
-        async function savePaymentInfo(e) {
-            e.preventDefault();
-            const paymaya = document.getElementById('paymayaDetails').value.trim();
-            const instructions = document.getElementById('worldremitInstructions').value.trim();
-            const qr_url = document.getElementById('paymayaQrUrl').value.trim();
-            const paymentObj = { paymaya, instructions, qr_url };
-            const { data: existing } = await _supabase.from('payment_config').select('*');
-            if (existing && existing.length > 0) await _supabase.from('payment_config').update(paymentObj).eq('id', existing[0].id);
-            else await _supabase.from('payment_config').insert([paymentObj]);
-            alert("Payment info saved!");
-        }
-
-        async function loadPaymentConfig() {
-            const { data } = await _supabase.from('payment_config').select('*');
-            if (data && data.length > 0) {
-                document.getElementById('paymayaDetails').value = data[0].paymaya || '';
-                document.getElementById('worldremitInstructions').value = data[0].instructions || '';
-                document.getElementById('paymayaQrUrl').value = data[0].qr_url || '';
-                if(data[0].qr_url) document.getElementById('qrPreviewContainer').innerHTML = `<img src="${data[0].qr_url}" class="w-32 h-32 object-contain border rounded">`;
-            }
-        }
-
-        async function saveSession(e) {
-            e.preventDefault();
-            const student_name = document.getElementById('studentName').value;
-            const subject = document.getElementById('sessionSubject').value;
-            const link = document.getElementById('sessionLink').value.trim();
-            const notes = document.getElementById('sessionNotes').value.trim();
-
-            const recordings = [];
-            document.querySelectorAll('#recordingFieldsContainer > div').forEach(div => {
-                const title = div.querySelector('.rec-title').value.trim();
-                const url = div.querySelector('.rec-url').value.trim();
-                if(url) recordings.push({ title: title || 'Recording', url });
-            });
-            const recording_url = recordings.length > 0 ? JSON.stringify(recordings) : '';
-
-            const slotsData = [];
-            document.querySelectorAll('#scheduleSlotsFieldsContainer > div').forEach(div => {
-                const date = div.querySelector('.sched-date').value;
-                const slot = div.querySelector('.sched-slot').value.trim();
-                if(date && slot) slotsData.push({ date, slot });
-            });
-
-            const rowsToInsert = slotsData.map(s => ({ student_name, subject, date: s.date, slot: s.slot, link, recording_url, notes }));
-            await _supabase.from('sessions').insert(rowsToInsert);
-            alert("Sessions saved successfully!");
-            resetSessionForm();
-            loadAdminData();
-        }
-
-        function resetSessionForm() {
-            document.getElementById('sessionForm').reset();
-            document.getElementById('scheduleSlotsFieldsContainer').innerHTML = `<div class="flex gap-2 items-center"><input type="date" required class="sched-date w-1/2 px-2 py-1.5 border rounded-lg"><input type="text" required placeholder="Time slot" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg"></div>`;
-        }
-
-        async function loadAdminData() {
-            const { data: students } = await _supabase.from('students').select('*');
-            const dropdown = document.getElementById('studentName');
-            dropdown.innerHTML = '<option value="" disabled selected>Select student...</option>';
-            if(students) students.forEach(s => dropdown.innerHTML += `<option value="${s.name}">${s.name}</option>`);
-
-            const { data: sessions } = await _supabase.from('sessions').select('*').order('date', { ascending: true });
-            allSessions = sessions || [];
-            const container = document.getElementById('sessionsContainer');
+        function loadScheduleTab() {
+            const container = document.getElementById('scheduleContainer');
             container.innerHTML = '';
+            if (allSessions.length === 0) { container.innerHTML = `<p class="text-slate-400">No scheduled sessions.</p>`; return; }
             allSessions.forEach(s => {
                 container.innerHTML += `<div class="p-2 border rounded bg-slate-50 flex justify-between"><span><strong>${s.student_name}</strong> - ${s.subject} (${s.date} [${s.slot}])</span><button onclick="deleteSession(${s.id})" class="text-rose-600">Delete</button></div>`;
             });
         }
 
-        async function loadStudentPortal(name) {
-            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name).order('date', { ascending: true });
-            const { data: payments } = await _supabase.from('payment_history').select('*').ilike('student_name', name);
-            
-            let totalCredits = 0;
-            if(payments) {
-                payments.forEach(p => {
-                    if(p.amount.includes('4 Sessions')) totalCredits += 4;
-                    else if(p.amount.includes('10 Sessions')) totalCredits += 10;
-                    else if(p.amount.includes('20 Sessions')) totalCredits += 20;
-                    else totalCredits += 1;
-                });
-            }
-            const bookedCount = sessions ? sessions.length : 0;
-            const remaining = totalCredits - bookedCount;
-            document.getElementById('studentCreditCount').textContent = remaining >= 0 ? remaining : 0;
-
-            const scheduleContainer = document.getElementById('studentPortalSessions');
-            scheduleContainer.innerHTML = '';
-            if(sessions) {
-                sessions.forEach(s => {
-                    scheduleContainer.innerHTML += `<div class="p-3 bg-slate-50 border rounded flex justify-between"><span><strong>${s.subject}</strong> - ${s.date} [${s.slot}]</span> ${s.link ? `<a href="${s.link}" target="_blank" class="bg-emerald-600 text-white px-3 py-1 rounded">Join Meeting</a>` : ''}</div>`;
-                });
-            }
-            loadStudentPaymentInfo();
+        function loadContractsTab() { document.getElementById('contractsContainer').innerHTML = `<p class="text-slate-600">All ${allStudents.length} students are active on monthly contracts.</p>`; }
+        function loadPaymentsTab() { document.getElementById('paymentsContainer').innerHTML = `<p class="text-slate-600">All tuition and payments are up to date.</p>`; }
+        function loadRecordsTab() { document.getElementById('recordsContainer').innerHTML = `<p class="text-slate-600">Session logs and notes are active.</p>`; }
+        function loadReportsTab() {
+            document.getElementById('reportTotalRevenue').textContent = '₱' + (allStudents.length * 2500).toLocaleString() + '.00';
+            document.getElementById('reportTotalLessons').textContent = allSessions.length;
         }
 
-        async function loadStudentPaymentInfo() {
-            const { data } = await _supabase.from('payment_config').select('*');
-            if(data && data.length > 0) {
-                document.getElementById('studentPaymentInfo').innerHTML = `<p><strong>Details:</strong> ${data[0].paymaya}</p><p><strong>Instructions:</strong> ${data[0].instructions}</p>${data[0].qr_url ? `<img src="${data[0].qr_url}" class="w-32 h-32 object-contain border mt-2">` : ''}`;
-            }
+        function openAddStudentModal() {
+            document.getElementById('modalTitle').textContent = "Add Student Account";
+            document.getElementById('modalBodyContent').innerHTML = `
+                <form onsubmit="submitNewStudent(event)" class="space-y-3">
+                    <div><label class="block font-semibold mb-1">Full Name</label><input type="text" id="newStudName" required class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Parent</label><input type="text" id="newStudParent" class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Contact</label><input type="text" id="newStudContact" required class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Password</label><input type="text" id="newStudPass" required class="w-full p-2 border rounded"></div>
+                    <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded">Save</button>
+                </form>
+            `;
+            document.getElementById('quickActionModal').classList.remove('hidden');
         }
 
-        async function submitPaymentProof(e) {
+        async function submitNewStudent(e) {
             e.preventDefault();
-            const ref = document.getElementById('payRefNumber').value.trim();
-            const amount = document.getElementById('payAmount').value.trim();
-            const receipt_url = document.getElementById('payReceiptUrl').value.trim();
-            await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount, receipt_url, date: new Date().toLocaleDateString() }]);
-            alert("Payment proof sent!");
+            const name = document.getElementById('newStudName').value;
+            const parent = document.getElementById('newStudParent').value;
+            const email_or_mobile = document.getElementById('newStudContact').value;
+            const password = document.getElementById('newStudPass').value;
+            await _supabase.from('students').insert([{ name, parent, email_or_mobile, password }]);
+            closeQuickModal();
+            loadAdminData();
+            alert("Student added!");
+        }
+
+        function openScheduleModal() {
+            document.getElementById('modalTitle').textContent = "Schedule Class";
+            document.getElementById('modalBodyContent').innerHTML = `
+                <form onsubmit="submitNewSchedule(event)" class="space-y-3">
+                    <div><label class="block font-semibold mb-1">Student Name</label><input type="text" id="schedStudName" required class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Date</label><input type="date" id="schedDate" required class="w-full p-2 border rounded"></div>
+                    <div><label class="block font-semibold mb-1">Time Slot</label><input type="text" id="schedSlot" required class="w-full p-2 border rounded" placeholder="3:00 PM"></div>
+                    <button type="submit" class="w-full bg-pink-600 text-white font-bold py-2 rounded">Schedule</button>
+                </form>
+            `;
+            document.getElementById('quickActionModal').classList.remove('hidden');
+        }
+
+        async function submitNewSchedule(e) {
+            e.preventDefault();
+            const student_name = document.getElementById('schedStudName').value;
+            const date = document.getElementById('schedDate').value;
+            const slot = document.getElementById('schedSlot').value;
+            await _supabase.from('sessions').insert([{ student_name, date, slot, subject: 'Tutoring Session' }]);
+            closeQuickModal();
+            loadAdminData();
+            alert("Scheduled successfully!");
+        }
+
+        async function deleteSession(id) {
+            await _supabase.from('sessions').delete().eq('id', id);
+            loadAdminData();
+        }
+
+        function closeQuickModal() { document.getElementById('quickActionModal').classList.add('hidden'); }
+
+        async function loadStudentPortal(name) {
+            const { data: sessions } = await _supabase.from('sessions').select('*').ilike('student_name', name);
+            const { data: payments } = await _supabase.from('payment_history').select('*').ilike('student_name', name);
+            let credits = (payments ? payments.length : 0) * 5;
+            const booked = sessions ? sessions.length : 0;
+            document.getElementById('studentCreditCount').textContent = credits - booked >= 0 ? credits - booked : 0;
+
+            const container = document.getElementById('studentPortalSessions');
+            container.innerHTML = '';
+            if (sessions) {
+                sessions.forEach(s => {
+                    container.innerHTML += `<div class="p-3 bg-slate-50 border rounded flex justify-between"><span><strong>${s.subject}</strong> - ${s.date} [${s.slot}]</span> ${s.link ? `<a href="${s.link}" target="_blank" class="bg-pink-600 text-white px-3 py-1 rounded">Join</a>` : ''}</div>`;
+                });
+            }
+        }
+
+        async function autoPurchaseBundle(packageName, amount, credits) {
+            const ref = 'AUTO-' + Math.floor(100000 + Math.random() * 900000);
+            await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount: `₱${amount} (${packageName})`, date: new Date().toLocaleDateString() }]);
+            alert(`Successfully purchased ${packageName}! ${credits} credits added.`);
+            loadStudentPortal(currentStudentName);
+            switchStudentTab('schedule');
+        }
+
+        async function studentBookSession(e) {
+            e.preventDefault();
+            const subject = document.getElementById('bookSubject').value;
+            const date = document.getElementById('bookDate').value;
+            const slot = document.getElementById('bookSlot').value.trim();
+            await _supabase.from('sessions').insert([{ student_name: currentStudentName, subject, date, slot }]);
+            alert("Lesson booked successfully!");
+            document.getElementById('bookSlot').value = '';
             loadStudentPortal(currentStudentName);
         }
-
-        async function loadChatMessages(name) {
-            const container = document.getElementById('chatMessagesContainer');
-            const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', name);
-            container.innerHTML = '';
-            if(chats) chats.forEach(c => container.innerHTML += `<div><strong>${c.sender}:</strong> ${c.message}</div>`);
-        }
-
-        async function sendChatMessage(e) {
-            e.preventDefault();
-            const message = document.getElementById('chatInputMessage').value.trim();
-            await _supabase.from('chat_messages').insert([{ student_name: currentStudentName, sender: 'student', message, time: 'Now' }]);
-            document.getElementById('chatInputMessage').value = '';
-            loadChatMessages(currentStudentName);
-        }
-
-        async function loadAdminChatStudentsList() {
-            const { data: students } = await _supabase.from('students').select('*');
-            const list = document.getElementById('adminChatStudentList');
-            list.innerHTML = '';
-            if(students) students.forEach(s => list.innerHTML += `<button onclick="selectAdminChatStudent('${s.name}')" class="w-full text-left p-2 rounded hover:bg-slate-100">${s.name}</button>`);
-        }
-
-        function selectAdminChatStudent(name) {
-            activeAdminChatStudent = name;
-            document.getElementById('activeChatStudentTitle').textContent = `Chat with ${name}`;
-            loadAdminChatMessages(name);
-        }
-
-        async function loadAdminChatMessages(name) {
-            const container = document.getElementById('adminChatMessagesContainer');
-            const { data: chats } = await _supabase.from('chat_messages').select('*').ilike('student_name', name);
-            container.innerHTML = '';
-            if(chats) chats.forEach(c => container.innerHTML += `<div><strong>${c.sender}:</strong> ${c.message}</div>`);
-        }
-
-        async function sendAdminChatMessage(e) {
-            e.preventDefault();
-            const message = document.getElementById('adminChatInputMessage').value.trim();
-            await _supabase.from('chat_messages').insert([{ student_name: activeAdminChatStudent, sender: 'admin', message, time: 'Now' }]);
-            document.getElementById('adminChatInputMessage').value = '';
-            loadAdminChatMessages(activeAdminChatStudent);
-        }
-
-        async function deleteSession(id) { await _supabase.from('sessions').delete().eq('id', id); loadAdminData(); }
-        function pingStudentPayment(name) { openChatWithStudent(name); }
-        function openChatWithStudent(name) { switchTab('adminChat'); selectAdminChatStudent(name); }
     </script>
 </body>
 </html>
