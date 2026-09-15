@@ -167,11 +167,11 @@
                     <div>
                         <label class="block font-semibold text-white uppercase mb-1">Preferred Program / Package</label>
                         <select id="enrollSubject" class="w-full p-2.5 rounded-lg border-0 bg-white">
-                            <option value="Reading Program (Preschool-Elem) - ₱250">📖 Reading Program (Preschool-Elem) - ₱250 / session</option>
-                            <option value="Math Program (Preschool-Grade 3) - ₱250">🔢 Math Program (Preschool-Grade 3) - ₱250 / session</option>
-                            <option value="Math Program (Grade 4-6 Standard) - ₱250">🔢 Math Program (Grade 4-6 Standard 25m) - ₱250 / session</option>
-                            <option value="Math Program (Grade 4-6 Comprehensive) - ₱500">🔢 Math Program (Grade 4-6 Comprehensive 50m) - ₱500 / session</option>
-                            <option value="Math Program (Junior High Grade 7-10) - ₱700">🔢 Math Program (Junior High Grade 7-10) - ₱700 / session</option>
+                            <option value="Reading Program (Preschool-Elem) - ₱250">📖 Reading Program (Preschool-Elem) - ₱250 / 25 mins</option>
+                            <option value="Math Program (Preschool-Grade 3) - ₱250">🔢 Math Program (Preschool-Grade 3) - ₱250 / 25 mins</option>
+                            <option value="Math Program (Grade 4-6 Standard) - ₱250">🔢 Math Program (Grade 4-6 Standard) - ₱250 / 25 mins</option>
+                            <option value="Math Program (Grade 4-6 Comprehensive) - ₱500">🔢 Math Program (Grade 4-6 Comprehensive) - ₱500 / 50 mins (Recommended)</option>
+                            <option value="Math Program (Junior High Grade 7-10) - ₱700">🔢 Math Program (Junior High Grade 7-10) - ₱700 / 50 mins</option>
                         </select>
                     </div>
                     <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg transition-colors">Submit Enrollment & Create Account</button>
@@ -250,7 +250,6 @@
         </header>
 
         <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <!-- MAIN TAB CONTENT AREA (3 columns) -->
             <div class="lg:col-span-3 space-y-6">
                 <!-- TAB 1: SCHEDULE -->
                 <div id="scheduleTab" class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -262,11 +261,11 @@
                             <div>
                                 <label class="block font-semibold uppercase mb-1">Subject / Program</label>
                                 <select id="sessionSubject" required class="w-full px-3 py-2 border rounded-lg bg-white">
-                                    <option value="Reading Program">📖 Reading Program (₱250)</option>
-                                    <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
-                                    <option value="Math (Grade 4-6 Standard)">🔢 Math (Grade 4-6 Standard 25m) (₱250)</option>
-                                    <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive 50m) (₱500)</option>
-                                    <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
+                                    <option value="Reading Program">📖 Reading Program (₱250 / 25 mins)</option>
+                                    <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250 / 25 mins)</option>
+                                    <option value="Math (Grade 4-6 Standard)">🔢 Math (Grade 4-6 Standard) (₱250 / 25 mins)</option>
+                                    <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive) (₱500 / 50 mins)</option>
+                                    <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700 / 50 mins)</option>
                                 </select>
                             </div>
                             
@@ -311,7 +310,7 @@
                     </section>
                 </div>
 
-                <!-- TAB 2: REGISTERED ACCOUNTS & PAYMENT CREDITS -->
+                <!-- TAB 2: REGISTERED ACCOUNTS -->
                 <div id="studentsTab" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
                     <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit md:col-span-1">
                         <h2 id="studentFormTitle" class="text-base font-bold text-slate-900 mb-4"><i class="fa-solid fa-user-plus text-indigo-600 mr-2"></i> Add / Edit Student Account</h2>
@@ -383,9 +382,8 @@
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: CALENDAR WIDGET & BULLETIN BOARD (ADS) -->
+            <!-- RIGHT COLUMN: CALENDAR WIDGET & BULLETIN BOARD -->
             <div class="space-y-6">
-                <!-- Mini Calendar Widget -->
                 <div class="bg-white rounded-xl shadow-sm border p-4 space-y-3">
                     <div class="flex justify-between items-center font-bold text-sm text-indigo-900 border-b pb-2">
                         <span id="calendarMonthYear"></span>
@@ -400,7 +398,6 @@
                     <div id="miniCalendarDays" class="grid grid-cols-7 gap-1 text-center text-xs"></div>
                 </div>
 
-                <!-- Bulletin Board / Ads Widget -->
                 <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-xl shadow-sm p-5 space-y-3">
                     <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Bulletin Board</h3>
                     <div class="space-y-2 text-xs text-indigo-100">
@@ -441,27 +438,52 @@
 
         <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-6">
             <!-- TAB 1: SCHEDULE & AUTO PURCHASE BOOKING -->
-            <div id="studentScheduleView" class="space-y-4 text-xs">
+            <div id="studentScheduleView" class="space-y-6 text-xs">
+                
+                <!-- VISIBLE RATES & PROGRAM STRUCTURE GUIDE FOR STUDENTS -->
+                <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
+                    <div class="text-center space-y-1 border-b pb-3">
+                        <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Tuition Investment</span>
+                        <h3 class="text-base font-bold text-slate-900">Class Rates & Program Structure Guide</h3>
+                        <p class="text-[11px] text-slate-500">Review our rate structure below before picking your program session.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="bg-emerald-50/40 p-4 rounded-xl border space-y-2">
+                            <div class="font-bold text-emerald-900 flex items-center gap-2"><i class="fa-solid fa-book-open-reader text-emerald-600"></i> Reading Program (Mon–Fri, Daily)</div>
+                            <p class="text-slate-700 flex justify-between border-t pt-2"><span>Preschool to Elementary:</span> <strong class="text-emerald-700">₱250 / 25 mins</strong></p>
+                        </div>
+                        <div class="bg-emerald-50/40 p-4 rounded-xl border space-y-2">
+                            <div class="font-bold text-emerald-900 flex items-center gap-2"><i class="fa-solid fa-calculator text-emerald-600"></i> Math Program</div>
+                            <ul class="space-y-2 text-slate-700 border-t pt-2">
+                                <li class="flex justify-between"><span>Preschool to Grade 3:</span> <strong class="text-emerald-700">₱250 / 25 mins</strong></li>
+                                <li class="flex justify-between border-t pt-1"><span>Grade 4 to Grade 6:</span> <div class="text-right"><strong class="text-emerald-700 block">₱250 / 25 mins</strong><strong class="text-emerald-700 block">₱500 / 50 mins <span class="text-[10px] text-indigo-600">(Recommended)</span></strong></div></li>
+                                <li class="flex justify-between border-t pt-1"><span>Grade 7 to Grade 10 (Junior High):</span> <strong class="text-emerald-700">₱700 / 50 mins</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOOKING FORM -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
                     <div class="flex justify-between items-center bg-emerald-50 p-3 rounded-lg border border-emerald-200">
                         <div>
                             <span class="text-emerald-900 font-bold text-sm">Available Session Credits: <span id="studentCreditCount" class="text-emerald-700 text-base">0</span></span>
-                            <p class="text-[11px] text-slate-500">You can pick and book your lessons instantly using your available session credits.</p>
+                            <p class="text-[11px] text-slate-500">Pick and book your lessons instantly using your available session credits.</p>
                         </div>
-                        <button onclick="switchStudentTab('payment')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded font-bold shadow"><i class="fa-solid fa-cart-plus mr-1"></i> Buy Session Package</button>
+                        <button onclick="switchStudentTab('payment')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded font-bold shadow"><i class="fa-solid fa-cart-plus mr-1"></i> Buy Package</button>
                     </div>
 
                     <div class="bg-slate-50 p-4 border rounded-xl space-y-3">
                         <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-calendar-check text-emerald-600 mr-2"></i> Pick & Book a Lesson / Session</h3>
                         <form onsubmit="studentBookSession(event)" class="space-y-3">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div><label class="block font-semibold uppercase mb-1">Select Program / Subject</label>
+                                <div><label class="block font-semibold uppercase mb-1">Select Program / Rate Option</label>
                                     <select id="bookSubject" required class="w-full p-2 border rounded bg-white">
-                                        <option value="Reading Program">📖 Reading Program (₱250)</option>
-                                        <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250)</option>
-                                        <option value="Math (Grade 4-6 Standard)">🔢 Math (Grade 4-6 Standard 25m) (₱250)</option>
-                                        <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive 50m) (₱500)</option>
-                                        <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700)</option>
+                                        <option value="Reading Program">📖 Reading Program (₱250 / 25 mins)</option>
+                                        <option value="Math (Preschool-Grade 3)">🔢 Math (Preschool-Grade 3) (₱250 / 25 mins)</option>
+                                        <option value="Math (Grade 4-6 Standard)">🔢 Math (Grade 4-6 Standard) (₱250 / 25 mins)</option>
+                                        <option value="Math (Grade 4-6 Comprehensive)">🔢 Math (Grade 4-6 Comprehensive) (₱500 / 50 mins)</option>
+                                        <option value="Math (Junior High Grade 7-10)">🔢 Math (Junior High Grade 7-10) (₱700 / 50 mins)</option>
                                     </select>
                                 </div>
                                 <div><label class="block font-semibold uppercase mb-1">Preferred Date</label><input type="date" id="bookDate" required class="w-full p-2 border rounded"></div>
@@ -488,14 +510,13 @@
 
             <!-- TAB 3: PAYMENTS & AUTOMATIC BUNDLE PURCHASE -->
             <div id="studentPaymentView" class="hidden space-y-6 text-xs">
-                <!-- Package Purchase Section -->
                 <div class="bg-white border rounded-xl p-6 shadow-sm space-y-4">
                     <h2 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-bag-shopping text-emerald-600 mr-2"></i> Purchase Session Bundles Automatically</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div class="border rounded-xl p-4 bg-emerald-50/50 space-y-2 text-center">
                             <h3 class="font-bold text-emerald-900">Starter Pack</h3>
                             <p class="text-lg font-extrabold text-emerald-700">₱1,000</p>
-                            <p class="text-[11px] text-slate-500">4 Session Credits (₱250 rate)</p>
+                            <p class="text-[11px] text-slate-500">4 Session Credits</p>
                             <button onclick="autoPurchaseBundle('Starter Pack (4 Sessions)', 1000, 4)" class="w-full bg-emerald-600 text-white py-2 rounded font-bold">Buy Now</button>
                         </div>
                         <div class="border-2 border-emerald-600 rounded-xl p-4 bg-emerald-50 space-y-2 text-center shadow-sm">
@@ -546,31 +567,7 @@
         </main>
     </div>
 
-    <!-- Modals for Student Cancel Class & Teacher Absence -->
-    <div id="cancelClassModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <h3 class="font-bold text-slate-800 text-sm">Request Class Cancellation</h3>
-            <input type="hidden" id="cancelSessionId">
-            <div><label class="block font-semibold uppercase mb-1">Reason for Cancellation</label><textarea id="cancelReason" rows="3" class="w-full p-2 border rounded"></textarea></div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="sendClassCancellation()" class="flex-1 bg-rose-600 text-white py-2 rounded font-bold">Submit Cancellation</button>
-                <button onclick="closeCancelClassModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="teacherAbsentModal" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4 text-xs">
-            <h3 class="font-bold text-slate-800 text-sm"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> Tag Teacher Absence</h3>
-            <input type="hidden" id="teacherAbsentSessionId">
-            <div><label class="block font-semibold uppercase mb-1">Reason / Message</label><textarea id="teacherAbsentReason" rows="4" class="w-full p-2 border rounded"></textarea></div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="saveTeacherAbsentNotice()" class="flex-1 bg-amber-600 text-white py-2 rounded font-bold">Save & Notify</button>
-                <button onclick="closeTeacherAbsentModal()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded">Cancel</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- Modals -->
     <div id="imageModal" class="hidden fixed inset-0 bg-slate-900/80 z-50 flex items-center justify-center p-4" onclick="closeImageModal()">
         <div class="bg-white rounded-xl p-4 max-w-lg w-full text-center space-y-3">
             <h3 class="font-bold text-slate-800 text-sm">Image Preview</h3>
@@ -578,7 +575,7 @@
         </div>
     </div>
 
-    <!-- ================= SCRIPT LOGIC ================= -->
+    <!-- SCRIPT LOGIC -->
     <script>
         let currentStudentName = '';
         let activeAdminChatStudent = '';
@@ -594,7 +591,6 @@
             loadAdminProfileDisplay();
         });
 
-        // Live PH Time Clocks
         function startLiveClocks() {
             setInterval(() => {
                 const now = new Date();
@@ -605,7 +601,6 @@
             }, 1000);
         }
 
-        // Mini Calendar Widget
         function renderMiniCalendar() {
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
@@ -638,7 +633,6 @@
             renderMiniCalendar();
         }
 
-        // Navigation Modals
         function scrollToEnroll() { document.getElementById('enroll').scrollIntoView({ behavior: 'smooth' }); }
         function openStudentLoginModal() { document.getElementById('studentLoginModal').classList.remove('hidden'); }
         function closeStudentLoginModal() { document.getElementById('studentLoginModal').classList.add('hidden'); }
@@ -662,7 +656,6 @@
             document.getElementById('enrollPassword').value = '';
         }
 
-        // Public Comments & Conditional Deletion
         async function submitPublicComment(e) {
             e.preventDefault();
             const name = document.getElementById('visitorName').value.trim();
@@ -809,7 +802,6 @@
             else if (tab === 'chat') { document.getElementById('studentChatView').classList.remove('hidden'); document.getElementById('stdNavChat').className = "px-3 py-1.5 rounded bg-white text-emerald-700 font-bold transition-all"; loadChatMessages(currentStudentName); }
         }
 
-        // Profile Picture & Admin Settings
         function previewAvatarUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -826,7 +818,6 @@
             const name = document.getElementById('profileNameInput').value.trim();
             const bio = document.getElementById('profileBioInput').value.trim();
             const avatar = document.getElementById('profileAvatarUrl').value.trim();
-
             const profileObj = { name, bio, avatar };
             localStorage.setItem('tutor_admin_profile', JSON.stringify(profileObj));
             alert("Admin profile updated successfully!");
@@ -858,25 +849,15 @@
             }
         }
 
-        // Automatic Package Purchase (Adds Credits)
         async function autoPurchaseBundle(packageName, amount, credits) {
             const ref = 'AUTO-' + Math.floor(100000 + Math.random() * 900000);
             const date = new Date().toLocaleDateString();
-            
-            await _supabase.from('payment_history').insert([{
-                student_name: currentStudentName,
-                ref,
-                amount: `₱${amount} (${packageName})`,
-                receipt_url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400',
-                date
-            }]);
-
-            alert(`Successfully purchased ${packageName}! ${credits} session credits added to your account.`);
+            await _supabase.from('payment_history').insert([{ student_name: currentStudentName, ref, amount: `₱${amount} (${packageName})`, receipt_url: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400', date }]);
+            alert(`Successfully purchased ${packageName}! ${credits} session credits added.`);
             loadStudentPortal(currentStudentName);
             switchStudentTab('schedule');
         }
 
-        // Student Booking (Deducts 1 Credit)
         async function studentBookSession(e) {
             e.preventDefault();
             const subject = document.getElementById('bookSubject').value;
@@ -897,38 +878,23 @@
             }
 
             const bookedCount = sessions ? sessions.length : 0;
-            const remainingCredits = totalCredits - bookedCount;
-
-            if (remainingCredits <= 0) {
-                alert("You have 0 session credits left! Please purchase a session package first.");
+            if (totalCredits - bookedCount <= 0) {
+                alert("You have 0 session credits left! Please purchase a package first.");
                 switchStudentTab('payment');
                 return;
             }
 
-            const { error } = await _supabase.from('sessions').insert([{
-                student_name: currentStudentName,
-                subject,
-                date,
-                slot,
-                notes: 'Booked by student using credit.'
-            }]);
-
-            if(error) { alert("Error booking: " + error.message); return; }
+            await _supabase.from('sessions').insert([{ student_name: currentStudentName, subject, date, slot, notes: 'Booked by student using credit.' }]);
             alert("Lesson booked successfully! 1 credit deducted.");
             document.getElementById('bookSlot').value = '';
             loadStudentPortal(currentStudentName);
         }
 
-        // Handlers for Schedule, Sessions, Payments
         function addScheduleSlotField(dateVal = '', slotVal = '') {
             const container = document.getElementById('scheduleSlotsFieldsContainer');
             const div = document.createElement('div');
             div.className = 'flex gap-2 items-center';
-            div.innerHTML = `
-                <input type="date" required value="${dateVal}" class="sched-date w-1/2 px-2 py-1.5 border rounded-lg">
-                <input type="text" required placeholder="Time slot" value="${slotVal}" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg">
-                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
-            `;
+            div.innerHTML = `<input type="date" required value="${dateVal}" class="sched-date w-1/2 px-2 py-1.5 border rounded-lg"><input type="text" required placeholder="Time slot" value="${slotVal}" class="sched-slot flex-grow px-2 py-1.5 border rounded-lg"><button type="button" onclick="this.parentElement.remove()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>`;
             container.appendChild(div);
         }
 
@@ -936,11 +902,7 @@
             const container = document.getElementById('recordingFieldsContainer');
             const div = document.createElement('div');
             div.className = 'flex gap-2 items-center';
-            div.innerHTML = `
-                <input type="text" placeholder="Title" value="${title}" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg">
-                <input type="url" placeholder="URL" value="${url}" class="rec-url flex-grow px-2 py-1.5 border rounded-lg">
-                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>
-            `;
+            div.innerHTML = `<input type="text" placeholder="Title" value="${title}" class="rec-title w-1/3 px-2 py-1.5 border rounded-lg"><input type="url" placeholder="URL" value="${url}" class="rec-url flex-grow px-2 py-1.5 border rounded-lg"><button type="button" onclick="this.parentElement.remove()" class="text-rose-500"><i class="fa-solid fa-trash"></i></button>`;
             container.appendChild(div);
         }
 
